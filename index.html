@@ -39,8 +39,8 @@
 	</div>
 	
 	<p align="center" style="margin-bottom: 0px;padding-top: 5px;padding-bottom: 5px;">
-		<em>Created by <a href="https://github.com/tchapi" target="_blank">tchapi</a>, major improvements by <a href="https://github.com/cmarrin" target="_blank">cmarrin</a> and <a href="https://github.com/charno" target="_blank">charno</a> - Source code available on <a href="https://github.com/tchapi/Adafruit-GFX-Font-Customiser" target="_blank">Github</a>. This is the 
-		<a href="https://tchapi.github.io/Adafruit-GFX-Font-Customiser/" target="_blank"> Original Page</a> font customiser.</em>
+		<em>Created by <a href="https://github.com/tchapi" target="_blank"><<u>tchapi</u></a>, major improvements by <a href="https://github.com/cmarrin" target="_blank">cmarrin</a> and <a href="https://github.com/charno" target="_blank">charno</a> - Source code available on <a href="https://github.com/tchapi/Adafruit-GFX-Font-Customiser" target="_blank">Github</a>. This is the 
+		<a href="https://tchapi.github.io/Adafruit-GFX-Font-Customiser/" target="_blank"><u>Original Page</u></a> font customiser.</em>
 	</p>
 
 	<p align="center" style="margin-bottom: 0px;padding-top: 5px;padding-bottom: 5px;">
@@ -57,70 +57,7 @@
   
 
 
-<!---------------------------------------------------->
-<!--			Tampilan Informasi Editor			-->
-<!---------------------------------------------------->
-<!-- 
-  <h2 class="ui header">Informasi Penggunaan editor ini. </h2>
-  <div class="ui grid">
-    <div class="eight wide column">
-      <div class="ui explanation">
-        <h5>Impor atau buatlah font baru terlebih dahulu:</h5>
-        <ul>
-          <li>Klik <a>Buka file font</a> lalu cari file font adafruit yang ber-ekstensi (**.h), atau dengan cara menyalin kode font dan menempelkan (paste) di teks area dibawah ini, atau</li>
-          <li>Klik <font color="blue"><i><b>Buat font baru</b></i></font> untuk membuat font baru dengan permulaan satu karakter awal yang anda tentukan sebelumnya. </li>
-		  <li>Tombol <font color="blue"><i><b>Buat font baru</b></i></font> hanya bisa diakses jika belum ada font yang ter-ekstrak. </li>
-        </ul>
-		<p>
-        <h5>Membuat font baru:</h5>
-        Dalam pembuatan font baru, yang perlu diperhatikan adalah mengeset tinggi font dalam pixel. <br>
-		<font color="red">Tinggi font tidak dapat dirubah lagi pada saat anda mengedit font baru nanti.</font><br>
-		Jika anda sudah terlanjur salah seting, silahkan klik <font color="blue"><strong>Reset</strong></font> saja, dan buat font baru lagi.</p> 
-		<p>
-        <h5>Merubah tinggi pixel karakter sebelum diekstrak:</h5>
-		Lihat pada data font sumber anda, cari baris yg berada dibagian paling bawah. Misal seperti ini:<br>
-		<i><b><font color="red">(GFXglyph *)NamaFontGlyphs, 0x61, 0x76, 27 };</font></b></i> <br>
-		Angka <b>27</b> adalah data tinggi font (dalam pixel) yg akan diekstrak. Silahkan rubah sesuai kebutuhan.
-		</p>
-		<p>
-        <h5>Menambahkan karakter baru:</h5>
-        Anda dapat dengan mudah menambahkan karakter baru yang belum ada didalam font yg anda edit. <br>
-		Karakter interval diantara range karakter baru tadi dan yg sudah ada, akan ditambahkan secara otomatis sebagai struktur <em>glyphs/karakter</em> yang dinonaktifkan.<br> Anda bisa meng-editnya kemudian.</p> 
-      </div>
-    </div>
-    <div class="eight wide column">
-      <div class="ui explanation">
-        <h5>Pengeditan glyphs karakter:</h5>
-        karakter dapat diedit satu per satu. fitur diantaranya:
-        <ul>
-          <li>Mengaktifkan atau nonaktifkan karakter (centang disable di tiap karakter)</li>
-          <li>Edit setiap pixel dari karakter</li>
-          <li>Edit semua nilai yang ada dalam struktur data GFXglyph <font color="blue">[Row, Cols, Base, XOff, Xadv]</font> <br>(Lihat <a href="https://learn.adafruit.com/creating-custom-symbol-font-for-adafruit-gfx-library/understanding-the-font-specification" target="blank">dokumentasi Adafruit </a> untuk informasi lebih lanjut) <a href="https://learn-adafruit-com.translate.goog/creating-custom-symbol-font-for-adafruit-gfx-library/understanding-the-font-specification?_x_tr_sl=auto&_x_tr_tl=id&_x_tr_hl=id&_x_tr_pto=nui" target="blank">[Terjemahan[</a></li>
-        </ul>
-		<p>
-        <h5>Saat mengekspor, perhatikan fitur ini:</h5>
-        <ul>
-		  <li>Anda dapat mengganti nama font langsung sebelum/sesudah menekan tombol<br> <font color="blue"><i><b>Proses dan buat font</b></i></font> lagi jika dirasa perlu.</li>
-          <li>
-			  Pilih rentang karakter (dalam HEX code) yang disertakan dalam font output jika diperlukan. <br>
-			  (Dalam kondisi standar, rentang karakter otomatis diset sesuai karakter yang ada dieditor. <br>
-			  Karakter yang berada di luar rentang ini, <font color="red"><b>tidak akan disertakan</b></font>  dalam pembuatan bitmap font atau tabel glyphs output nanti.
-		  </li>
-          <li>
-			  Nonaktifkan karakter yang tidak diperlukan jika perlu <font color="red"><b>(centang disable)</b></font>. <br>
-			  Karakter yang dinonaktifkan, semua nilai datanya akan disetel ke 0 (kosong).<br>
-			  Entri/tempat untuk karakter masih ada, tapi akan dinonaktifkan di tabel, jadi tidak ada data yang ditampilkan dalam bitmap font.<br>
-			  Ini membuat struktur karakter tetap di tempat yang benar di tabel ASCII (untuk dipanggil dalam fungsi font di library adafruit),<br>
-			  akan tetapi memperkecil ukuran hasil file font yang dibuat nanti, dan tentunya akan menghemat memory program.<br>
-			  Misal anda menbuat font dengan huruf A-Z, tapi anda menonaktifkan karakter F,J,Q,V,X
-		  </li>
-        </ul>
-		</p>
-      </div>
-    </div>
-  </div>
-  <br>
-   -->
+
 <!-------------------------------------------->
 <!--			Menu Ekstrak Font			-->
 <!-------------------------------------------->
@@ -134,44 +71,138 @@
 	
 			<label><font color="white">Data Font yang akan diproses</font></label>
             <textarea id="source" style="font-weight: bolder;">
-			// Font AdafruitGfx = Nonstop12num.h
+// SAMPLE FONT FOR THIS PAGE
+// Font AdafruitGfx = Nonstop_12p_F.h
 // Font Height = 12 pixels
-// Font Set = ./0123456789
+// Font Set = space !"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLM
+//            NOPQRSTUVWXYZ[\]^_`
 // Script editor mod by DONY OPREKERS
 
-const uint8_t Nonstop12numBitmaps[] PROGMEM = {
-  0xFF, 0x80, 0xFF, 0xFF, 0xFF, 0x7E, 0xFD, 0xFB, 0xF7, 0xFF, 0xFF, 0xF8, 
-  0x00, 0xFF, 0xF7, 0x77, 0x77, 0x77, 0x70, 0xFF, 0xFF, 0xF8, 0x7F, 0xFF, 
-  0xFF, 0xF0, 0xFF, 0xFF, 0xF8, 0x00, 0xFF, 0xFF, 0xF8, 0x7F, 0xFF, 0xFF, 
-  0x87, 0xFF, 0xFF, 0xF8, 0x00, 0xEF, 0xDF, 0xBF, 0x7F, 0xFF, 0xFF, 0x87, 
-  0x0E, 0x1C, 0x38, 0x00, 0xFF, 0xFF, 0xFF, 0x0F, 0xFF, 0xFF, 0x87, 0xFF, 
-  0xFF, 0xF8, 0x00, 0xFF, 0xFF, 0xFF, 0x0F, 0xFF, 0xFF, 0xF7, 0xFF, 0xFF, 
-  0xF8, 0x00, 0xFF, 0xFF, 0xF8, 0x70, 0xE1, 0xC3, 0x87, 0x0E, 0x1C, 0x38, 
-  0x00, 0xFF, 0xFF, 0xFF, 0x7F, 0xFF, 0xFF, 0xF7, 0xFF, 0xFF, 0xF8, 0x00, 
-  0xFF, 0xFF, 0xFF, 0x7F, 0xFF, 0xFF, 0x87, 0xFF, 0xFF, 0xF8, 0x00
+const uint8_t Nonstop_12p_FBitmaps[] PROGMEM = {
+  0xF9, 0x99, 0x99, 0x9F, 0x99, 0xF0, 0xEF, 0x56, 0xAD, 0x5E, 0xE0, 0xDE, 
+  0xA2, 0xA2, 0xE2, 0x22, 0x44, 0x44, 0x47, 0x45, 0x45, 0x7B, 0x7E, 0x40, 
+  0xA0, 0x52, 0x28, 0x12, 0x1A, 0x05, 0x21, 0x80, 0xC0, 0x5F, 0xE0, 0xF6, 
+  0xDE, 0x7E, 0x18, 0x63, 0x92, 0x49, 0x23, 0x86, 0x17, 0xC0, 0xFA, 0x18, 
+  0x71, 0x45, 0x14, 0x71, 0x86, 0x1F, 0x80, 0x3C, 0x24, 0xE7, 0x81, 0x81, 
+  0xE7, 0x24, 0x3C, 0xF9, 0xD7, 0x30, 0xFF, 0x81, 0x81, 0xFF, 0xF9, 0x9F, 
+  0x3D, 0x14, 0x51, 0x45, 0x28, 0xA2, 0x8A, 0x2F, 0x00, 0xFF, 0x81, 0x81, 
+  0x81, 0x99, 0x99, 0x99, 0x81, 0x81, 0x81, 0xFF, 0xFC, 0x63, 0x94, 0xA5, 
+  0x29, 0x4A, 0x5E, 0x00, 0xFF, 0x81, 0x81, 0xF9, 0x81, 0x81, 0x81, 0x9F, 
+  0x81, 0x81, 0xFF, 0xFF, 0x81, 0x81, 0xF9, 0x81, 0x81, 0x81, 0xF9, 0x81, 
+  0x81, 0xFF, 0xFF, 0x99, 0x99, 0x99, 0x81, 0x81, 0x81, 0xF9, 0x09, 0x09, 
+  0x0F, 0xFF, 0x81, 0x81, 0x9F, 0x81, 0x81, 0x81, 0xF9, 0x81, 0x81, 0xFF, 
+  0xFF, 0x81, 0x81, 0x9F, 0x81, 0x81, 0x99, 0x99, 0x81, 0x81, 0xFF, 0xFF, 
+  0x81, 0x81, 0xF9, 0x09, 0x09, 0x09, 0x09, 0x09, 0x09, 0x0F, 0xFF, 0x81, 
+  0x81, 0x99, 0x99, 0x81, 0x99, 0x99, 0x81, 0x81, 0xFF, 0xFF, 0x81, 0x81, 
+  0x99, 0x99, 0x81, 0x81, 0xF9, 0x81, 0x81, 0xFF, 0xF9, 0x9F, 0xF9, 0x9F, 
+  0xF9, 0x9F, 0x99, 0x9F, 0x1F, 0x63, 0x68, 0xC5, 0xE0, 0xFF, 0x81, 0x81, 
+  0xFF, 0x81, 0x81, 0x81, 0xFF, 0xE4, 0xE2, 0xD8, 0xC7, 0xC0, 0xFE, 0x81, 
+  0x81, 0xF1, 0x81, 0x81, 0x81, 0xFE, 0x90, 0x90, 0xF0, 0x7E, 0x81, 0x81, 
+  0x99, 0xA9, 0xA9, 0xA9, 0x9F, 0x81, 0x81, 0x7F, 0xFF, 0x81, 0x81, 0x99, 
+  0x99, 0x81, 0x81, 0x99, 0x99, 0x99, 0xFF, 0xFF, 0x81, 0x81, 0x99, 0x99, 
+  0x83, 0x99, 0x99, 0x81, 0x81, 0xFF, 0xFF, 0x81, 0x81, 0x9F, 0x90, 0x90, 
+  0x90, 0x9F, 0x81, 0x81, 0xFF, 0xFF, 0x83, 0x81, 0x99, 0x99, 0x99, 0x99, 
+  0x99, 0x81, 0x83, 0xFF, 0xFF, 0x81, 0x81, 0x9F, 0x81, 0x81, 0x81, 0x9F, 
+  0x81, 0x81, 0xFF, 0xFF, 0x81, 0x81, 0x9F, 0x81, 0x81, 0x9F, 0x90, 0x90, 
+  0x90, 0xF0, 0xFF, 0x81, 0x81, 0x9F, 0x91, 0x91, 0x99, 0x99, 0x81, 0x81, 
+  0xFF, 0xFF, 0x99, 0x99, 0x99, 0x99, 0x81, 0x81, 0x99, 0x99, 0x99, 0xFF, 
+  0xF9, 0x9F, 0x99, 0x99, 0x99, 0xF0, 0x1E, 0x24, 0x48, 0x91, 0x22, 0x44, 
+  0xF9, 0x83, 0x07, 0xF8, 0x00, 0xFF, 0x99, 0x99, 0x91, 0x83, 0x87, 0x83, 
+  0x91, 0x99, 0x99, 0xFF, 0xF0, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x9F, 
+  0x81, 0x81, 0xFF, 0xFF, 0xF8, 0x01, 0x80, 0x19, 0x99, 0x99, 0x99, 0x99, 
+  0x99, 0x99, 0x99, 0x99, 0x99, 0x99, 0xFF, 0xF0, 0xFF, 0x81, 0x81, 0x99, 
+  0x99, 0x99, 0x99, 0x99, 0x99, 0x99, 0xFF, 0xFF, 0x81, 0x81, 0x99, 0x99, 
+  0x99, 0x99, 0x99, 0x81, 0x81, 0xFF, 0xFF, 0x81, 0x81, 0x99, 0x99, 0x81, 
+  0x81, 0x9F, 0x90, 0x90, 0xF0, 0xFF, 0x40, 0xA0, 0x50, 0x29, 0x94, 0xCA, 
+  0x65, 0x01, 0x80, 0xC0, 0x7F, 0xE0, 0xFF, 0x81, 0x81, 0x99, 0x99, 0x83, 
+  0x83, 0x91, 0x99, 0x99, 0xFF, 0xFF, 0x81, 0x81, 0x9F, 0x81, 0x81, 0x81, 
+  0xF9, 0x81, 0x81, 0xFF, 0xFF, 0x81, 0x81, 0xE7, 0x24, 0x24, 0x24, 0x24, 
+  0x24, 0x24, 0x3C, 0xFF, 0x99, 0x99, 0x99, 0x99, 0x99, 0x99, 0x99, 0x81, 
+  0x81, 0xFF, 0xFF, 0x99, 0x99, 0x99, 0x99, 0x81, 0x42, 0x42, 0x66, 0x24, 
+  0x3C, 0xFF, 0xF9, 0x99, 0x99, 0x99, 0x99, 0x99, 0x99, 0x99, 0x99, 0x99, 
+  0x99, 0x80, 0x18, 0x01, 0xFF, 0xF0, 0xFF, 0x99, 0x99, 0x99, 0x81, 0xC3, 
+  0x81, 0x99, 0x99, 0x99, 0xFF, 0xFF, 0x99, 0x99, 0x99, 0x99, 0x81, 0x81, 
+  0xF9, 0x81, 0x81, 0xFF, 0xFF, 0x81, 0x81, 0xF9, 0x81, 0x81, 0x81, 0x9F, 
+  0x81, 0x81, 0xFF, 0xFE, 0x18, 0x63, 0x92, 0x49, 0x23, 0x86, 0x1F, 0xC0, 
+  0xF2, 0x28, 0xA2, 0x89, 0x24, 0x51, 0x45, 0x13, 0xC0, 0xFE, 0x18, 0x71, 
+  0x45, 0x14, 0x71, 0x86, 0x1F, 0xC0, 0xF9, 0x99, 0x99, 0x99, 0xF0, 0xFF, 
+  0x81, 0x81, 0xFF, 0xF9, 0x99, 0x99, 0x99, 0xF0
 };
 
-const GFXglyph Nonstop12numGlyphs[] PROGMEM = {
+const GFXglyph Nonstop_12p_FGlyphs[] PROGMEM = {
 //    Pos  Col  Row  Xadv  Xoff  Base    Ascii hex   Char    Hex Count
-  {     0,   3,   3,   4,    0,    8 },   // 0x2E     '.'     '2'
-  {     0,   0,   0,   0,    0,    0 },   // 0x2F     '/'     '0'
-  {     2,   7,  11,   8,    0,    0 },   // 0x30     '0'     '11'
-  {    13,   4,  11,   5,    0,    0 },   // 0x31     '1'     '6'
-  {    19,   7,  11,   8,    0,    0 },   // 0x32     '2'     '11'
-  {    30,   7,  11,   8,    0,    0 },   // 0x33     '3'     '11'
-  {    41,   7,  11,   8,    0,    0 },   // 0x34     '4'     '11'
-  {    52,   7,  11,   8,    0,    0 },   // 0x35     '5'     '11'
-  {    63,   7,  11,   8,    0,    0 },   // 0x36     '6'     '11'
-  {    74,   7,  11,   8,    0,    0 },   // 0x37     '7'     '11'
-  {    85,   7,  11,   8,    0,    0 },   // 0x38     '8'     '11'
-  {    96,   7,  11,   8,    0,    0 }    // 0x39     '9'     '11'
+  {     0,   0,   0,   6,    0,    0 },   // 0x20     ' '     '0'
+  {     0,   4,  11,   5,    0,    0 },   // 0x21     '!'     '6'
+  {     6,   7,   5,   8,    0,    0 },   // 0x22     '"'     '5'
+  {     0,   0,   0,   0,    0,    0 },   // 0x23     '#'     '0'
+  {     0,   0,   0,   0,    0,    0 },   // 0x24     '$'     '0'
+  {    11,   8,  11,   9,    0,    0 },   // 0x25     '%'     '11'
+  {    22,   9,  11,  10,    0,    0 },   // 0x26     '&'     '13'
+  {    35,   3,   5,   4,    0,    0 },   // 0x27     '''     '2'
+  {    37,   6,  11,   7,    0,    0 },   // 0x28     '('     '9'
+  {    46,   6,  11,   7,    0,    0 },   // 0x29     ')'     '9'
+  {     0,   0,   0,   0,    0,    0 },   // 0x2A     '*'     '0'
+  {    55,   8,   8,   9,    0,    1 },   // 0x2B     '+'     '8'
+  {    63,   4,   5,   5,    0,    7 },   // 0x2C     ','     '3'
+  {    66,   8,   4,   9,    0,    4 },   // 0x2D     '-'     '4'
+  {    70,   4,   4,   5,    0,    7 },   // 0x2E     '.'     '2'
+  {    72,   6,  11,   7,    0,    0 },   // 0x2F     '/'     '9'
+  {    81,   8,  11,   9,    0,    0 },   // 0x30     '0'     '11'
+  {    92,   5,  11,   6,    0,    0 },   // 0x31     '1'     '8'
+  {   100,   8,  11,   9,    0,    0 },   // 0x32     '2'     '11'
+  {   111,   8,  11,   9,    0,    0 },   // 0x33     '3'     '11'
+  {   122,   8,  11,   9,    0,    0 },   // 0x34     '4'     '11'
+  {   133,   8,  11,   9,    0,    0 },   // 0x35     '5'     '11'
+  {   144,   8,  11,   9,    0,    0 },   // 0x36     '6'     '11'
+  {   155,   8,  11,   9,    0,    0 },   // 0x37     '7'     '11'
+  {   166,   8,  11,   9,    0,    0 },   // 0x38     '8'     '11'
+  {   177,   8,  11,   9,    0,    0 },   // 0x39     '9'     '11'
+  {   188,   4,   8,   5,    0,    2 },   // 0x3A     ':'     '4'
+  {   192,   4,   8,   5,    0,    2 },   // 0x3B     ';'     '4'
+  {   196,   5,   7,   7,    0,    2 },   // 0x3C     '<'     '5'
+  {   201,   8,   8,   9,    0,    2 },   // 0x3D     '='     '8'
+  {   209,   5,   7,   7,    0,    2 },   // 0x3E     '>'     '5'
+  {   214,   8,  11,   9,    0,    0 },   // 0x3F     '?'     '11'
+  {   225,   8,  11,   9,    0,    0 },   // 0x40     '@'     '11'
+  {   236,   8,  11,   9,    0,    0 },   // 0x41     'A'     '11'
+  {   247,   8,  11,   9,    0,    0 },   // 0x42     'B'     '11'
+  {   258,   8,  11,   9,    0,    0 },   // 0x43     'C'     '11'
+  {   269,   8,  11,   9,    0,    0 },   // 0x44     'D'     '11'
+  {   280,   8,  11,   9,    0,    0 },   // 0x45     'E'     '11'
+  {   291,   8,  11,   9,    0,    0 },   // 0x46     'F'     '11'
+  {   302,   8,  11,   9,    0,    0 },   // 0x47     'G'     '11'
+  {   313,   8,  11,   9,    0,    0 },   // 0x48     'H'     '11'
+  {   324,   4,  11,   5,    0,    0 },   // 0x49     'I'     '6'
+  {   330,   7,  11,   9,    0,    0 },   // 0x4A     'J'     '11'
+  {   341,   8,  11,   9,    0,    0 },   // 0x4B     'K'     '11'
+  {   352,   8,  11,   9,    0,    0 },   // 0x4C     'L'     '11'
+  {   363,  12,  11,  13,    0,    0 },   // 0x4D     'M'     '17'
+  {   380,   8,  11,   9,    0,    0 },   // 0x4E     'N'     '11'
+  {   391,   8,  11,   9,    0,    0 },   // 0x4F     'O'     '11'
+  {   402,   8,  11,   9,    0,    0 },   // 0x50     'P'     '11'
+  {   413,   9,  11,  10,    0,    0 },   // 0x51     'Q'     '13'
+  {   426,   8,  11,   9,    0,    0 },   // 0x52     'R'     '11'
+  {   437,   8,  11,   9,    0,    0 },   // 0x53     'S'     '11'
+  {   448,   8,  11,   9,    0,    0 },   // 0x54     'T'     '11'
+  {   459,   8,  11,   9,    0,    0 },   // 0x55     'U'     '11'
+  {   470,   8,  11,   9,    0,    0 },   // 0x56     'V'     '11'
+  {   481,  12,  11,  13,    0,    0 },   // 0x57     'W'     '17'
+  {   498,   8,  11,   9,    0,    0 },   // 0x58     'X'     '11'
+  {   509,   8,  11,   9,    0,    0 },   // 0x59     'Y'     '11'
+  {   520,   8,  11,   9,    0,    0 },   // 0x5A     'Z'     '11'
+  {   531,   6,  11,   7,    0,    0 },   // 0x5B     '['     '9'
+  {   540,   6,  11,   7,    0,    0 },   // 0x5C     '\'     '9'
+  {   549,   6,  11,   7,    0,    0 },   // 0x5D     ']'     '9'
+  {   558,   4,   9,   6,    1,    0 },   // 0x5E     '^'     '5'
+  {   563,   8,   4,   9,    0,    7 },   // 0x5F     '_'     '4'
+  {   567,   4,   9,   6,    1,    0 }    // 0x60     '`'     '5'
 };
 
-const GFXfont Nonstop12num PROGMEM = {
-(uint8_t *) Nonstop12numBitmaps,
-(GFXglyph *)Nonstop12numGlyphs,0x2E,0x39, 12 };
+const GFXfont Nonstop_12p_F PROGMEM = {
+  (uint8_t *) Nonstop_12p_FBitmaps, 
+  (GFXglyph *)Nonstop_12p_FGlyphs, 0x20, 0x60,   12 };
 
-// Approx. 1684 bytes
+// File size approx : 8.22kb
 			</textarea>
 			</div>
 		  
@@ -193,7 +224,7 @@ const GFXfont Nonstop12num PROGMEM = {
 					</div>
 					<div class="field" > 
 						Zoom Scale 
-						<input class="puter" type="number" id="FontZoom" value="8" min="2" step="1" style="height: 34px; width:70px; margin-top:5px;"></input>
+						<input class="puter" type="number" id="FontZoom" value="4" min="2" step="1" style="height: 34px; width:70px; margin-top:5px;"></input>
 						<button class="ui small inverted button blue" id="FontPreview"><i class="recycle icon"></i>Preview</button>
 						
 					</div>
