@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Page Switcher with Semantic UI</title>
+
+    <!-- Semantic UI JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css">
     <style>
         body {
@@ -77,8 +81,8 @@
         </div>
     </div>
     <hr>
-                <iframe id="contentFrame" src="" ></iframe>
-				<textarea id="editor" ></textarea>
+	<iframe id="contentFrame" src="" ></iframe>
+	<textarea id="editor" style="display:none"></textarea>
 
     <script>
         // Fungsi untuk memuat halaman ke dalam iframe
@@ -86,12 +90,8 @@
 		
 function loadPage(page) {
     const iframe = document.getElementById('contentFrame');
-	const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
-    const iframeHTML = iframeDoc.documentElement.outerHTML;
-	
-    navigator.clipboard.writeText(iframeHTML)
     const textarea = document.getElementById('editor');
-			openPage = page
+	openPage = page
     iframe.src = page;
 
     // Menggunakan fetch untuk mendapatkan konten file
@@ -109,11 +109,19 @@ function loadPage(page) {
             console.error('Error loading page:', error);
             textarea.value = 'Error loading content.';
         });
+	$('#copyToClipboard').trigger('click');
 }
+	    
+$(document).ready(function () {
+        // Copy to Clipboard
+        $('#copyToClipboard').click(function () {
+            var copyText = document.getElementById("editor");
+            copyText.select();
+            copyText.setSelectionRange(0, 9999999); // Ensure selection range covers all content
+            document.execCommand("copy");
+        });
+  
+})
     </script>
-
-    <!-- Semantic UI JS -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js"></script>
 </body>
 </html>
