@@ -106,9 +106,11 @@
                 textarea.value = content; // Menampilkan konten file ke textarea
                 // Setelah konten berhasil dimuat, salin ke clipboard
 		if (page != 'HtmlRealtimeEditor.html'){
-	    	console.log('THIS PAGES NOT COPIED');
                 	copyToClipboard();
+		} else {
+	    		console.log('THIS PAGES NOT COPIED');
 		}
+			
             })
             .catch(error => {
                 console.error('Error loading page:', error);
