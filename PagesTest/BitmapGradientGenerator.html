@@ -1,7 +1,6 @@
 <html>
 <head>
   <title>Bitmap Gradient Generator</title>
-	<script src="https://cdn.jsdelivr.net/npm/index-of-js@1.0.0/index.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jscolor/2.5.2/jscolor.js" integrity="sha512-IShZ5NZxEaotdJdpd853DUKXbgYUH7O/PaeGDp2eiS3XxNDnIQ9+GuRX3d5c4joOqs7Ni8ZKQmRFbKImtcwLaA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" crossorigin="anonymous"></script>
@@ -270,7 +269,8 @@
 					<em>
 						** Pada akhir nama di kode yang dihasilkan, akan ditambah angka urut dari 0 sampai maks jumlah warna gradasi yang dihasilkan.
 						<br>
-						** Hasil gradasi yg ditampilkan adalah perhitungan dari tinggi gambar dibagi dengan nilai pembagi baris gambar
+						** Hasil gradasi yg ditampilkan adalah perhitungan dari tinggi gambar dibagi dengan nilai pembagi baris gambar. 
+						<br>Semakin kecil nilai pembagi, maka warna gradasi yang dihasilkan semakin banyak.
 					</em>
 					</div>
 				</div>
@@ -343,6 +343,170 @@ var hasilWarna;
 // var xPos=document.getElementById('xPos').value;
 // var yPos = document.getElementById('yPos').value;
 	
+function Proses(){
+		
+		var colordata = document.getElementById("lcdDrawCmd").value;
+		var imagedata = document.getElementById("bmpArray").value;
+		
+		canvas.width  = document.getElementById("bmpP").value;
+		canvas.height = document.getElementById("bmpT").value;
+			ctrx.clearRect(0, 0, canvas.width, canvas.height);
+		//for proccessing color data array
+		let color = colordata.replace(/(.*,\s)/g,"");
+			color = color.replace(/([)];\s)/g,",");
+			datacolor = color.split(",");
+			
+		arraylist = imagedata;
+			for (var i=0;i<=hasilWarna;i++){
+				readSplitData();
+				listToImageHorizontal(databmp, Bagian, Bagian*i,datacolor[i]);
+				}
+}
+
+function readSplitData() {
+		let input = arraylist;
+		
+	  re = /};([\s\S]*)/;
+	  const xfound = input.match(re);
+	  if (xfound != null && xfound.length > 1) {
+		  arraylist = xfound[1];
+	  } 
+	
+		input = input.replace(/};([\s\S]*)/g, "");
+		input = input.replace(/[\s\S]*const\s+(unsigned\s+char|uint8_t)\s+[a-zA-Z0-9\d\D]+\s*\[\]\s*(PROGMEM\s*)?=\s*{/g, "");
+			// Convert newlines to comma (helps to remove comments later)
+			input = input.replace(/\r\n|\r|\n/g, ",");
+			// Convert multiple commas in a row into a single one
+			input = input.replace(/,{2,}/g, ",");
+			// Remove whitespace
+			input = input.replace(/\s/g, "");
+			//Remove comments
+			input = input.replace(/\/\/(.+?),/g, "");
+			// Remove "0x"
+			input = input.replace(/0[xX]/g, "");
+			databmp = input.split(",");
+}
+
+function listToImageHorizontal(list, bmpH, ypos, hexColor) {
+  var imgData = ctrx.createImageData(canvas.width, bmpH);
+  var index = 0;
+
+  // Extract individual RGB components from the 16-bit color
+  var red = (hexColor >> 8) & 0xF8; // 5 bits for red
+  var green = (hexColor >> 3) & 0xFC; // 6 bits for green
+  var blue = (hexColor << 3) & 0xF8; // 5 bits for blue
+
+  // round the width up to the next byte
+  var widthRoundedUp = Math.floor(canvas.width / 8 + (canvas.width % 8 ? 1 : 0)) * 8;
+  var widthCounter = 0;
+
+  // Move the list into the imageData object
+  for (var i = 0; i < list.length; i++) {
+    var binString = hexToBinary(list[i]).result;
+	
+    if (binString.length == 4) {
+      binString = binString + "0000";
+    }
+
+    // Check if pixel is white or black
+    for (var k = 0; k < binString.length; k++, widthCounter++) {
+      // if we've counted enough bits, reset counter for next line
+      if (widthCounter >= widthRoundedUp) {
+        widthCounter = 0;
+      }
+      // skip 'artifact' pixels due to rounding up to a byte
+      if (widthCounter >= canvas.width) {
+        continue;
+      }
+	  
+      if (binString.charAt(k) == invert) {
+        // Use the provided 16-bit color for black pixels
+        imgData.data[index] = red;
+        imgData.data[index + 1] = green;
+        imgData.data[index + 2] = blue;
+        imgData.data[index + 3] = 255;
+      } else {
+        // Use white color for white pixels
+        imgData.data[index] = 0;
+        imgData.data[index + 1] = 0;
+        imgData.data[index + 2] = 0;
+        imgData.data[index + 3] = 255;
+      }
+
+      index += 4;
+    }
+  }
+
+  ctrx.putImageData(imgData, 0, ypos);
+  //img.src = canvas.toDataURL('image/png');
+  //place_image();
+  if(canvas.width<200){
+  document.getElementById('previewCanvas').style="width:100%;";
+  }
+  else {
+  document.getElementById('previewCanvas').style="width:100%;";
+  }
+  
+    //$('#previewCanvas').attr('width', 100px)
+}
+
+function invertion(){
+	
+      if (invert == '0') invert = '1'
+	  else if (invert == '1') invert = '0'
+	Proses()
+}
+
+function hexToBinary(s) {
+
+			var i, k, part, ret = "";
+			// lookup table for easier conversion. "0" characters are
+			// padded for "1" to "7"
+			var lookupTable = {
+				"0": "0000", "1": "0001", "2": "0010", "3": "0011", "4": "0100",
+				"5": "0101", "6": "0110", "7": "0111", "8": "1000", "9": "1001",
+				"a": "1010", "b": "1011", "c": "1100", "d": "1101", "e": "1110",
+				"f": "1111", "A": "1010", "B": "1011", "C": "1100", "D": "1101",
+				"E": "1110", "F": "1111"
+			};
+			for (i = 0; i < s.length; i += 1) {
+				if (lookupTable.hasOwnProperty(s[i])) {
+					ret += lookupTable[s[i]];
+				} else {
+					return { valid: false, s: s };
+				}
+			}
+			return { valid: true, result: ret };
+		}
+
+function hapus() {
+	$('#source').val('');
+}
+
+function getFile(event) {
+	const input = event.target
+  if ('files' in input && input.files.length > 0) {
+	  placeFileContent(
+      document.getElementById('source'),
+      input.files[0])
+  }    
+}
+
+function readFileContent(file) {
+	const reader = new FileReader()
+  return new Promise((resolve, reject) => {
+    reader.onload = event => resolve(event.target.result)
+    reader.onerror = error => reject(error)
+    reader.readAsText(file)
+  })
+}
+
+function placeFileContent(target, file) {
+	readFileContent(file).then(content => {
+  	target.value = content
+  }).catch(error => console.log(error))
+}
+
 function Split() {
 		let Newdata = 0;
 		let data = document.getElementById("source").value;
@@ -351,7 +515,6 @@ function Split() {
 		
 	  re = /(.*)(const)/;
 	  const found = data.match(re);
-			console.log('test', found);
 	  
 	  if (found != null && found.length > 1) {
 		//alert('Ditemukan text yang tidak diperlukan sebelum aray file.\nSemua text dibelakang kata "const uint8_t...." akan dihapus dulu.');
@@ -589,170 +752,6 @@ function jadiin(){
 	ctx.fillText("[ " + (ranges+1) + " warna hasil akhir]",300,163);
 	ctx.stroke();
 	Proses();
-}
-
-function Proses(){
-		
-		var colordata = document.getElementById("lcdDrawCmd").value;
-		var imagedata = document.getElementById("bmpArray").value;
-		
-		canvas.width  = document.getElementById("bmpP").value;
-		canvas.height = document.getElementById("bmpT").value;
-			ctrx.clearRect(0, 0, canvas.width, canvas.height);
-		//for proccessing color data array
-		let color = colordata.replace(/(.*,\s)/g,"");
-			color = color.replace(/([)];\s)/g,",");
-			datacolor = color.split(",");
-			
-		arraylist = imagedata;
-			for (var i=0;i<=hasilWarna;i++){
-				readSplitData();
-				listToImageHorizontal(databmp, Bagian, Bagian*i,datacolor[i]);
-				}
-}
-
-function readSplitData() {
-		let input = arraylist;
-		
-	  re = /};([\s\S]*)/;
-	  const xfound = input.match(re);
-	  if (xfound != null && xfound.length > 1) {
-		  arraylist = xfound[1];
-	  } 
-	
-		input = input.replace(/};([\s\S]*)/g, "");
-		input = input.replace(/[\s\S]*const\s+(unsigned\s+char|uint8_t)\s+[a-zA-Z0-9\d\D]+\s*\[\]\s*(PROGMEM\s*)?=\s*{/g, "");
-			// Convert newlines to comma (helps to remove comments later)
-			input = input.replace(/\r\n|\r|\n/g, ",");
-			// Convert multiple commas in a row into a single one
-			input = input.replace(/,{2,}/g, ",");
-			// Remove whitespace
-			input = input.replace(/\s/g, "");
-			//Remove comments
-			input = input.replace(/\/\/(.+?),/g, "");
-			// Remove "0x"
-			input = input.replace(/0[xX]/g, "");
-			databmp = input.split(",");
-}
-
-function listToImageHorizontal(list, bmpH, ypos, hexColor) {
-  var imgData = ctrx.createImageData(canvas.width, bmpH);
-  var index = 0;
-
-  // Extract individual RGB components from the 16-bit color
-  var red = (hexColor >> 8) & 0xF8; // 5 bits for red
-  var green = (hexColor >> 3) & 0xFC; // 6 bits for green
-  var blue = (hexColor << 3) & 0xF8; // 5 bits for blue
-
-  // round the width up to the next byte
-  var widthRoundedUp = Math.floor(canvas.width / 8 + (canvas.width % 8 ? 1 : 0)) * 8;
-  var widthCounter = 0;
-
-  // Move the list into the imageData object
-  for (var i = 0; i < list.length; i++) {
-    var binString = hexToBinary(list[i]).result;
-	
-    if (binString.length == 4) {
-      binString = binString + "0000";
-    }
-
-    // Check if pixel is white or black
-    for (var k = 0; k < binString.length; k++, widthCounter++) {
-      // if we've counted enough bits, reset counter for next line
-      if (widthCounter >= widthRoundedUp) {
-        widthCounter = 0;
-      }
-      // skip 'artifact' pixels due to rounding up to a byte
-      if (widthCounter >= canvas.width) {
-        continue;
-      }
-	  
-      if (binString.charAt(k) == invert) {
-        // Use the provided 16-bit color for black pixels
-        imgData.data[index] = red;
-        imgData.data[index + 1] = green;
-        imgData.data[index + 2] = blue;
-        imgData.data[index + 3] = 255;
-      } else {
-        // Use white color for white pixels
-        imgData.data[index] = 0;
-        imgData.data[index + 1] = 0;
-        imgData.data[index + 2] = 0;
-        imgData.data[index + 3] = 255;
-      }
-
-      index += 4;
-    }
-  }
-
-  ctrx.putImageData(imgData, 0, ypos);
-  //img.src = canvas.toDataURL('image/png');
-  //place_image();
-  if(canvas.width<200){
-  document.getElementById('previewCanvas').style="width:100%;";
-  }
-  else {
-  document.getElementById('previewCanvas').style="width:100%;";
-  }
-  
-    //$('#previewCanvas').attr('width', 100px)
-}
-
-function invertion(){
-	
-      if (invert == '0') invert = '1'
-	  else if (invert == '1') invert = '0'
-	Proses()
-}
-
-function hexToBinary(s) {
-
-			var i, k, part, ret = "";
-			// lookup table for easier conversion. "0" characters are
-			// padded for "1" to "7"
-			var lookupTable = {
-				"0": "0000", "1": "0001", "2": "0010", "3": "0011", "4": "0100",
-				"5": "0101", "6": "0110", "7": "0111", "8": "1000", "9": "1001",
-				"a": "1010", "b": "1011", "c": "1100", "d": "1101", "e": "1110",
-				"f": "1111", "A": "1010", "B": "1011", "C": "1100", "D": "1101",
-				"E": "1110", "F": "1111"
-			};
-			for (i = 0; i < s.length; i += 1) {
-				if (lookupTable.hasOwnProperty(s[i])) {
-					ret += lookupTable[s[i]];
-				} else {
-					return { valid: false, s: s };
-				}
-			}
-			return { valid: true, result: ret };
-		}
-
-function hapus() {
-	$('#source').val('');
-}
-
-function getFile(event) {
-	const input = event.target
-  if ('files' in input && input.files.length > 0) {
-	  placeFileContent(
-      document.getElementById('source'),
-      input.files[0])
-  }    
-}
-
-function readFileContent(file) {
-	const reader = new FileReader()
-  return new Promise((resolve, reject) => {
-    reader.onload = event => resolve(event.target.result)
-    reader.onerror = error => reject(error)
-    reader.readAsText(file)
-  })
-}
-
-function placeFileContent(target, file) {
-	readFileContent(file).then(content => {
-  	target.value = content
-  }).catch(error => console.log(error))
 }
 
 $(document).ready(function () {

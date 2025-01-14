@@ -1,7 +1,6 @@
 <html>
 <head>
   <title>Bitmap Gradient Generator</title>
-	<script src="https://cdn.jsdelivr.net/npm/index-of-js@1.0.0/index.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jscolor/2.5.2/jscolor.js" integrity="sha512-IShZ5NZxEaotdJdpd853DUKXbgYUH7O/PaeGDp2eiS3XxNDnIQ9+GuRX3d5c4joOqs7Ni8ZKQmRFbKImtcwLaA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" crossorigin="anonymous"></script>
@@ -395,21 +394,21 @@ const uint8_t FreeWiFi [] PROGMEM = {
           <div class="two fields">
 			  <div class="field">
 					<label><font color="white">Fungsi pemangil tft.drawBitmap</font></label>
-					<textarea id="colorSets2" ></textarea>
+					<textarea id="lcdDrawCmd" ></textarea>
 					<br>
 					<br>
 					<button class="ui inverted teal button" id="copying">Salin ke clipboard</button>
 			  </div>
 			  <div class="field">
 					<label><font color="white">Data BMP Split array</font></label>
-					<textarea id="result" ></textarea>
+					<textarea id="bmpArray" ></textarea>
 					<br>
 					<br>
 					<button class="ui inverted teal button" id="copying2">Salin ke clipboard</button>
 			  </div>
 			  <div class="field">
-					<label><font color="white">Sample Sketch Code unutk tft lcd ILI9341</font></label>
-					<textarea id="sample" readonly="" cols='100' rows='20'></textarea>
+					<label><font color="white">Sample Sketch untuk tft lcd ILI9341</font></label>
+					<textarea id="sampleSketch" readonly="" cols='100' rows='20'></textarea>
 					<br>
 					<br>
 					<button class="ui inverted teal button" id="copying3">Salin ke clipboard</button>
@@ -457,8 +456,8 @@ var hasilWarna;
 
 function Proses(){
 		
-		var colordata = document.getElementById("colorSets2").value;
-		var imagedata = document.getElementById("result").value;
+		var colordata = document.getElementById("lcdDrawCmd").value;
+		var imagedata = document.getElementById("bmpArray").value;
 		
 		canvas.width  = document.getElementById("bmpP").value;
 		canvas.height = document.getElementById("bmpT").value;
@@ -674,7 +673,7 @@ function Split() {
 			result.push(g.join("\n"))
 		})
 
-		document.getElementById("result").value = result.join("\n");
+		document.getElementById("bmpArray").value = result.join("\n");
 		return 1;
 }
 
@@ -772,7 +771,7 @@ function jadiin(){
 	hasilWarna = ranges;
 
 	// THIS FUNCTION FOR GENERATE RESULT HEX COLOR DATA
-	document.getElementById('colorSets2').innerHTML="\n ";//start for data .toString(16) makes data hex
+	document.getElementById('lcdDrawCmd').innerHTML="\n ";//start for data .toString(16) makes data hex
 	for (  i=0;i<=ranges;i++){
 	  for (  j=0;j<1024/ranges;j++){
 	  
@@ -811,7 +810,7 @@ function jadiin(){
 	//hexinfo= awaltft + yPos + tengahtft + i + akhirtft + (Math.floor(red/8)*2048+Math.floor(green/4)*32+Math.floor(blue/8)).toString(16) + ');\n ';
 	hexinfo= ' tft.drawBitmap(' + xPos + ', ' + yPos + ', ' + newname + '_' + i + ', ' + bmp_P + ', ' + Bagian + ', 0x' + (Math.floor(red/8)*2048+Math.floor(green/4)*32+Math.floor(blue/8)).toString(16) + ');\n ';
 	while (hexinfo.length<5){hexinfo='0'+hexinfo;} //this adds leading zeros
-	document.getElementById('colorSets2').innerHTML+= hexinfo;
+	document.getElementById('lcdDrawCmd').innerHTML+= hexinfo;
 	temp++;
 	}
 
@@ -823,15 +822,14 @@ function jadiin(){
 
 	//this is at end of loop, all values in table text area, 
 	// now we need to clean up last comment and close loop 
-	var temptable=document.getElementById('colorSets2').innerHTML
-	document.getElementById('colorSets2').innerHTML=temptable.substring(0,temptable.length-1);//we remove last coma
-	//document.getElementById('colorSets2').innerHTML+=" \n};";//we want number to stay after refresh;//start for data .toString(16) makes data hex
+	var temptable=document.getElementById('lcdDrawCmd').innerHTML
+	document.getElementById('lcdDrawCmd').innerHTML=temptable.substring(0,temptable.length-1);//we remove last coma
+	//document.getElementById('lcdDrawCmd').innerHTML+=" \n};";//we want number to stay after refresh;//start for data .toString(16) makes data hex
 	//GENERATE SKETCH code
-	var sketch  = '/* \n   This example code base from adafruit tft library.\n';
-		sketch += '   Sketch created by Bitmap Gradient Array Generator tools.\n';
-		sketch += '   https://github.com/oprekersmania/BitmapGradientArrayGenerator \n\n';
-		sketch += '   Tools created by Dony Oprekers.\n';
-		sketch += '   https://www.facebook.com/profile.php?id=100015443235767 \n*/\n\n';
+	var sketch  = '/* \nThis example code base from adafruit tft library.\n';
+		sketch += 'Sketch created by Bitmap Gradient Array Generator tools.\n';
+		sketch += 'Tools created by Dony Oprekers.\n';
+		sketch += 'https://github.com/oprekersmania/BitmapGradientArrayGenerator \n*/\n\n';
 		sketch += '// Arduino LCD library \n';
 		sketch += '#include "SPI.h"  // Arduino LCD library \n';
 		sketch += '#include "Adafruit_GFX.h" \n';
@@ -842,7 +840,7 @@ function jadiin(){
 		sketch += 'Adafruit_ILI9341 tft = Adafruit_ILI9341(TFT_CS, TFT_DC);';
 		sketch += '\n\n';
 		sketch += '// Array from sliced image \n';
-		sketch += document.getElementById('result').value;
+		sketch += document.getElementById('bmpArray').value;
 		sketch += '\n\n';
 		sketch += 'void setup() { \n  ';
 		sketch += '// initialize the display \n  ';
@@ -850,11 +848,11 @@ function jadiin(){
 		sketch += '// set the background to black \n  ';
 		sketch += 'tft.fillScreen(ILI9341_BLACK); \n\n  ';
 		sketch += '// Drawing image with Gradient color  ';
-		sketch += document.getElementById('colorSets2').innerHTML;
+		sketch += document.getElementById('lcdDrawCmd').innerHTML;
 		sketch += '\n';
 		sketch += '}\n\n';
 		sketch += 'void loop() {}\n\n';
-	document.getElementById('sample').innerHTML = sketch;
+	document.getElementById('sampleSketch').innerHTML = sketch;
 	//this part simulates actual chart data
 
 	for (  i=0;i<64;i++){
@@ -893,7 +891,6 @@ function jadiin(){
 	Proses();
 }
 
-
 $(document).ready(function () {
     $('input:radio[name="BaseWarna"]').change(function() {
         if ($(this).val() == '3') {
@@ -923,7 +920,7 @@ $(document).ready(function () {
 <!---------------------------------------------------->
   $('#copying1').click(function () {
   
-	  var copyText = document.getElementById("colorSets2");
+	  var copyText = document.getElementById("lcdDrawCmd");
 	  copyText.select();
 	  copyText.setSelectionRange(0, 9999999); 
 			  document.execCommand("copy");
@@ -933,14 +930,14 @@ $(document).ready(function () {
 <!---------------------------------------------------->
   $('#copying2').click(function () {
   
-	  var copyText = document.getElementById("result");
+	  var copyText = document.getElementById("bmpArray");
 	  copyText.select();
 	  copyText.setSelectionRange(0, 9999999);
 			  document.execCommand("copy");
   });
 
   $('#copying3').click(function () {
-	  var copyText = document.getElementById("sample");
+	  var copyText = document.getElementById("sampleSketch");
 	  copyText.select();
 	  copyText.setSelectionRange(0, 9999999); /*Change higher if all content not copied*/
 	  document.execCommand("copy");
