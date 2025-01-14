@@ -84,44 +84,54 @@
 	<iframe id="contentFrame" src="" ></iframe>
 	<textarea id="editor" ></textarea>
 
-    <script>
-        // Fungsi untuk memuat halaman ke dalam iframe
-		let openPage = '';
-		
-function loadPage(page) {
-    const iframe = document.getElementById('contentFrame');
-    const textarea = document.getElementById('editor');
-	openPage = page
-    iframe.src = page;
+<script>
+    let openPage = '';
 
-    // Menggunakan fetch untuk mendapatkan konten file
-    fetch(page)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
-            }
-            return response.text();
-        })
-        .then(content => {
-            textarea.value = content; // Menampilkan konten file ke textarea
-        })
-        .catch(error => {
-            console.error('Error loading page:', error);
-            textarea.value = 'Error loading content.';
-        });
-	$('#copyToClipboard').trigger('click');
-}
-	    
-$(document).ready(function () {
-        // Copy to Clipboard
+    function loadPage(page) {
+        const iframe = document.getElementById('contentFrame');
+        const textarea = document.getElementById('editor');
+        openPage = page;
+        iframe.src = page;
+
+        // Menggunakan fetch untuk mendapatkan konten file
+        fetch(page)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                return response.text();
+            })
+            .then(content => {
+                textarea.value = content; // Menampilkan konten file ke textarea
+                // Setelah konten berhasil dimuat, salin ke clipboard
+                copyToClipboard();
+            })
+            .catch(error => {
+                console.error('Error loading page:', error);
+                textarea.value = 'Error loading content.';
+            });
+    }
+
+    // Fungsi untuk menyalin konten ke clipboard
+    function copyToClipboard() {
+        const textarea = document.getElementById("editor");
+        textarea.select();
+        textarea.setSelectionRange(0, textarea.value.length); // Pastikan semua konten terpilih
+        const success = document.execCommand("copy");
+        if (success) {
+            console.log('Content copied to clipboard');
+        } else {
+            console.error('Failed to copy content to clipboard');
+        }
+    }
+
+    $(document).ready(function () {
+        // Event listener untuk tombol "Copy to Clipboard" (jika diperlukan manual trigger)
         $('#copyToClipboard').click(function () {
-            var copyText = document.getElementById("editor");
-            copyText.select();
-            copyText.setSelectionRange(0, 9999999); // Ensure selection range covers all content
-            document.execCommand("copy");
+            copyToClipboard();
         });
-  
-})
-    </script>
+    });
+</script>
+
 </body>
 </html>
