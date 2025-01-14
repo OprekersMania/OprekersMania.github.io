@@ -3,8 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Realtime HTML Editor with Resizer</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css">
+    <title>Realtime HTML Editor</title>
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css">
     <style>
         body {
             display: flex;
@@ -26,7 +28,7 @@
     .button-row {
       display: flex;
       gap: 10px;
-      margin-bottom: 10px;
+      margin: 10px;
     }
 
         textarea {
@@ -36,11 +38,10 @@
             padding: 10px;
             background-color: #000;
             color: #0f0;
-            font-family: monospace;
             box-sizing: border-box;
         }
         iframe {
-            width: 50%;
+            width: 70%;
             height: 100%;
             border: none;
             box-sizing: border-box;
@@ -55,18 +56,25 @@
 
         .resizer:hover {
             background-color: #aaa;
-        }
+        }	
+#editor::-webkit-scrollbar-thumb {
+    background-color: #ff0000;  /* Warna track scroll (bagian yang dapat digeser) */
+    border-radius: 10px; /* Membuat sudut scrollbar melengkung */
+}
+#editor::-webkit-scrollbar-track {
+    background-color: #454444;  /* Warna background track scrollbar */
+}
     </style>
 </head>
 <body>
     <div class="left-pane">
       <div class="button-row">
-        <button class="ui compact red button">Red</button>
-        <button class="ui compact green button">Green</button>
-        <button class="ui compact blue button">Blue</button>
+		<button class="ui mini red button" id="copyToClipboard"><i class="copy icon"></i>Copy to Clpbrd</button>
+		<button class="ui mini purple button" id="pasteFromClipboard"><i class="copy icon"></i>Paste Clpbrd</button>
+		<button class="ui mini green button" id="savefile"><i class="copy icon"></i>Save to file</button>
+		<button class="ui mini blue button" onclick="toggleWhiteSpace()">Toggle WordWrap</button>
       </div>
-        <textarea id="editor" placeholder="Write your HTML, CSS, and JavaScript here...">
-		</textarea>
+        <textarea id="editor" style="white-space: nowrap"></textarea>
     </div>
     <div class="resizer" id="resizer"></div>
     <iframe id="preview"></iframe>
@@ -111,6 +119,53 @@
             isResizing = false;
             document.body.style.cursor = 'default';
         });
+	
+	function toggleWhiteSpace() {
+		const element = document.getElementById('editor'); // Ganti dengan ID elemen yang sesuai
+		const currentWhiteSpace = window.getComputedStyle(element).whiteSpace;
+
+		if (currentWhiteSpace === 'nowrap') {
+			element.style.whiteSpace = 'normal';
+		} else {
+			element.style.whiteSpace = 'nowrap';
+		}
+	}
+	
+$(document).ready(function () {
+
+	$('#savefile').click(function () {
+		var textToSave = document.getElementById("editor").value;  // Ambil teks dari elemen dengan id 'result'
+		var textToSaveAsBlob = new Blob([textToSave], {type:"text/plain"});  // Buat Blob dari teks
+		var textToSaveAsURL = window.URL.createObjectURL(textToSaveAsBlob);  // Buat URL objek dari Blob
+
+		var downloadLink = document.createElement("a");  // Membuat elemen <a> untuk link unduhan
+		downloadLink.href = textToSaveAsURL;  // Set link ke URL objek
+		downloadLink.download = name + '.h';  // Tentukan nama file untuk diunduh
+		downloadLink.innerHTML = "Download File";  // Teks untuk link (bisa diubah sesuai kebutuhan)
+		downloadLink.onclick = function(event) {
+			document.body.removeChild(event.target);  // Hapus elemen setelah di-klik
+		};
+		downloadLink.style.display = "none";  // Sembunyikan link dari tampilan
+		document.body.appendChild(downloadLink);  // Tambahkan link ke body
+		downloadLink.click();  // Klik link untuk memulai download
+	});
+
+        // Copy to Clipboard
+        $('#copyToClipboard').click(function () {
+            var copyText = document.getElementById("editor");
+            copyText.select();
+            copyText.setSelectionRange(0, 9999999); // Ensure selection range covers all content
+            document.execCommand("copy");
+        });
+
+        // Paste from Clipboard
+        $('#pasteFromClipboard').click(async function () {
+			$('#editor').val('')
+                const clipboardText = await navigator.clipboard.readText(); // Read text from clipboard
+                $('#editor').val(clipboardText); // Paste text into the textarea
+        });
+  
+})
     </script>
 </body>
 </html>
