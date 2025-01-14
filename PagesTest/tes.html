@@ -1,0 +1,2239 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" crossorigin="anonymous"></script>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
+	<script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
+</head>
+
+    <style>
+	
+		body {
+            font-family: "Lato", sans-serif;
+            background-color: #111;
+			color: #4183c4;
+            padding: 16px;
+            margin-left: 40px;
+			scroll-behavior: smooth;
+        }
+        
+        .sidebar {
+            height: 100%;
+            width: 40px;
+            position: fixed;
+            z-index: 2;
+            top: 0;
+            left: 0;
+            background-color: #071c35;
+            overflow-x: hidden;
+            transition: 0.5s;
+            padding-top: 30px;
+            white-space: nowrap;
+        }
+        
+        .sidebar.left {
+            left: 0;
+			padding-right: 30px;
+        }
+
+        .sidebar.right {
+            right: 0;
+			justify-self: right;
+        }
+
+        .sidebar a {
+            padding: 8px;
+            text-decoration: none;
+            font-size: 20px;
+            color: #4183c4;
+            display: block;
+            transition: 0.3s;
+        }
+        
+        .sidebar a:hover {
+            color: #fd0909;
+        }
+        
+        .sidebar-text {
+            vertical-align: middle;
+        }
+        
+        #main {
+            /* transition: margin-left .5s; */
+            padding: 16px;
+            margin-left: 40px;
+        }
+        /* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
+        
+        @media screen and (max-height: 450px) {
+            .sidebar {
+                padding-top: 15px;
+            }
+            .sidebar a {
+                font-size: 18px;
+            }
+        }
+			
+/*--------------------------------*/	
+		
+        .hidden {
+            display: none;
+        }
+
+        .flex-container {
+            display: flex;
+            height: 100vh;
+            /* margin-top: 20px; */
+        }
+
+        .center-panel {
+            /* flex-grow: 1; */
+            padding: 0 10px;
+            /* overflow-y: auto; */
+        }
+
+        .file-list {
+            list-style: none;
+            margin: 0 0 0 45px;
+            padding: 0;
+            width: max-content;
+        }
+
+        .file-list li {
+            cursor: pointer;
+            padding: 5px 10px;
+            border: 1px solid #595959;
+            border-radius: .28571429rem;
+            margin-left: -15px;
+        }
+
+        .file-list li:hover {
+            background-color: #011159;
+        }
+
+	
+/*--------------------------------*/
+	
+    textarea {
+      font-family: "Courier", monotype;
+      font-size: 0.9em !important;
+    }
+
+    .explanation ul {
+      list-style-type: circle;
+      margin: 0;
+      padding-left: 14px;
+    }
+
+    .explanation h5 {
+      margin-bottom: 4px;
+      margin-top: 4px;
+    }
+
+    #glyphs div.inner {
+      padding: 10px 0;
+      position: relative;
+    }
+    #glyphs .centered.inner {
+      padding: 10px;
+      text-align: center;
+    }
+
+    #glyphs h2.inner {
+      font-size: 2em;
+      padding: 0.3em;
+      text-align: center;
+    }
+    #glyphs div.table {
+      user-select: none;
+      position: relative;
+      width: max-content;
+      margin: auto;
+    }
+    #glyphs div.table div.row {
+      height: 10px;
+      position: relative;
+    }
+    #glyphs div.table div.row:first-child div.cell {
+      height: 10px;
+      border-top: 1px solid lightgrey;
+    }
+    #glyphs div.table div.cell {
+      border-bottom: 1px solid lightgrey;
+      border-right: 1px solid lightgrey;
+      width: 10px;
+      height: 10px;
+      display: inline-block;
+      cursor: pointer;
+      background: white;
+    }
+    #glyphs div.table div.cell:first-child {
+      border-left: 1px solid lightgrey;
+    }
+    #glyphs div.table div.cell.fill {
+      background: black;
+    }
+    #glyphs div.table div.cell:hover {
+      background: #999;
+    }
+    #glyphs div.table div.cell.fill.over {
+      box-shadow: 0 0 9px #D00 inset;
+    }
+    #glyphs div.table div.cell.dead {
+      background: #c1c1c1;
+    }
+    #loader {
+      position: fixed;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(0, 0, 0, 0.8);
+      color: white;
+      font-weight: bold;
+      font-size: 2em;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 10;
+      display: flex;
+      flex-direction: column;
+    }
+    .advance-wrapper {
+      width: 300px;
+      position: relative;
+      border: 1px solid lightgray;
+      height: 30px;
+      margin-bottom: 20px;
+    }
+    .advance {
+      opacity: 0.7;
+      background: white;
+      width: 10px;
+      height: 24px;
+      margin: 2px;
+    }
+    .baseline {
+      position:absolute;
+      left:0px;
+      width:100%;
+      height:2px;
+      background-color:#090;
+      opacity:0.6;
+      pointer-events: none;
+    }
+    .limit {
+      position: absolute;
+      top: 0px;
+      width: 2px;
+      height: 100%;
+      opacity: 0.4;
+      pointer-events: none;
+      background-color: #900;
+    }
+    #add {
+      margin-top: 10px;
+    }
+
+    span.np {
+      font-size: 0.5em;
+      color: #CCC;
+      font-style: italic;
+    }
+
+    .glyph-grid {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: stretch;
+      justify-content: center;
+    }
+    .glyph-grid > div {
+      padding-left: 1rem;
+      padding-right: 1rem;
+	  margin-top: 1rem;
+    }
+	
+	.ui.form input:not([number] ) {
+      padding-left: 1rem;
+      padding-right: 1rem;
+    }
+	
+.ui.button:not(.icon)>.right.icon:not(.button):not(.dropdown) {
+    margin: 0 .42857143em 0 -.21428571em;
+}
+	.ui.button {
+		margin-top:5px;
+	}
+		
+	canvas{
+		max-width:97%;
+	}
+		
+	
+		
+		
+    </style>
+<body>
+
+			
+	<div id="mySidebarLeft" class="sidebar left" onmouseover="toggleSidebar('mySidebarLeft')" onmouseout="toggleSidebar('mySidebarLeft')">
+		<a href="#" onclick="selectDirectory()">
+			<span><i class="folder open outline icon"></i></span>&nbsp;&nbsp;&nbsp;&nbsp;Open Folder
+		</a>
+                    <a href="#" id="rst" onclick="resetDirectoryTree()" style="margin:10px 0px 0px 50px; display:none">
+						<span><i class="trash icon"></i></span>&nbsp;&nbsp;&nbsp;&nbsp;Clear List
+					</a>
+                    <div class="file-list" id="directoryTree"></div>
+	</div>
+
+
+<!-------------------------------->
+<!--			HEADER			-->
+<!-------------------------------->
+	<div style="background-color: #37f21c54; margin-top: 25px;" class="ui red segment">
+			<h2 align="center" style="font-size: 30px;">Adafruit GFX Pixel font customiser</h2>
+	</div>
+	
+	<p align="center" style="margin-bottom: 0px;padding-top: 5px;padding-bottom: 5px;">
+		<em>Created by <a href="https://github.com/tchapi" target="_blank">tchapi</a>, major improvements by <a href="https://github.com/cmarrin" target="_blank">cmarrin</a> and <a href="https://github.com/charno" target="_blank">charno</a> - Source code available on <a href="https://github.com/tchapi/Adafruit-GFX-Font-Customiser" target="_blank">Github</a>. This is the 
+		<a href="https://tchapi.github.io/Adafruit-GFX-Font-Customiser/" target="_blank"> Original Page</a> font customiser.</em>
+	</p>
+
+	<p align="center" style="margin-bottom: 0px;padding-top: 5px;padding-bottom: 5px;">
+		<em>
+			<b>Tata letak dan fitur tambahan, serta terjemahan, di desain ulang oleh member facebook,  
+				<a href="https://www.facebook.com/profile.php?id=100015443235767" target="_blank">DONY OPREKERS</a>
+			 <br><br>
+			Tool untuk mengkonversi image ke byte array secara online, untuk digunakan pada</br>
+			library lcd Adafruit atau yg support, bisa cek <a href="https://oprekersmania.github.io/image2cpp.html" target="_blank">DISINI</a></b>
+		</em>
+	</p>
+
+  <div class="ui divider"></div>
+  
+
+<!-------------------------------------------->
+<!--			Menu Ekstrak Font			-->
+<!-------------------------------------------->
+<div class="eight wide column" id="sumber">
+<div class="ui black inverted segment">
+<div class="ui form">
+	
+	<div class="two fields">
+		<div class="field" >
+			<div class="field">
+	
+			<label><font color="white">Data Font yang akan diproses</font></label>
+            <textarea id="source" style="font-weight: bolder;">
+			</textarea>
+			</div>
+		  
+			<label for="BukaFile" class="ui small inverted blue button" ><i class="folder icon"></i> Buka File Font</label>
+			<input id="BukaFile" type="file" style="display:none;" >
+            <button class="ui small inverted violet button" id="extract"><i class="icon upload"></i> Ekstrak font</button>
+            <button class="ui small inverted yellow button" id="createFont"><i class="icon file outline"></i> Buat font baru</button>
+			<button class="ui small inverted red button" id="hapus"><i class="eraser icon"></i> Hapus area teks</button>
+			<br>
+			<input class="puter" type="number" id="baseValue" value="0" step="1"  style="height: 34px; width:70px; margin-top:5px;"></input>
+			<button class="ui small inverted blue button"  onclick="zeroBase()">Rubah Base</button>
+		</div>
+				
+		<div class="field" >
+			<label><font color="white">Preview Only Active Font</font></label>
+			
+					<div class="field" style="background-color:black;min-height: 11em;">
+					<canvas id="fontCanvas" ></canvas>
+					</div>
+					<div class="field" > 
+						Zoom Scale 
+						<input class="puter" type="number" id="FontZoom" value="8" min="2" step="1" style="height: 34px; width:70px; margin-top:5px;"></input>
+						<button class="ui small inverted button blue" id="FontPreview"><i class="recycle icon"></i>Preview</button>
+						
+					</div>
+  
+		</div>
+	</div>
+		
+	  
+</div>
+</div>
+</div>
+	
+	<div id="informasi" class="ui red segment" style="background-color: #b0fde8; display: none; text-align:center;">
+	  <h1><font color="red">!!! &ensp;&ensp;  Editor akan ditampilkan setelah font diekstrak atau font baru dibuat &ensp;&ensp;  !!!</font></h1>
+	</div>
+
+  <br><br>
+
+<!---------------------------------------------------->
+<!--			Menu Tambah Karakter Baru			-->
+<!---------------------------------------------------->
+<div id="hasil" class="ui teal segment" style="background-color: #1b1c1d; display: none; padding-bottom:100px;">
+
+	<div class="ui grid">
+	  <div class="eight wide column">
+		  <h2 class="ui header" style="color: #0faf7b;">Glyphs dari font : &nbsp; <em class="fontname" style="display: none; color: #1b00ff;">Nama Font tidak diketahui</em></h2>
+	  </div>
+	  <div class="eight wide column" style="padding-top: 0px;">
+		  <button class="ui small button violet" id="add" disabled="disabled"><i class="icon add"></i> Tambah Karakter baru</button>
+	  </div>
+	 </div>
+	 <hr>
+	
+		 <div align="center" style="position: sticky;background-color: #1b1c1d;top: 0;z-index: 1;">
+			  <!-- Tambahkan ini ke bagian HTML yang sesuai -->
+			<font style="color: red;margin-bottom:10px"><b>Tombol Pengaturan Masal Semua Karakter !!!</b></font>
+			<br>
+			<div class="ui mini buttons" style="margin:1px">
+				<button id="xoff-" class="ui button global-handler purple">-</button>
+				<button id="XoffChange" class="ui disable button teal" style="width:50">XOff</button>
+				<button id="xoff+" class="ui button global-handler purple">+</button>
+			</div>
+			<div class="ui mini buttons" style="margin:1px">
+				<button id="xadv-" class="ui button global-handler purple">-</button>
+				<button id="XadvChange" class="ui disable button teal" style="width:50">XAdv</button>
+				<button id="xadv+" class="ui button global-handler purple">+</button>
+			</div>
+			<div class="ui mini buttons" style="margin:1px">
+				<button id="base-" class="ui button global-handler purple">-</button>
+				<button id="BaseChange" class="ui disable button teal" style="width:50">Base</button>
+				<button id="base+" class="ui button global-handler purple">+</button>
+			</div>
+			<div class="ui mini buttons" style="margin:1px">
+				<button id="col-" class="ui button global-handler purple">-</button>
+				<button id="ColumnChange" class="ui disable button teal" style="width:50">Col</button>
+				<button id="col+" class="ui button global-handler purple">+</button>
+			</div>
+			<div class="ui mini buttons" style="margin:1px">
+				<button id="row-" class="ui button global-handler purple">-</button>
+				<button id="RowChange" class="ui disable button teal" style="width:50">Row</button>
+				<button id="row+" class="ui button global-handler purple">+</button>
+			</div>
+		  <button class="ui mini button red" onclick='window.location="#resultWrapper"'><i class="arrow alternate circle down icon"></i> Turun</button>
+		<div class="ui divider"> </div>
+		 </div>
+	 
+<!------------------------------------------------>
+<!--			Tampilan font editor			-->
+<!------------------------------------------------>
+  <div id="glyphs" class="ui glyph-grid">
+  </div>
+  <br>
+  
+<!-------------------------------------------->
+<!--			Menu Ekspor Font 			-->
+<!-------------------------------------------->
+    <div class="eight wide column">
+      <div class="ui black inverted segment" id="resultWrapper">
+        <div class="ui form">
+          <div class="six fields">
+			  <div class="field" style="width:250px;">
+				<label><font color="white">Silahkan ganti nama font <br> jika diperlukan lagi,<br>
+				lalu klik proses kembali</font></label>
+				<input type="text" id="namafont" value="fontname" style="font-weight: bolder;">
+			  </div>
+			  <div class="field" style="width:20px;">
+			  </div>
+				<textarea id="result" style="font-weight: bolder;"></textarea>
+          </div>
+		  
+          <div>
+		  <font color="yellow" >Range karakter yang akan diekspor
+		  </font>
+          <div class="eight fields">
+            <div class="field">
+				<input class="check" name="ranges" type="radio" value="1" />&nbsp;&nbsp;&nbsp; Huruf A-Z
+            </div>
+            <div class="field">
+				<input class="check" name="ranges" type="radio" value="2" />&nbsp;&nbsp;&nbsp; Huruf a-z
+            </div>
+            <div class="field">
+				<input class="check" name="ranges" type="radio" value="3" />&nbsp;&nbsp;&nbsp; Angka 0-9
+            </div>
+            <div class="field">
+				<input class="check" name="ranges" type="radio" value="4" />&nbsp;&nbsp;&nbsp; Fullset ASCII
+            </div>
+		  </div>
+		  </div>
+		
+		  
+		  
+          <div class="two fields">
+            <div class="field">
+              <label><font color="white">Karakter awal yg diekspor </font></label>
+              <input type="text" id="firstglyph" value="0x00" style="font-weight: bolder;">
+            </div>
+            <div class="field">
+              <label><font color="white">Karakter terakhir yg diekspor</font></label>
+              <input type="text" id="lastglyph" value="0x00" style="font-weight: bolder;">
+            </div>
+          </div>
+			<button class="ui inverted green button" id="export"><i class="icon download"></i> Proses dan buat font</button>
+			<button class="ui inverted teal button" id="copying"><i class="clipboard list icon"></i>Salin ke clipboard</button>
+			<button class="ui inverted red button" id="savefile"><i class="clipboard save icon"></i>Simpan ke file</button>
+			<button class="ui inverted blue button right floated" id="editing" ><i class="recycle icon"></i>Edit ulang hasil</button>
+			<button class="ui inverted red button right floated" id="reset" ><i class="icon undo"></i> Reset!</button>
+			<button class="ui inverted green button right floated" onclick='window.location="#sumber"' ><i class="angle double up icon"></i> Naik</button>
+        </div>
+      </div>
+    </div>
+  </div>
+	
+<!--------------------------------------------------->
+  
+<!------------------------------------------------>
+<!--			Menu Tambah Karakter 			-->
+<!------------------------------------------------>
+  <div class="ui grid">
+	  
+		<div class="ui small modal choose">
+		  <div class="header">Menambah karakter baru</div>
+		  <div class="content">
+			<p>Karakter akan ditambahkan ke set font yang sedang di edit (<em>baik di akhir atau di awal, tergantung pada posisi ASCII nya)</em>), dan jika tidak berurutan dengan set sebelum/sesudahnya, maka set karakter interval diantara keduanya akan ditambahkan otomatis, tetapi dinonaktifkan, sehingga tidak memakai banyak ruang dalam glyph font yang akan diekspor</p>
+			<form class="ui form">
+			<div class="field">
+			  <div class="ui toggle checkbox use-charcode">
+				<input type="checkbox" name="charcode" tabindex="0" class="hidden">
+					<label>Menggunakan kode (hex) : contoh 0x30</label>
+			  </div>
+			</div>
+			</form>
+			<div class="ui right labeled input">
+			  <input type="text" id="new-character" placeholder="Huruf/Angka/Symbol" maxlength="1">
+			  <a class="ui label">
+				Kode Hex: <kbd class="charcode" style="color: #db2828;">>N/A</kbd>
+			  </a>
+			</div>
+			<div class="ui right labeled input" style="display: none;">
+			  <input type="text" id="new-character-code" placeholder="Kode hex" maxlength="4">
+			  <a class="ui label">
+				Huruf/Angka/Symbol: <kbd class="character" style="color: #db2828;">N/A</kbd>
+			  </a>
+			</div>
+		  </div>
+		  <div class="actions">
+			<div class="ui buttons">
+				<button class="negative ui button">Batal</button>
+				<div class="or"></div>
+				<button class="positive ui button">Tambah</button>
+			</div>
+		  </div>
+		</div>
+<!--------------------------------------------------->
+			
+<!------------------------------------------------>
+<!--			Menu Buat font baru 			-->
+<!------------------------------------------------>
+		<div class="ui small modal newfont">
+			  <div class="header">Buat font baru</div>
+		  <div class="content">
+				<p>Untuk membuat font baru, Anda perlu memberikan beberapa detail dibawah ini.</p>
+			<form class="ui form">
+			<div class="field">
+				  <label>Nama Font <font color="red">&emsp; *wajib</font></label>
+			  <input type="text" id="newfont-name" placeholder="Nama untuk font yang baru">
+			</div>
+			<div class="field">
+				  <label>Tinggi Font dalam pixels<font color="red">&emsp; *wajib</font></label>
+			  <input id="newfont-height" type="number" value="5" min="1">
+			</div>
+			<div class="field">
+				  <label>Karakter Pertama<font color="red">&emsp; *wajib</font></label>
+				  <p>Font baru akan dibuat dengan satu karakter.</br>Anda bisa menambahkan lebih banyak karakter nanti.</p>
+			  <div class="ui toggle checkbox newfont-use-charcode">
+				<input type="checkbox" name="newfontCharcode" tabindex="0" class="hidden">
+				<label>Menggunakan kode (HEX)</label>
+			  </div>
+			</div>
+
+			</form>
+			<div class="ui right labeled input">
+			  <input type="text" id="newfont-new-character" placeholder="Huruf/Angka/Symbol" maxlength="1">
+			  <a class="ui label">
+				Kode Hex: <kbd class="newfontCharcode" style="color: #db2828;"> Karakter belum ditulis</kbd>
+			  </a>
+			</div>
+			<div class="ui right labeled input" style="display: none;">
+			  <input type="text" id="newfont-new-character-code" placeholder="Kode hex" maxlength="4">
+			  <a class="ui label">
+				Huruf/Angka/Symbol: <kbd class="newfontCharacter" style="color: #db2828;"> Kode hex belum ditulis Karakter belum ditulis</kbd>
+			  </a>
+			</div>
+		  </div>
+		  <div class="actions">
+			<div class="ui buttons">
+				<button class="negative ui button">Batal</button>
+				<div class="or"></div>
+				<button class="positive ui button">Buat</button>
+			</div>
+		  </div>
+		</div>
+<!--------------------------------------------------->
+
+		<div class="ui small modal message">
+		  <div class="header">⚠️ GAGAL MENAMBAH KARAKTER BARU</div>
+		  <div class="content">
+			<p></p>
+		  </div>
+		  <div class="actions">
+			<div class="ui approve blue button">Oke</div>
+		  </div>
+		</div>
+<!--------------------------------------------------->
+		
+		<div class="ui small modal confirmation">
+		  <div class="header">⚠️ MERESET SEMUA DATA EDITOR FONT !!!</div>
+		  <div class="content">
+			<p></p>
+		  </div>
+		  <div class="actions">
+			<div class="ui buttons">
+				<button class="negative ui button">Batal</button>
+				<div class="or"></div>
+				<button class="positive ui button">Reset</button>
+			</div>
+		  </div>
+		</div>
+<!--------------------------------------------------->
+
+		  <div id="loader" style="display: none;">
+			<div class="advance-wrapper"><div class="advance"></div></div>
+			<span>Proses meng-ekstrak font ...</span>
+		  </div>
+		  
+  </div>
+	
+	
+
+
+
+
+<!----------------------------------------------->
+<!------       FUNGSI JAVASCRIPT	      ------>
+<!----------------------------------------------->
+    <script>
+	
+        var SidebarToggleLeft = true;
+        var SidebarToggleRight = true;
+		
+		
+        function toggleSidebar(sidebarId) {
+            const sidebar = document.getElementById(sidebarId);
+            const resetButton = sidebarId === 'mySidebarLeft' ? document.getElementById('rst') : null;
+
+            if (sidebarId === 'mySidebarLeft') {
+                if (SidebarToggleLeft) {
+                    sidebar.style.width = "max-content";
+                } else {
+                    sidebar.style.width = "40px";
+                }
+                SidebarToggleLeft = !SidebarToggleLeft;
+            } else {
+                if (SidebarToggleRight) {
+                    sidebar.style.width = "max-content";
+                    // if (resetButton) resetButton.style.display = "block";
+                } else {
+                    sidebar.style.width = "40px";
+                    // if (resetButton) resetButton.style.display = "none";
+                }
+                SidebarToggleRight = !SidebarToggleRight;
+            }
+        }
+		
+        function zeroBase() {
+			const inputValue = parseInt(document.getElementById('baseValue').value, 10);
+			let glyphArray = document.getElementById('source').value;
+			const regex = /(\{\s*\d+,\s*\d+,\s*\d+,\s*\d+,\s*\d+,\s*)(-?\d+)(\s*\})/g;
+
+			let result = '';
+			let lastIndex = 0;
+
+			glyphArray.replace(regex, (match, p1, p2, p3, offset) => {
+				result += glyphArray.slice(lastIndex, offset);
+				let originalValue = parseInt(p2, 10);
+				let newValue = originalValue + inputValue;
+				result += `${p1}${newValue}${p3}`;
+				lastIndex = offset + match.length;
+			});
+
+			result += glyphArray.slice(lastIndex);
+
+			document.getElementById('source').value = result;
+			document.getElementById('baseValue').value = 0;
+		}
+
+// Mengambil semua elemen input dengan class "puter"
+        const puterInputs = document.querySelectorAll('.puter');
+        puterInputs.forEach(input => {
+            input.addEventListener('wheel', function(e) {
+                let currentValue = parseFloat(input.value) || 0;
+                currentValue += e.deltaY > 0 ? -1 : 1;
+
+                const min = parseFloat(input.min);
+                const max = parseFloat(input.max);
+
+                if (!isNaN(min)) currentValue = Math.max(currentValue, min);
+                if (!isNaN(max)) currentValue = Math.min(currentValue, max);
+
+                input.value = currentValue;
+            });
+        });
+
+	
+		async function selectDirectory() {
+			try {
+				let directoryHandle = await window.showDirectoryPicker();
+				console.log('directoryHandle:', directoryHandle);
+
+				const rootNode = document.createElement('ul');
+				await traverseDirectory(directoryHandle, rootNode, true); // Pass true to indicate it's the root directory
+				const directoryTree = document.getElementById('directoryTree');
+
+				//directoryTree.innerHTML = ''; // Clear previous list
+				directoryTree.appendChild(rootNode);
+
+				// Show reset button if directory tree is not empty
+				if (directoryTree.childElementCount > 0) {
+					document.getElementById('rst').style.display = 'block';
+				}
+			} catch (err) {
+				console.error('Error selecting directory:', err);
+				alert('Error selecting directory: ' + err.message);
+			}
+		}
+
+        async function traverseDirectory(directoryHandle, parentNode) {
+            for await (const [name, handle] of directoryHandle.entries()) {
+				// Skip files that don't end with .h
+				if (handle.kind === 'file' && !name.endsWith('.h')) {
+					continue;
+				}
+				
+                const listItem = document.createElement('li');
+                const itemText = document.createElement('span');
+                itemText.textContent = name;
+                listItem.appendChild(itemText);
+
+                if (handle.kind === 'directory') {
+                    listItem.className = 'folder';
+                    listItem.style.backgroundColor = '#3d3637';
+                    listItem.style.marginTop = '5px';
+                    const subList = document.createElement('ul');
+                    subList.style.borderRadius= '.28571429rem';
+                    subList.classList.add('hidden');
+                    listItem.appendChild(subList);
+
+                    itemText.addEventListener('click', async () => {
+                        if (subList.childElementCount === 0) {
+                            await traverseDirectory(handle, subList);
+                        }
+                        subList.classList.toggle('hidden');
+                    });
+                } else if (handle.kind === 'file' && name.endsWith('.h')) {
+                    listItem.className = 'file';
+                    listItem.style.backgroundColor = '#331643';
+                    listItem.addEventListener('click', () => loadFile(handle));
+                }
+
+                parentNode.appendChild(listItem);
+            }
+        }
+
+        async function loadFile(fileHandle) {
+            const file = await fileHandle.getFile();
+            const content = await file.text();
+            document.getElementById('source').value = content;
+            previewFont(content);
+        }
+
+function resetDirectoryTree() {
+    const directoryTree = document.getElementById('directoryTree');
+    directoryTree.innerHTML = '';
+    const resetButtonRight = document.getElementById('rst');
+    resetButtonRight.style.display = 'none';
+}
+
+
+document.getElementById('BukaFile')
+  .addEventListener('change', getFile)
+  
+document.getElementById('FontPreview').addEventListener('click', function() {
+    const fontData = document.getElementById('source').value;
+    executeFontPreview(fontData);
+});
+	
+function executeFontPreview(fontData) {
+        previewFont(fontData);
+    }
+	
+function previewFont(fontData) {
+    const canvas = document.getElementById('fontCanvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = "#000";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    const { bitmaps, glyphs, FontHeight } = parseFontHeader(fontData);
+    
+    // console.log('Parsed Font Data:', { bitmaps, glyphs, FontHeight });
+    
+    if (!bitmaps.length || !glyphs.length || isNaN(FontHeight)) {
+        console.error('Invalid font data parsed:', { bitmaps, glyphs, FontHeight });
+        return;
+    }
+
+    let x = 5;
+    const lineHeight = 30;
+    let scaleFactor = parseFloat(document.getElementById('FontZoom').value);
+    let y = FontHeight * scaleFactor;
+    let renderedChars = [];
+
+    function render() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = "#000";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        renderedChars.forEach(char => {
+            const { imgData, posX, posY } = char;
+            ctx.putImageData(imgData, posX, posY);
+        });
+    }
+    
+    glyphs.forEach(glyph => {
+        const charImageData = getCharImageData(bitmaps, glyph);
+        // console.log('Glyph:', glyph);
+
+        if (glyph.width > 0 && glyph.height > 0) {
+            const imgData = ctx.createImageData(glyph.width * scaleFactor, glyph.height * scaleFactor);
+            const scaledCharImageData = scaleImageData(charImageData, glyph.width, glyph.height, scaleFactor);
+            imgData.data.set(scaledCharImageData);
+            
+            // Check if y exceeds the canvas height
+            if (y + lineHeight > canvas.height) {
+                // Increase canvas height by a fixed amount (e.g., 200 pixels) or based on line height
+                canvas.height += lineHeight + 10 * scaleFactor; // Add some padding
+                render(); // Render everything again
+            }
+            
+            ctx.putImageData(imgData, x, y - glyph.height * scaleFactor);
+            renderedChars.push({ imgData, posX: x, posY: y - glyph.height * scaleFactor });
+
+            x += (glyph.xAdvance * scaleFactor + 10);
+
+            if (x > canvas.width - (glyph.width * scaleFactor)) {
+                x = 10;
+                y += lineHeight + FontHeight * scaleFactor;
+            }
+        } else {
+            console.error('Invalid glyph data:', glyph);
+        }
+    });
+    // Adjust canvas height to fit all rendered characters
+    const lastChar = renderedChars[renderedChars.length - 1];
+    const requiredHeight = lastChar ? lastChar.posY + lastChar.imgData.height : canvas.height;
+    if (canvas.height !== requiredHeight) {
+        canvas.height = requiredHeight;
+        render(); // Render everything again with the adjusted canvas height
+    }
+}
+
+function parseFontHeader(data) {
+	/* 
+		//Adafruit GFX Font Glyphs structure
+		typedef struct {
+		  uint16_t bitmapOffset; ///< Pointer into GFXfont->bitmap
+		  uint8_t width;         ///< Bitmap dimensions in pixels
+		  uint8_t height;        ///< Bitmap dimensions in pixels
+		  uint8_t xAdvance;      ///< Distance to advance cursor (x axis)
+		  int8_t xOffset;        ///< X dist from cursor pos to UL corner
+		  int8_t yOffset;        ///< Y dist from cursor pos to UL corner
+		} GFXglyph;
+	*/
+    const bitmaps = [];
+    const glyphs = [];
+    const bitmapRegex = /0x([0-9A-Fa-f]{2})/g;
+    const glyphRegex = /{ +(\d+), +(\d+), +(\d+), +(\d+), +(-?\d+), +(-?\d+) }/g;
+
+    let match;
+    while ((match = bitmapRegex.exec(data)) !== null) {
+        tes = bitmaps.push(parseInt(match[1], 16));
+    }
+
+    const regex = /,\s*(\d+)\s*\};/;
+    const FontHeightMatch = data.match(regex);
+    const FontHeight = parseInt(FontHeightMatch[1], 10);
+
+    let currentBitmapOffset = 0;
+    let oldOffset = 0;
+    while ((match = glyphRegex.exec(data)) !== null) {
+        const [_, bitmapOffset, width, height, xAdvance, xOffset, yOffset] = match.map(Number);
+        if (width > 0 && height > 0) {
+            oldOffset = currentBitmapOffset;
+            if (oldOffset != bitmapOffset) {
+                currentBitmapOffset += 1;
+            }
+            glyphs.push({ bitmapOffset, width, height, xAdvance, xOffset, yOffset, glyphOffset: currentBitmapOffset });
+            currentBitmapOffset += Math.ceil((width * height) / 8);
+            // console.log('oldOffset:', oldOffset);
+            // console.log('currentBitmapOffset:', currentBitmapOffset);
+            // console.log('bitmapOffset:', bitmapOffset, '\n\n');
+        } else {
+            // console.log('w=0 h=0:\n', oldOffset);
+            glyphs.push({ bitmapOffset, width, height, xAdvance, xOffset, yOffset, glyphOffset: -1 });
+        }
+    }
+
+    return { bitmaps, glyphs, FontHeight };
+}
+
+function getCharImageData(bitmaps, glyph) {
+    const { width, height, glyphOffset } = glyph;
+    if (glyphOffset === -1) {
+        return new Uint8ClampedArray(width * height * 4);
+    }
+    const charData = new Uint8ClampedArray(width * height * 4);
+    let byteIndex = glyphOffset;
+    let bitIndex = 0;
+
+    for (let y = 0; y < height; y++) {
+        for (let x = 0; x < width; x++) {
+            const byte = bitmaps[byteIndex];
+            const bit = (byte >> (7 - bitIndex)) & 1;
+            const pixel = bit ? 255 : 0;
+            const index = (y * width + x) * 4;
+            charData[index] = pixel;
+            charData[index + 1] = pixel;
+            charData[index + 2] = pixel;
+            charData[index + 3] = 255;
+
+            bitIndex++;
+            if (bitIndex === 8) {
+                bitIndex = 0;
+                byteIndex++;
+            }
+        }
+    }
+
+    return charData;
+}
+
+function scaleImageData(data, width, height, scaleFactor) {
+    const scaledData = new Uint8ClampedArray(width * height * 4 * scaleFactor * scaleFactor);
+    for (let y = 0; y < height; y++) {
+        for (let x = 0; x < width; x++) {
+            const index = (y * width + x) * 4;
+            for (let dy = 0; dy < scaleFactor; dy++) {
+                for (let dx = 0; dx < scaleFactor; dx++) {
+                    const scaledIndex = ((y * scaleFactor + dy) * width * scaleFactor + (x * scaleFactor + dx)) * 4;
+                    scaledData[scaledIndex] = data[index];
+                    scaledData[scaledIndex + 1] = data[index + 1];
+                    scaledData[scaledIndex + 2] = data[index + 2];
+                    scaledData[scaledIndex + 3] = data[index + 3];
+                }
+            }
+        }
+    }
+    return scaledData;
+}
+
+function getFile(event) {
+	const input = event.target
+  if ('files' in input && input.files.length > 0) {
+	  placeFileContent(
+      document.getElementById('source'),
+      input.files[0])
+  }
+}
+
+function readFileContent(file) {
+	const reader = new FileReader()
+  return new Promise((resolve, reject) => {
+    reader.onload = event => resolve(event.target.result)
+    reader.onerror = error => reject(error)
+    reader.readAsText(file)
+  })
+}
+
+function placeFileContent(target, file) {
+    readFileContent(file).then(content => {
+        target.value = content;
+        executeFontPreview(content); // Call executeFontPreview after setting the content
+    }).catch(error => console.log(error));
+}
+
+function saveTextAsFile(){
+    var textToSave = document.getElementById("result").value;
+    var textToSaveAsBlob = new Blob([textToSave], {type:"text/plain"});
+    var textToSaveAsURL = window.URL.createObjectURL(textToSaveAsBlob);
+ 
+    var downloadLink = document.createElement("a");
+    downloadLink.href = textToSaveAsURL;
+    downloadLink.download = name + '.h';
+    downloadLink.innerHTML = "Download File";
+    downloadLink.onclick = destroyClickedElement;
+    downloadLink.style.display = "none";
+    document.body.appendChild(downloadLink);
+    downloadLink.click();
+}
+ 
+function destroyClickedElement(event){
+    document.body.removeChild(event.target);
+}
+ 
+function makeDirectionButton (name, func, color, width) {
+  const button = $('<div class="ui mini compact buttons" style="margin:1px"></div>')
+  const style = 'ui compact button ' + 'dir-handler ' + color
+	
+  button.append('<button id="' + func + '-left" class="' 	+ style + '" style="padding:10px">&larr;</button>')
+  button.append('<button id="' + func + '-up" class="' 		+ style + '" style="padding:10px">&uarr;</button>')
+  button.append('<button id="' + func + '-down" class="' 	+ style + '" style="padding:10px">&darr;</button>')
+  button.append('<button id="' + func + '-right" class="' 	+ style + '" style="padding:10px">&rarr;</button>')
+  return button
+}
+
+function makeUpDownButton (name, func, color, width) {
+  const button = $('<div class="ui mini compact buttons" style="margin:1px"></div>')
+  const style = 'ui compact button ' + func + '-handler ' + color
+  button.append('<button id="' + func + '-remove" class="' + style + '">-</button>')
+  button.append('<button id="' + func + '-value" class="ui compact disabled button ' + color + '" style="width:' + width + '">' + name + '</button>')
+  button.append('<button id="' + func + '-add" class="' + style + '">+</button>')
+  return button
+}
+
+function makeUndoButtons(func, color, width, teks) {
+    const button = $('<div class="ui mini compact buttons" style="margin:1px"></div>')
+    const style = 'ui compact button clip-handler ' + color
+    button.append('<button id="clip-' + func + '" class="' + style + '">' + teks +'</button>')
+    return button
+}
+
+function makeCheckButton ( width, disabled) {
+  // Tentukan warna tombol dan teks berdasarkan status disabled
+  const buttonColor = disabled ? 'green' : 'grey';
+  const buttonText = disabled ? 'ENABLE' : 'DISABLE';
+
+  // Membuat tombol
+  const button = $('<button>', {
+    id: buttonText, // ID untuk tombol
+    class: `ui mini button dis-handler ${buttonColor}`, // Menentukan warna tombol (Hijau untuk Enable, Merah untuk Disable)
+    style: `width:${width}; cursor: pointer; margin-top: 1px; display: inline-flex; justify-content: center;`,
+    text: buttonText, // Menentukan teks tombol (Enable/Disable)
+    disabled: false // Tombol selalu bisa diklik (fungsi ini dikelola lewat event)
+  });
+  return button;
+}
+
+function makeGlyphItem (n, w, h, char, adv, ow, oh, disabled) {
+  const charCode = char.charCodeAt(0)
+  const character = charCode.toString(16).toUpperCase()
+  const table = $('<div class="table"></div>')
+    .addClass('glyph')
+    .attr('data-pixels', n)
+    .attr('data-w', w)
+    .attr('data-h', h)
+    .attr('data-char', char)
+    .attr('data-adv', adv)
+    .attr('data-ow', ow)
+    .attr('data-oh', oh)
+    .attr('data-dis', disabled ? 1 : 0)
+    .css('opacity', disabled ? 0.1 : 1)
+
+  const grid = $(`<div style="width: ${window['glyph_table_width']}px"></div>`)
+  const div = $('<div class="ui attached segment inner" style="background-color: #372d03;"></div>')
+
+  div.append(table)
+
+  if (char == ' ') {
+    grid.append('<h2 class="ui top attached segment inner" ><span class="np">space</span></h2>')
+  } else  {
+    // Display a specific text for non-printable characters
+    grid.append('<h2 class="ui top attached segment inner" style="background-color: #211e11;">' + char.replace(/[\x00-\x1F\x7F-\x9F\xAD]/g, '<span class="np">non-printable</span>') + '</h2>')
+  }
+
+  grid.append('<div class="ui attached segment inner secondary centered" style="color:#00fdff; background-color: #372d03;"><b>' + '0x' + character + '</b></div>')
+  grid.append(div)
+
+  const buttonBar = $('<div class="ui bottom attached warning message inner centered" style="background-color: #372d03;"></div>')
+  buttonBar.append('<div style="background-color: aqua;">Move all pixel</div>')
+  buttonBar.append(makeDirectionButton('direct', 'dir', 'red', 50))
+  buttonBar.append(makeUpDownButton('Rows', 'row', 'purple', 50))
+  buttonBar.append(makeUpDownButton('Cols', 'col', 'violet', 50))
+  buttonBar.append(makeUpDownButton('Base', 'base', 'green', 50))
+  buttonBar.append(makeUpDownButton('XOff', 'xoff', 'blue', 50))
+  buttonBar.append(makeUpDownButton('XAdv', 'xadv', 'teal', 50))
+  buttonBar.append(makeUndoButtons('copy', 'brown', 20, 'COPY'))
+  buttonBar.append(makeUndoButtons('paste', 'orange', 20, 'PASTE'))
+  buttonBar.append(makeUndoButtons('undo', 'red', 20, 'UNDO'))
+  buttonBar.append(makeCheckButton( 119.84, disabled))
+
+  grid.append(buttonBar)
+
+  return grid
+}
+
+
+function setGlyphTable (table) {
+  const xadvance = parseInt(table.attr('data-adv'))
+  const yadvance = parseInt(window['yAdvance'])
+
+  const xoffset = parseInt(table.attr('data-ow'))
+  const yoffset = parseInt(table.attr('data-oh'))
+
+  const width = parseInt(table.attr('data-w'))
+  const height = parseInt(table.attr('data-h'))
+
+  const pixels = table.attr('data-pixels')
+
+  const maxBaseline = window['maxBaseline']
+
+  const left = xoffset
+  const right = width + xoffset
+  const top = maxBaseline + yoffset
+  const bottom = top + height
+
+  // Set the table
+  table.empty()
+  for (let i = 0; i < yadvance; i++) {
+    const row = $('<div></div>').addClass('row')
+    for (let j = Math.min(0, xoffset); j <= Math.max(xadvance, right); j++) {
+      const cell = $('<div></div>').addClass('cell').attr('data-x', j).attr('data-y', i)
+      // These classes are used to position the "limits" vertical lines
+      if (i === 0 && j === 0) {
+        cell.addClass('before_xoffset')
+      }
+      if (i === 0 && j === xadvance) {
+        cell.addClass('before_xadvance')
+      }
+      // Now draw the actual pixels
+      if (i < top || i >= bottom || j < left || j >= right) {
+        cell.addClass('dead')
+      } else if (pixels.charAt((i - top) * width + (j - left)) == '1') {
+        cell.addClass('fill')
+      }
+      // If the pixel is after xadvance, or before xoffset
+      if (j >= xadvance || j < Math.max(0, xoffset)) {
+        cell.addClass('over')
+      }
+      row.append(cell)
+    }
+    table.append(row)
+  }
+
+  // Draw the xadvance/xoffset limits
+  // (We need to get the actual cell position before hand)
+  const left_xoffset = table.find('div.before_xoffset')[0].offsetLeft
+  xoffset_limit = $('<div class="xoffset_limit limit"></div>').css('left', (left_xoffset - 1) + 'px') // -1 accounts for first border of table
+  table.append(xoffset_limit)
+
+  const left_xadvance = table.find('div.before_xadvance')[0].offsetLeft
+  xadvance_limit = $('<div class="xadvance_limit limit"></div>').css('left', (left_xadvance - 1) + 'px')
+  table.append(xadvance_limit)
+
+  // Set the baseline
+  baseline = $('<div class="baseline"></div>').css('top', ((maxBaseline + 1) * 15 - 1) + 'px')
+  table.append(baseline)
+}
+
+function updatePixels (table, newWidth, newHeight, x, y, fill) {
+  const dataPixels = table.attr('data-pixels')
+  const width = parseInt(table.attr('data-w'))
+  const height = parseInt(table.attr('data-h'))
+  const xoff = parseInt(table.attr('data-ow'))
+  const base = parseInt(table.attr('data-oh'))
+  const xAdjust = xoff * -1
+  const yAdjust = (window['maxBaseline'] + base) * -1
+
+  if (newWidth < 0) {
+    newWidth = width
+  }
+
+  if (newHeight < 0) {
+    newHeight = height
+  }
+
+  if (x >= 0 && y >= 0) {
+    x += xAdjust
+    y += yAdjust
+  }
+
+  // Store the pixels into a 2D bool array
+  const array = []
+  let pixelIndex = 0
+  for (let i = 0; i < height; ++i) {
+    const rowArray = []
+    for (let j = 0; j < width; ++j) {
+      if(x == j && y == i) {
+        rowArray.push(fill)
+      } else {
+        rowArray.push(dataPixels.charAt(pixelIndex))
+      }
+      ++pixelIndex
+    }
+    array.push(rowArray)
+  }
+
+  // Write out to a string newWidth x newHeight
+  let newPixels = ''
+  for (let i = 0; i < newHeight; ++i) {
+    for (let j = 0; j < newWidth; ++j) {
+      if (i >= height || j >= width) {
+        newPixels += '0'
+      } else {
+        newPixels += array[i][j]
+      }
+    }
+  }
+
+  // Pad out to a multiple of 8
+  const pad = newPixels.length % 8
+  for (let i = 0; i < pad; ++i) {
+    newPixels += '0'
+  }
+
+  table.attr('data-pixels', newPixels)
+}
+
+function advanceLoading (percent) {
+  const element = document.querySelector('#loader .advance')
+  element.style.width = Math.floor(294 * percent)
+}
+
+<!----------------------------------------------------->
+<!------        FUNGSI utama ekstrak font        ------>
+<!----------------------------------------------------->
+function extractFont () {
+  let data = $('#source').val()
+  const fontData = document.getElementById('source').value;
+    executeFontPreview(fontData);
+  // Extract name
+  const re = /const\s+(?:unsigned\s+char|uint8_t)\s+(\w+)Bitmaps\[\]/
+  const found = data.match(re)
+
+  if (found != null && found.length > 1) {
+    window['name'] = found[1]
+  } else {
+    alert('Tidak ditemukan kode font yang benar, silakan buka file font, atau paste-kan isi kode font Adafruit GFX terlebih dahulu.')
+	$("#loader").hide()
+    return
+  }
+
+  $('#glyphs').empty()
+
+  // extract GFXFont part
+  const last_part_re = /const\ GFXfont([\s\S]*)/g
+  const last_part = data.match(last_part_re)
+  window['last_part'] = last_part[0]
+
+  // Get first, last and yOffset
+  let parts = last_part[0].split(',')
+  const number_re = /0[xX][0-9a-fA-F]+|[0-9]+/gi
+  window['first'] = parts[2].match(number_re)[0]
+  window['last'] = parts[3].match(number_re)[0]
+  window['yAdvance'] = parts[4].match(number_re)[0]
+  console.log(window['yAdvance'])
+
+  data = data.replace(last_part[0], '')
+  data = data.replace(/\{/gi, '[').replace(/\}/gi, ']')
+  data = data.replace('const GFXglyph ', '').replace('const uint8_t ', '').replace(/\[\]\ PROGMEM/gi, '')
+
+  eval(data)
+
+
+  $('.fontname').text(window['name'].slice(0, window['name'].length)).show()
+  $('#firstglyph').val(window["first"])
+  $('#lastglyph').val(window["last"])
+
+  $('#add').attr('disabled', false)
+
+  const glyphsArray = window[name + 'Glyphs']
+
+  // Calculate the max yAdv to scale the table columns for the glyphs
+  let maxW = 0
+  for (ind in glyphsArray) {
+    maxW = Math.max(maxW, glyphsArray[ind][1], glyphsArray[ind][3])
+  }
+  // Calculate the ideal glyph width. 160px is the minimum (for the buttons)
+  window['glyph_table_width'] = Math.max(160, maxW * 11 + 30 /* some margin */)
+
+  // Space from the baseline to the top of the character cell is determined by the character with the
+  // largest negative yOffset.
+  let maxBaseline = 0
+
+  // Display tables
+  for (ind in glyphsArray) {
+    const charIndex = parseInt(ind)
+    // for each glyph
+    const char = String.fromCharCode(parseInt(window['first'], 16) + charIndex)
+    const w = glyphsArray[ind][1]
+    const h = glyphsArray[ind][2]
+    const adv = glyphsArray[ind][3]
+    const ow = glyphsArray[ind][4]
+    const oh = glyphsArray[ind][5]
+    let n = ''
+
+    maxBaseline = Math.max(maxBaseline, -oh)
+
+    // extract data: current offset
+    currentOffset = glyphsArray[charIndex][0]
+
+    // extract data: next offset
+    if (charIndex + 1 < glyphsArray.length) {
+      // To get the next offset, we need to find the next non-disabled
+      // character offset (else, we will get 0 and it's not correct).
+      let nextIndexIncrementor = 1
+      do {
+        nextOffset = glyphsArray[charIndex + nextIndexIncrementor][0]
+        nextIndexIncrementor += 1
+      } while (nextOffset === 0 && (charIndex + nextIndexIncrementor < glyphsArray.length))
+      if (nextOffset === 0) { // We reached the end of the bitmaps
+        nextOffset = window[name + 'Bitmaps'].length
+      }
+    } else {
+      nextOffset = window[name + 'Bitmaps'].length
+    }
+    
+    let disabled = (w == 0 || h == 0) && adv == 0
+
+    if (!disabled) {
+      for (let k = 0; k < (nextOffset - currentOffset); k++) {
+        n += ('000000000' + window[name + 'Bitmaps'][currentOffset + k].toString(2)).substr(-8)
+      }
+    }
+
+    grid = makeGlyphItem (n, w, h, char, adv, ow, oh, disabled)
+
+    function glyphAppendClosure(el, adv, maxBaseline) {
+      setTimeout(function () {
+        advanceLoading(0.2 * adv)
+        $('#glyphs').append(el)
+        if (adv === 1) {
+          // Run the setGlyphTable function now
+          displayGlyphTable(maxBaseline)
+        }
+      }, 1)
+    }
+
+    glyphAppendClosure(grid, (charIndex + 1) / glyphsArray.length, maxBaseline)
+  }
+  $('#namafont').val(name)
+  $('#informasi').hide()
+  $('#hasil').show()
+	 $('html, body').animate({
+        scrollTop: $("#hasil").offset().top
+    }, 0);
+  //$('#export').prop( "disabled", false )
+  $('#result').val('')
+  $('#reset').prop("disabled", false)
+  $('#savefile').prop( "disabled", true)
+  $('#copying').prop("disabled", true)
+  $('#editing').prop("disabled", true)
+  $('#createFont').prop( "disabled", true )
+  //$('#extract').prop( "disabled", false )
+}
+
+function displayGlyphTable (maxBaseline) {
+  window['maxBaseline'] = maxBaseline
+
+  const l = $('#glyphs').children().length
+  $('#glyphs').children().each(function (i) {
+
+    function setGlyphTableClosure(el, adv) {
+      setTimeout(function () {
+        advanceLoading(0.2 + 0.8 * adv)
+        setGlyphTable(el.children().find('.glyph'))
+        if (adv === 1) {
+          $('#loader').hide()
+        }
+      }, 1)
+    }
+
+    setGlyphTableClosure($(this), (i + 1) / l)
+  })
+}
+
+// Fungsi untuk memperbarui semua glyph tables
+function setAllGlyphTables() {
+  $('.table.glyph').each(function () {
+    setGlyphTable($(this))
+  })
+}
+
+// Fungsi untuk menggeser piksel dalam tabel glyph
+function shiftPixels(table, direction) {
+  const dataPixels = table.attr('data-pixels');
+  const width = parseInt(table.attr('data-w'));
+  const height = parseInt(table.attr('data-h'));
+  let newPixels = '';
+
+  const array = [];
+  let pixelIndex = 0;
+  for (let i = 0; i < height; ++i) {
+    const rowArray = [];
+    for (let j = 0; j < width; ++j) {
+      rowArray.push(dataPixels.charAt(pixelIndex));
+      ++pixelIndex;
+    }
+    array.push(rowArray);
+  }
+
+  const shiftedArray = array.map(row => [...row]);
+
+  if (direction === 'left') {
+    for (let i = 0; i < height; ++i) {
+      for (let j = 0; j < width; ++j) {
+        shiftedArray[i][j] = j === width - 1 ? '0' : array[i][j + 1];
+      }
+    }
+  } else if (direction === 'right') {
+    for (let i = 0; i < height; ++i) {
+      for (let j = width - 1; j >= 0; --j) {
+        shiftedArray[i][j] = j === 0 ? '0' : array[i][j - 1];
+      }
+    }
+  } else if (direction === 'up') {
+    for (let i = 0; i < height; ++i) {
+      for (let j = 0; j < width; ++j) {
+        shiftedArray[i][j] = i === height - 1 ? '0' : array[i + 1][j];
+      }
+    }
+  } else if (direction === 'down') {
+    for (let i = height - 1; i >= 0; --i) {
+      for (let j = 0; j < width; ++j) {
+        shiftedArray[i][j] = i === 0 ? '0' : array[i - 1][j];
+      }
+    }
+  }
+
+  for (let i = 0; i < height; ++i) {
+    newPixels += shiftedArray[i].join('');
+  }
+
+  // Pad out to a multiple of 8
+  const pad = newPixels.length % 8;
+  for (let i = 0; i < pad; ++i) {
+    newPixels += '0';
+  }
+
+  table.attr('data-pixels', newPixels);
+  setGlyphTable(table); // Memperbarui tampilan tabel
+}
+
+function calculateFileSize(headerContent) {
+  const blob = new Blob([headerContent], { type: 'text/plain' })
+  const fileSizeInBytes = blob.size
+  const fileSizeInKB = fileSizeInBytes / 1024
+  return fileSizeInKB.toFixed(2)
+}
+<!------------------------------------------------------------------------>
+<!------------------------------------------------------------------------>
+<!------                 FUNGSI UTAMA SELURUH SCRIPT                ------>
+<!------------------------------------------------------------------------>
+<!------------------------------------------------------------------------>
+$(document).ready(function () {
+
+  var clip_data = {}
+  var undo_data = {}
+  let Cc = false;
+  
+  $('#new-character-code').parent().hide()
+  $('#informasi').show()
+  $('#add').attr('disabled', 'disabled')
+  //$('#export').attr('disabled', 'disabled')
+  $('#reset').prop("disabled", 'disabled')
+  $('.ui.checkbox.use-charcode').checkbox()
+
+  $(document).on('change', '.ui.checkbox.use-charcode input', function (e) {
+    $('#new-character').parent().toggle()
+    $('#new-character-code').parent().toggle()
+    
+    if ($('input[name=charcode]').is(':checked')) {
+      if ($('#new-character-code').val() == '') {
+        $('.character').text(' Kode hex belum ditulis')
+      } else {
+        $('.character').text(String.fromCharCode(parseInt($('#new-character-code').val(), 16)))
+      }
+    } else {
+      if ($('#new-character').val() == '') {
+        $('.charcode').text(' Karakter belum ditulis')
+      } else {
+        $('.charcode').text('0x' + $('#new-character').val().charCodeAt(0).toString(16).toUpperCase())
+      }
+    }
+  })
+  
+  $('#newfont-new-character-code').parent().hide()
+  $('.ui.checkbox.newfont-use-charcode').checkbox()
+  $(document).on('change', '.ui.checkbox.newfont-use-charcode input', function (e) {
+    $('#newfont-new-character').parent().toggle()
+    $('#newfont-new-character-code').parent().toggle()
+    
+    if ($('input[name=newfontCharcode]').is(':checked')) {
+      if ($('#newfont-new-character-code').val() == '') {
+        $('.newfontCharacter').text(' Kode hex belum ditulis')
+      } else {
+        $('.newfontCharacter').text(String.fromCharCode(parseInt($('#newfont-new-character-code').val(), 16)))
+      }
+    } else {
+      if ($('#newfont-new-character').val() == '') {
+        $('.newfontCharcode').text(' Karakter belum ditulis')
+      } else {
+        $('.newfontCharcode').text('0x' + $('#newfont-new-character').val().charCodeAt(0).toString(16).toUpperCase())
+      }
+    }
+  })
+
+  $('#loader').hide()
+  window['name'] = null
+  window['last_part'] = null
+  
+  $("input[name='ranges'].check").click(function() {
+    if($(this).is(':checked')) {
+        if ($(this).val() == 1) {
+            $("#firstglyph").val("0x41");
+            $("#lastglyph").val("0x5A");
+        }
+        if ($(this).val() == 2) {
+            $("#firstglyph").val("0x61");
+            $("#lastglyph").val("0x7A");
+        }
+        if ($(this).val() == 3) {
+            $("#firstglyph").val("0x30");
+            $("#lastglyph").val("0x39");
+        }
+        if ($(this).val() == 4) {
+            $("#firstglyph").val("0x20");
+            $("#lastglyph").val("0x7E");
+        }
+    }
+	});
+
+ 
+<!----------------------------------------------->
+<!------        FUNGSI ekstrak font        ------>
+<!----------------------------------------------->
+  $('#extract').click(function () {
+    advanceLoading(0)
+    $('#loader').fadeIn(function() {
+      extractFont()
+    })
+  })
+
+<!----------------------------------------------->
+<!------       FUNGSI hapus teks area      ------>
+<!----------------------------------------------->
+  $('#hapus').click(function () {
+        $('#source').val('')
+        $('#extract').prop("disabled", false)
+  })
+  
+<!----------------------------------------------->
+<!------     FUNGSI simpan font ke file    ------>
+<!----------------------------------------------->
+  $('#savefile').click(function () {
+     saveTextAsFile()
+  })
+  
+<!---------------------------------------------------->
+<!------        FUNGSI copy to clipboard        ------>
+<!---------------------------------------------------->
+  $('#copying').click(function () {
+  
+	  var copyText = document.getElementById("result");
+	  copyText.select();
+	  copyText.setSelectionRange(0, 9999999); /*Change higher if all content not copied*/
+	  document.execCommand("copy");
+  })
+
+<!------------------------------------->
+<!------       FUNGSI Reset      ------>
+<!------------------------------------->
+  $('#reset').click(function () {
+    $('.ui.modal.confirmation p').text('Semua perubahan yang anda lakukan di editor akan dihapus dan editor akan disembunyikan.')
+    $('.ui.modal.confirmation').modal({
+      closable: false,
+      onApprove: function() {
+        $('#glyphs').empty()
+        $('#source').val('')
+		$('#result').val('')
+		$('#hasil').hide()
+		$('#informasi').show()
+        $('#createFont').prop("disabled", false)
+        $('#extract').prop("disabled", false)
+        $('#add').prop("disabled", "disabled")
+        //$('#export').prop("disabled", "disabled")
+        $('#reset').prop("disabled", "disabled")
+        $('.fontname').text('Fontname unknown').hide()
+      }
+    }).modal('show')
+  })
+
+
+<!--------------------------------------------------->
+<!------        FUNGSI Edit ulang hasil        ------>
+<!--------------------------------------------------->
+  $('#editing').click(function () {
+	let input = $('#result').val()
+	if (input.length === 0) {
+		  document.getElementById("ErrorMsg").style.display = "block";
+		  setTimeout(function(){ document.getElementById("ErrorMsg").style.display = "none"; }, 1000);
+		return;
+	}
+	$('#source').val('')
+    $('#glyphs').empty()
+	$('#source').val(input)
+	extractFont()
+	$('#result').val('')
+	
+  })
+  
+<!--------------------------------------------------->
+  
+  const fillPixel = (target, fill) => {
+    fill === '1' ? target.addClass('fill') : target.removeClass('fill')
+    const table = target.parent().parent().parent().find('.table.glyph')
+    updatePixels(table, -1, -1, parseInt(target.attr('data-x')), parseInt(target.attr('data-y')), fill)
+  }
+
+  let isFilling = false;
+  let fillingMode = '1';
+  $(document).on('mousedown', '.cell:not(.dead)', function (e) {
+    isFilling = true;
+    fillingMode = $(e.target).hasClass('fill') ? '0' : '1'
+    fillPixel($(e.target), fillingMode)
+  })
+  $(document).on('mouseup', '.cell:not(.dead)', function (e) {
+    isFilling = false;
+  })
+  $(document).on('mouseenter', '.cell:not(.dead)', function (e) {
+    if (isFilling) {
+      fillPixel($(e.target), fillingMode)
+    }
+  })
+
+$(document).on('click', '.clip-handler', function (e) {
+  const targetID = $(e.target).attr('id');
+  const table = $(e.target).parent().parent().parent().find('.table.glyph');
+  
+  if (targetID === 'clip-copy') {
+    clip_data.xadvance = parseInt(table.attr('data-adv'));
+    clip_data.xoffset = parseInt(table.attr('data-ow'));
+    clip_data.yoffset = parseInt(table.attr('data-oh'));
+    clip_data.width = parseInt(table.attr('data-w'));
+    clip_data.height = parseInt(table.attr('data-h'));
+    clip_data.pixels = table.attr('data-pixels');
+
+    // Buat string dari data untuk disimpan ke clipboard
+    // const clipText = JSON.stringify({
+      // xadvance: clip_data.xadvance,
+      // xoffset: clip_data.xoffset,
+      // yoffset: clip_data.yoffset,
+      // width: clip_data.width,
+      // height: clip_data.height,
+      // pixels: clip_data.pixels
+    // });
+
+    // Simpan data ke clipboard
+    // navigator.clipboard.writeText(clipText).then(() => {
+      // console.log('Data copied to clipboard');
+    // }).catch(err => {
+      // console.error('Failed to copy text to clipboard', err);
+    // });
+  } else if (targetID === 'clip-paste') {
+    // Ambil data dari clipboard dalam konteks user gesture
+    // navigator.clipboard.readText().then(clipText => {
+      // try {
+        // const clipData = JSON.parse(clipText);
+
+        undo_data.xadvance = parseInt(table.attr('data-adv'));
+        undo_data.xoffset = parseInt(table.attr('data-ow'));
+        undo_data.yoffset = parseInt(table.attr('data-oh'));
+        undo_data.width = parseInt(table.attr('data-w'));
+        undo_data.height = parseInt(table.attr('data-h'));
+        undo_data.pixels = table.attr('data-pixels');
+        Cc = true;
+
+      table.attr('data-adv',      clip_data.xadvance)
+      table.attr('data-ow',       clip_data.xoffset)
+      table.attr('data-oh',       clip_data.yoffset)
+      table.attr('data-w',        clip_data.width)
+      table.attr('data-h',        clip_data.height)
+      table.attr('data-pixels',   clip_data.pixels)
+
+        // setGlyphTable(table); // Memperbarui tampilan tabel
+      // } catch (err) {
+        // console.error('Failed to parse clipboard data', err);
+      // }
+    // }).catch(err => {
+      // console.error('Failed to read text from clipboard', err);
+    // });
+  } else if (targetID === 'clip-undo') {
+    if (Cc) {
+      table.attr('data-adv', undo_data.xadvance);
+      table.attr('data-ow', undo_data.xoffset);
+      table.attr('data-oh', undo_data.yoffset);
+      table.attr('data-w', undo_data.width);
+      table.attr('data-h', undo_data.height);
+      table.attr('data-pixels', undo_data.pixels);
+      Cc = false;
+
+    }
+  }
+
+      setGlyphTable(table); // Memperbarui tampilan tabel
+  return false;
+});
+
+  $(document).on('click', '.row-handler', function (e) {
+    const targetID = $(e.target).attr('id')
+    const table = $(e.target).parent().parent().parent().find('.table.glyph')
+    let height = parseInt(table.attr('data-h'))
+
+    if (targetID === 'row-add') {
+      height++
+    } else if (targetID === 'row-remove') {
+      height--
+    }
+
+    updatePixels(table, -1, height, -1, -1, false)
+    table.attr('data-h', height)
+    setGlyphTable(table)
+    return false
+  })
+  
+  $(document).on('click', '.col-handler', function (e) {
+    const targetID = $(e.target).attr('id')
+    const table = $(e.target).parent().parent().parent().find('.table.glyph')
+    let width = parseInt(table.attr('data-w'))
+
+    if (targetID === 'col-add') {
+      width++
+    } else if (targetID === 'col-remove') {
+      width--
+    }
+
+    updatePixels(table, width, -1, -1, -1, false)
+    table.attr('data-w', width)
+    setGlyphTable(table)
+    return false
+  })
+
+  $(document).on('click', '.base-handler', function (e) {
+    const targetID = $(e.target).attr('id')
+    const table = $(e.target).parent().parent().parent().find('.table.glyph')
+    if (targetID === 'base-add') {
+      table.attr('data-oh', parseInt(table.attr('data-oh')) + 1)
+    } else if (targetID === 'base-remove') {
+      table.attr('data-oh', parseInt(table.attr('data-oh')) - 1)
+    }
+
+    setGlyphTable(table)
+    return false
+  })
+
+  $(document).on('click', '.xadv-handler', function (e) {
+    const targetID = $(e.target).attr('id')
+    const table = $(e.target).parent().parent().parent().find('.table.glyph')
+    if (targetID === 'xadv-add') {
+      table.attr('data-adv', parseInt(table.attr('data-adv')) + 1)
+    } else if (targetID === 'xadv-remove') {
+      table.attr('data-adv', parseInt(table.attr('data-adv')) - 1)
+    }
+
+    setGlyphTable(table)
+    return false
+  })
+
+  $(document).on('click', '.xoff-handler', function (e) {
+    const targetID = $(e.target).attr('id')
+    const table = $(e.target).parent().parent().parent().find('.table.glyph')
+    if (targetID === 'xoff-add') {
+      table.attr('data-ow', parseInt(table.attr('data-ow')) + 1)
+    } else if (targetID === 'xoff-remove') {
+      table.attr('data-ow', parseInt(table.attr('data-ow')) - 1)
+    }
+
+    setGlyphTable(table)
+    return false
+  })
+
+
+
+  $(document).on('click', '.dis-handler', function (e) {
+  // Temukan tombol yang diklik
+  const button = $(e.target);
+
+    const table = $(e.target).parent().parent().find('.table.glyph')
+	console.log('table: ', table)
+
+  // Toggle data-dis dan ubah opacity
+  const newDisValue = 1 - parseInt(table.attr('data-dis'));
+  table.attr('data-dis', newDisValue);
+  table.fadeTo('fast', 1 - 0.9 * newDisValue);
+  
+  // Update warna tombol dan ID berdasarkan status
+  if (newDisValue === 1) {
+    button.removeClass('grey').addClass('green').text('ENABLE').attr('id', 'DISABLE'); // Mengubah ID tombol
+  } else {
+    button.removeClass('green').addClass('grey').text('DISABLE').attr('id', 'ENABLE'); // Mengubah ID tombol
+  }
+    e.preventDefault(); 
+});
+
+  
+// Event handler untuk tombol shift
+$(document).on('click', '.dir-handler', function (e) {
+  const targetID = $(e.target).attr('id');
+  const table = $(e.target).parent().parent().parent().find('.table.glyph');
+
+  if (targetID === 'dir-left') {
+    shiftPixels(table, 'left');
+  } else if (targetID === 'dir-right') {
+    shiftPixels(table, 'right');
+  } else if (targetID === 'dir-up') {
+    shiftPixels(table, 'up');
+  } else if (targetID === 'dir-down') {
+    shiftPixels(table, 'down');
+  }
+});
+
+
+ $(document).on('click', '.global-handler', function (e) {
+  const targetID = $(e.target).attr('id')
+  
+  $('.table.glyph').each(function () {
+    let height = parseInt($(this).attr('data-h'))
+    let width = parseInt($(this).attr('data-w'))
+
+	  if (targetID === 'xadv+') {
+		$(this).attr('data-adv', parseInt($(this).attr('data-adv')) + 1)
+	  } else if (targetID === 'xadv-') {
+		$(this).attr('data-adv', parseInt($(this).attr('data-adv')) - 1)
+	  } else if (targetID === 'xoff+') {
+		$(this).attr('data-ow', parseInt($(this).attr('data-ow')) + 1)
+	  } else if (targetID === 'xoff-') {
+		$(this).attr('data-ow', parseInt($(this).attr('data-ow')) - 1)
+	  } else if (targetID === 'base+') {
+		$(this).attr('data-oh', parseInt($(this).attr('data-oh')) + 1)
+	  } else if (targetID === 'base-') {
+		$(this).attr('data-oh', parseInt($(this).attr('data-oh')) - 1)
+	  } else if (targetID === 'col-') {
+		width--
+	  } else if (targetID === 'col+') {
+		width++
+	  } else if (targetID === 'row-') {
+		height--
+	  } else if (targetID === 'row+') {
+		height++
+	  }
+	  
+	  if ((targetID === 'row-')||(targetID === 'row+')){
+		updatePixels($(this), -1, height, -1, -1, false)
+		$(this).attr('data-h', height)
+	  }
+	  if ((targetID === 'col-')||(targetID === 'col+')){
+		updatePixels($(this), width, -1, -1, -1, false)
+		$(this).attr('data-w', width)
+	  }
+  })
+  
+  setAllGlyphTables()
+  return false
+});
+
+  $(document).on('keyup', '#new-character', function (e) {
+    if ($('#new-character').val() == '') {
+		$('.charcode').css('color','red')
+      $('.charcode').text(' Kode hex belum ditulis')
+    } else {
+		$('.charcode').css('color','blue')
+      $('.charcode').text('0x' + $('#new-character').val().charCodeAt(0).toString(16).toUpperCase())
+    }
+  })
+
+  $(document).on('keyup', '#new-character-code', function (e) {
+    if ($('#new-character-code').val() == '') {
+		$('.character').css('color','red')
+      $('.character').text(' Karakter belum ditulis')
+    } else {
+		$('.character').css('color','blue')
+      $('.character').text(String.fromCharCode(parseInt($('#new-character-code').val(), 16)))
+    }
+  })
+  
+  $(document).on('keyup', '#newfont-new-character', function (e) {
+    if ($('#newfont-new-character').val() == '') {
+		$('.newfontCharcode').css('color','red')
+      $('.newfontCharcode').text(' Kode hex belum ditulis')
+    } else {
+		$('.newfontCharcode').css('color','blue')
+      $('.newfontCharcode').text('0x' + $('#newfont-new-character').val().charCodeAt(0).toString(16).toUpperCase())
+    }
+  })
+
+  $(document).on('keyup', '#newfont-new-character-code', function (e) {
+    if ($('#newfont-new-character-code').val() == '') {
+		$('.newfontCharacter').css('color','red')
+      $('.newfontCharacter').text(' Karakter belum ditulis')
+    } else {
+		$('.newfontCharacter').css('color','blue')
+      $('.newfontCharacter').text(String.fromCharCode(parseInt($('#newfont-new-character-code').val(), 16)))
+    }
+  })
+  
+<!---------------------------------------------------->
+<!------        FUNGSI Membuat font baru        ------>
+<!---------------------------------------------------->
+  $('#createFont').click(function () {
+    $('input[name=newfontCharcode]').prop('checked', false)
+    $('#newfont-new-character').parent().show()
+    $('#newfont-new-character-code').parent().hide()
+    if ($('#newfont-new-character').val() == '') {
+      $('.charcode').text(' Karakter belum ditulis')
+    } else {
+      $('.charcode').text('0x' + $('#newfont-new-character').val().charCodeAt(0).toString(16).toUpperCase())
+    }
+    if ($('#newfont-new-character-code').val() == '') {
+      $('.character').text(' Kode hex belum ditulis')
+    } else {
+      $('.character').text(String.fromCharCode($('#newfont-new-character-code').val()))
+    }
+    
+    $('.ui.modal.newfont').modal({
+      closable: false,
+      
+      onApprove: function() {
+        let name = $('#newfont-name').val()
+        if (name.length < 1) {
+          $('.ui.modal.message p').text('Font harus diberi nama, atau tidak dapat membuat font baru.')
+          $('.ui.modal.message').modal('show')
+          return
+        }
+        
+        
+        let newfontHeight = parseInt($('#newfont-height').val())
+        if (newfontHeight < 1) {
+          $('.ui.modal.message p').text('Tinggi font harus lebih besar dari 0, atau tidak dapat membuat font baru.')
+          $('.ui.modal.message').modal('show')
+          return
+        }
+        
+        
+        // Get new character data
+        let newChar
+        let newCharCode
+        if ($('input[name=newfontCharcode]').is(':checked')) {
+          newCharCode = parseInt($('#newfont-new-character-code').val(), 16)
+          newChar = String.fromCharCode(newCharCode)
+        } else {
+          newChar = $('#newfont-new-character').val()
+          newCharCode = $('#newfont-new-character').val().charCodeAt(0)
+        }
+
+        // Check character validity
+        if (newChar == '') {
+          $('.ui.modal.message p').text('Karakter kosong atau salah, tidak dapat membuat font baru.')
+          $('.ui.modal.message').modal('show')
+          return
+        }
+
+        if (newCharCode < 1) {
+          $('.ui.modal.message p').text('Ini adalah karakter kontrol khusus, tidak dapat membuat font baru.')
+          $('.ui.modal.message').modal('show')
+          return
+        }
+
+        if (newCharCode > 65535) {
+          $('.ui.modal.message p').text('Karakter ini berada di luar kode ascii, tidak dapat membuat font baru.')
+          $('.ui.modal.message').modal('show')
+          return
+        }
+        
+        // Set the font parameters
+        window['first'] = newCharCode
+        window['last'] = newCharCode
+        window['yAdvance'] = newfontHeight
+        window['name'] = name + '_'
+        window[name + '_Bitmaps'] = [] // This is otherwise created by the eval() in extract font
+        window['maxBaseline'] = newfontHeight
+        window['last_part'] = 'const GFXfont ' + name + ' PROGMEM = {(uint8_t *) ' + name + '_Bitmaps, (GFXglyph *)' + name + '_Glyphs, 0x00, 0x00, ' + newfontHeight + '};'
+        
+        // Show the data
+        $('.fontname').text('(' + name + ')').show()
+        $('#firstglyph').val('0x' + window["first"].toString(16))
+        $('#lastglyph').val('0x' + window["last"].toString(16))
+        $('#glyphs').empty()
+
+        
+        // Change button states
+        $('#add').attr('disabled', false)
+        //$('#export').prop( "disabled", false )
+        $('#createFont').prop( "disabled", true )
+        $('#extract').prop( "disabled", true )
+        $('#reset').prop("disabled", false)
+		$('#informasi').hide()
+		$('#hasil').show()
+        
+        // Add the new character
+        const grid = makeGlyphItem (' ' , 1, 1, newChar, 10, 0, -newfontHeight, false)
+        $('#glyphs').append(grid)
+        
+        setGlyphTable(grid.find('.glyph'))
+		$('#namafont').val(name);
+		 $('html, body').animate({
+			scrollTop: $("#hasil").offset().top
+		},0);
+      }
+    })
+    .modal('show')
+  }) 
+  
+	<!-------------------------------------------------------->
+	<!------        FUNGSI Membuat karakter baru        ------>
+	<!-------------------------------------------------------->
+  $('#add').click(function () {
+    $('input[name=charcode]').prop('checked', false)
+    $('#new-character').parent().show()
+    $('#new-character-code').parent().hide()
+    if ($('#new-character').val() == '') {
+      $('.charcode').text('Karakter belum ditulis')
+    } else {
+      $('.charcode').text('0x' + $('#new-character').val().charCodeAt(0).toString(16).toUpperCase())
+    }
+    if ($('#new-character-code').val() == '') {
+      $('.character').text('Kode hex belum ditulis')
+    } else {
+      $('.character').text(String.fromCharCode($('#new-character-code').val()))
+    }
+    
+    // Choose a character
+    $('.ui.modal.choose').modal({
+      closable: false,
+      onApprove: function() {
+        const firstglyph = parseInt($('#firstglyph').val(), 16)
+        const lastglyph = parseInt($('#lastglyph').val(), 16)
+
+        let newChar
+        let newCharCode
+        if ($('input[name=charcode]').is(':checked')) {
+          newCharCode = parseInt($('#new-character-code').val(), 16)
+          newChar = String.fromCharCode(newCharCode)
+        } else {
+          newChar = $('#new-character').val()
+          newCharCode = $('#new-character').val().charCodeAt(0)
+        }
+
+        if (newChar == '') {
+          $('.ui.modal.message p').text('Karakter kosong atau salah, tidak dapat ditambahkan.')
+          $('.ui.modal.message').modal('show')
+          return
+        }
+
+        if (newCharCode < 1) {
+          $('.ui.modal.message p').text('Ini adalah karakter kontrol khusus, tidak dapat ditambahkan.')
+          $('.ui.modal.message').modal('show')
+          return
+        }
+
+        if (newCharCode > 65535) {
+          $('.ui.modal.message p').text('Karakter ini berada di luar kode ascii, tidak dapat ditambahkan.')
+          $('.ui.modal.message').modal('show')
+          return
+        }
+
+        // Check that the character is not already existing
+        if (newCharCode > lastglyph || newCharCode < firstglyph) {
+          let start, end;
+          if (newCharCode > lastglyph) {
+            start = lastglyph + 1
+            end = newCharCode
+            window['last'] = '0x' + newCharCode.toString(16).toUpperCase()
+            $('#lastglyph').val(window['last'])
+          } else {
+            start = newCharCode
+            end = firstglyph - 1
+            window['first'] = '0x' + newCharCode.toString(16).toUpperCase()
+            $('#firstglyph').val(window['first'])
+          }
+          
+          if (newCharCode < firstglyph) {
+            for (j = end; j >= start; j--) {
+              const char = String.fromCharCode(parseInt(j))
+              const grid = makeGlyphItem (' ', 1, 1, char, 4, 0, -window['maxBaseline'], !(j === newCharCode))
+              $('#glyphs').prepend(grid)
+              setGlyphTable(grid.find('.glyph'))
+            }
+          } else {
+            for (j = start; j <= end; j++) {
+              const char = String.fromCharCode(parseInt(j))
+              const grid = makeGlyphItem (' ', 1, 1, char, 4, 0, -window['maxBaseline'], !(j === newCharCode))
+              $('#glyphs').append(grid)
+              setGlyphTable(grid.find('.glyph'))
+            }
+          }
+          
+        } else {
+          $('.ui.modal.message p').text('Karakter ini sudah ada di dalam editor, tidak dapat ditambahkan.')
+          $('.ui.modal.message').modal('show')
+        }
+      }
+    })
+    .modal('show');
+
+  })
+
+	<!----------------------------------------------->
+	<!------        FUNGSI Eksport Font        ------>
+	<!----------------------------------------------->
+  $('#export').click(function () {
+	  
+    name = $('#namafont').val()
+    const glyphs = []
+    const bitsArray = []
+    let offset = 0
+    let jmlh = 50
+	let fontDisplay = ''
+    const firstglyph = parseInt($('#firstglyph').val(), 16)
+    const lastglyph = parseInt($('#lastglyph').val(), 16)
+    let fixlastglyph = ''
+
+    $('.table.glyph').each(function () {
+      const t = $(this)
+      // Ignore glyphs outside of requested range
+      if (t.attr('data-char').charCodeAt(0) < firstglyph || t.attr('data-char').charCodeAt(0) > lastglyph) {
+        return
+      }
+
+      var dataPixels = $(this).attr('data-pixels')
+      if (t.attr('data-dis') == 1) {
+        dataPixels = ''
+      }
+      let bits = ''
+
+      for (let i = 0; i < dataPixels.length; i++) {
+        bits += dataPixels.charAt(i)
+        // Each 8 bits, we form the HEX value
+        if (bits.length == 8) {
+          bitsArray.push('0x' + ('00' + parseInt((bits + '00000000').slice(0, 8), 2).toString(16).toUpperCase()).slice(-2))
+          bits = ''
+        }
+      }
+
+      // Remaining bits with padding then, if necessary
+      if (bits != '') {
+        bitsArray.push('0x' + ('00' + parseInt((bits + '00000000').slice(0, 8), 2).toString(16).toUpperCase()).slice(-2))
+      }
+
+      // Set data width/height to 0 for disabled glyphs
+      const w = parseInt(t.attr('data-w')) * (1 - parseInt(t.attr('data-dis')))
+      const h = parseInt(t.attr('data-h')) * (1 - parseInt(t.attr('data-dis')))
+
+      let char = t.attr('data-char')
+      const charCode = char.charCodeAt(0).toString(16).toUpperCase()
+      const charDisplay = char.replace(/[\x00-\x1F\x7F-\x9F\xAD]/g, 'non-printable')
+	  if (charDisplay == ' ') {
+		  fontDisplay = 'space'
+	  }
+      fontDisplay += charDisplay
+	  if (fontDisplay.length > jmlh){
+		  fontDisplay += '\n//            '
+		  jmlh += fontDisplay.length 
+      }
+	  fixlastglyph = charCode
+      const comment = '// 0x' + charCode + '     \'' + charDisplay + '\'' + '     \'' + (bitsArray.length - offset) + '\''
+      
+      if (t.attr('data-dis') == 0) {
+        glyphs.push(
+          '  { ' +
+          ('     ' + offset).slice(-5) + ', ' +
+          ('   ' + w).slice(-3) + ', ' +
+          ('   ' + h).slice(-3) + ', ' +
+          ('   ' + parseInt(t.attr('data-adv'))).slice(-3) + ', ' +
+          ('    ' + parseInt(t.attr('data-ow'))).slice(-4) + ', ' +
+          ('    ' + parseInt(t.attr('data-oh'))).slice(-4) + ' },   ' +
+          comment)
+      } else {
+        glyphs.push(
+          '  { ' +
+          '    0, ' +
+          '  0, ' +
+          '  0, ' +
+          '  0, ' +
+          '   0, ' +
+          '   0 },   ' +
+          comment)
+      }
+      
+      offset = bitsArray.length
+    })
+
+    // Bitmaps
+    let bitmapsOutput = 'const uint8_t ' + name + 'Bitmaps[] PROGMEM = {\n'
+    // We want to join per 12 words
+    const limit = Math.floor(bitsArray.length / 12)
+    for (let nb = 0; nb < limit; nb++) {
+      const isLastLine = (limit * 12 === bitsArray.length) && (nb === limit - 1)
+
+      bitmapsOutput += '  ' + bitsArray[nb * 12] + ', ' +
+                              bitsArray[nb * 12 + 1] + ', ' +
+                              bitsArray[nb * 12 + 2] + ', ' +
+                              bitsArray[nb * 12 + 3] + ', ' +
+                              bitsArray[nb * 12 + 4] + ', ' +
+                              bitsArray[nb * 12 + 5] + ', ' +
+                              bitsArray[nb * 12 + 6] + ', ' +
+                              bitsArray[nb * 12 + 7] + ', ' +
+                              bitsArray[nb * 12 + 8] + ', ' +
+                              bitsArray[nb * 12 + 9] + ', ' +
+                              bitsArray[nb * 12 + 10] + ', ' +
+                              bitsArray[nb * 12 + 11] + (isLastLine ? '' : ',') + ' \n'
+    }
+
+    if (limit * 12 !== bitsArray.length) {
+      bitmapsOutput += '  ' + bitsArray.slice(-(bitsArray.length - limit * 12)).join(', ') + '\n'
+    }
+    bitmapsOutput += '};\n\n'
+	
+    // Glyphs
+	
+	const tinggiFont = parseInt(window['yAdvance'])
+	let Info = '// Font AdafruitGfx = ' + name + '.h\n' + 
+				'// Font Height = ' + tinggiFont + ' pixels\n' + 
+				'// Font Set = ' + fontDisplay + '\n' +
+				'// Script editor mod by DONY OPREKERS\n\n' 
+    let KeteranganGlyphs = '//    Pos  Col  Row  Xadv  Xoff  Base    Ascii hex   Char    Hex Count\n'
+    // The last glyph has a ',' too much at the end, we need to remove it (it's easier than to avoid putting it in the first place)
+    glyphs[glyphs.length - 1] = glyphs[glyphs.length - 1].replace('},', '} ')
+    let glyphsOutput = 'const GFXglyph ' + name + 'Glyphs[] PROGMEM = {\n' + KeteranganGlyphs
+    glyphsOutput += glyphs.join('\n') + '\n};\n\n'
+
+    // Create a new last_part with the updated first & last glyph values in it
+    let parts = window['last_part'].split(',')    
+    parts[0] = 'const GFXfont ' + name + ' PROGMEM = {\n' +
+	       '  (uint8_t *) ' + name + 'Bitmaps'
+    parts[1] = '\n  (GFXglyph *)' + name + 'Glyphs'
+    parts[2] = '0x' + firstglyph.toString(16).toUpperCase()
+    parts[3] = '0x' + fixlastglyph
+    let last_part = parts.join(", ",parts)
+	
+	// Cleaning any comment at bottom page if exist
+    let re = /const\ GFXfont([\s\S]*?});/;
+    let last_match = last_part.match(re);
+    last_part = last_match ? last_match[0] : "";
+
+    data = Info + bitmapsOutput + glyphsOutput + last_part
+    // Create a file size info text at bottom page
+    const fileSizeInKB = calculateFileSize(data);
+    data = data + '\n\n// File size approx : ' + fileSizeInKB + 'kb'
+    $('#result').val(data)
+  $('#savefile').prop("disabled", false)
+  $('#copying').prop("disabled", false)
+  $('#editing').prop("disabled", false)
+  $('#extract').prop("disabled", false)
+  })
+})
+
+    </script>
+</body>
+</html>
