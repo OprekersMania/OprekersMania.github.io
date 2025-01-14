@@ -77,6 +77,8 @@
 					<button class="ui blue button" onclick="loadPage('tchapi.github.2025.html')">tchapi.github.2025</button>
 					<div class="or"></div>
 					<button class="ui blue button" onclick="loadPage('testREGEX.html')">testREGEX</button>
+					<div class="or"></div>
+					<button class="ui red button" onclick="openPageInNewTab()">Load in New Tab</button>
                 </div>
             </div>
         </div>
@@ -118,7 +120,14 @@
                 textarea.value = 'Error loading content.';
             });
     }
-
+        // Fungsi untuk membuka halaman di tab baru
+        function openPageInNewTab() {
+            if (openPage) {
+                window.open(openPage, '_blank'); // Buka halaman di tab baru
+            } else {
+                alert("Page URL is not defined!");
+            }
+        }
     // Fungsi untuk menyalin konten ke clipboard
     function copyToClipboard() {
         const textarea = document.getElementById("editor");
