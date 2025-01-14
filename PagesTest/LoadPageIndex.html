@@ -82,7 +82,7 @@
     </div>
     <hr>
 	<iframe id="contentFrame" src="" ></iframe>
-	<textarea id="editor" ></textarea>
+	<textarea id="editor" style="display:none"></textarea>
 
 <script>
     let openPage = '';
@@ -91,7 +91,7 @@
         const iframe = document.getElementById('contentFrame');
         const textarea = document.getElementById('editor');
         openPage = page;
-	    console.log('pages = ', page);
+	console.log('pages = ', page);
         iframe.src = page;
 
         // Menggunakan fetch untuk mendapatkan konten file
@@ -108,7 +108,7 @@
 		if (page != 'HtmlRealtimeEditor.html'){
                 	copyToClipboard();
 		} else {
-	    		console.log('THIS PAGES NOT COPIED');
+	    		console.log('THIS PAGES NOT COPIED TO CLIPBOARD');
 		}
 			
             })
