@@ -86,6 +86,10 @@
 		
 function loadPage(page) {
     const iframe = document.getElementById('contentFrame');
+	const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+    const iframeHTML = iframeDoc.documentElement.outerHTML;
+	
+    navigator.clipboard.writeText(iframeHTML)
     const textarea = document.getElementById('editor');
 			openPage = page
     iframe.src = page;
