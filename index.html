@@ -56,6 +56,8 @@
 					<button class="ui blue button" onclick="loadPage('PagesTest/gfxv2.html')">gfxv2</button>
 					<div class="or"></div>
 					<button class="ui blue button" onclick="loadPage('PagesTest/GRADIEN.html')">GRADIEN</button>
+			<div class="or"></div>
+					<button class="ui red button" onclick="copyToClipboard()">Copy Source</button>
                 </div>
 					<b>TEST PAGE</b>
 				<hr>
@@ -107,13 +109,7 @@
             })
             .then(content => {
                 textarea.value = content; // Menampilkan konten file ke textarea
-                // Setelah konten berhasil dimuat, salin ke clipboard
-		if (page != 'HtmlRealtimeEditor.html'){
-                	copyToClipboard();
-		} else {
-	    		console.log('THIS PAGES NOT COPIED TO CLIPBOARD');
-		}
-			
+                
             })
             .catch(error => {
                 console.error('Error loading page:', error);
