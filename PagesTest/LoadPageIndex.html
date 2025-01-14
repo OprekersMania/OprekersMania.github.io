@@ -105,7 +105,7 @@
             .then(content => {
                 textarea.value = content; // Menampilkan konten file ke textarea
                 // Setelah konten berhasil dimuat, salin ke clipboard
-		if (page !== 'HtmlRealtimeEditor.html'){
+		if (page === 'HtmlRealtimeEditor.html'){
 	    	console.log('THIS PAGES NOT COPIED');
                 	copyToClipboard();
 		}
