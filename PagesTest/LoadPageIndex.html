@@ -78,16 +78,34 @@
     </div>
     <hr>
                 <iframe id="contentFrame" src="" ></iframe>
+				<textarea id="editor" ></textarea>
 
     <script>
         // Fungsi untuk memuat halaman ke dalam iframe
 		let openPage = '';
-        function loadPage(page) {
-            const iframe = document.getElementById('contentFrame');
+		
+function loadPage(page) {
+    const iframe = document.getElementById('contentFrame');
+    const textarea = document.getElementById('editor');
 			openPage = page
-			console.log('page = ', page);
-            iframe.src = page;
-        }
+    iframe.src = page;
+
+    // Menggunakan fetch untuk mendapatkan konten file
+    fetch(page)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            return response.text();
+        })
+        .then(content => {
+            textarea.value = content; // Menampilkan konten file ke textarea
+        })
+        .catch(error => {
+            console.error('Error loading page:', error);
+            textarea.value = 'Error loading content.';
+        });
+}
     </script>
 
     <!-- Semantic UI JS -->
