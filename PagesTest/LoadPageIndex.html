@@ -91,6 +91,7 @@
         const iframe = document.getElementById('contentFrame');
         const textarea = document.getElementById('editor');
         openPage = page;
+	    console.log('pages = ', page);
         iframe.src = page;
 
         // Menggunakan fetch untuk mendapatkan konten file
@@ -104,7 +105,10 @@
             .then(content => {
                 textarea.value = content; // Menampilkan konten file ke textarea
                 // Setelah konten berhasil dimuat, salin ke clipboard
-                copyToClipboard();
+		if (page !== 'HtmlRealtimeEditor.html'){
+	    	console.log('THIS PAGES NOT COPIED');
+                	copyToClipboard();
+		}
             })
             .catch(error => {
                 console.error('Error loading page:', error);
