@@ -1,0 +1,808 @@
+<html>
+<head>
+  <title>Bitmap Gradient Generator</title>
+	<script src="https://cdn.jsdelivr.net/npm/index-of-js@1.0.0/index.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jscolor/2.5.2/jscolor.js" integrity="sha512-IShZ5NZxEaotdJdpd853DUKXbgYUH7O/PaeGDp2eiS3XxNDnIQ9+GuRX3d5c4joOqs7Ni8ZKQmRFbKImtcwLaA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" crossorigin="anonymous"></script>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
+	<script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
+  
+	
+
+<style>
+
+	html, body {
+		font-size: 0.9em !important;
+		margin: 0 10px;
+		scroll-behavior: smooth;
+		color : black;
+		min-width: 550px;
+	}
+	
+	h4 {
+		margin:0;
+	}
+	
+
+	.ui.form {
+		font-size: 0.9em ;
+	}
+	.ui.form textarea {
+		font-weight: bolder;
+		width:100%;
+		height: 20em !important;
+		overflow-wrap: normal;
+	}
+
+    .color {
+		position:relative;
+		width:65px;
+		height:20px;
+    }
+	
+	
+	.ui.form input[type=number]{
+		width: 60px;
+		height: 20px;
+		padding: 0px 0px 0px 5px;
+	}
+	
+	.ui.form input[type=text]{
+		width: 65px;
+		height: 20px;
+		padding: 0px 0px 0px 5px;
+		font-size: 0.8em !important;
+	}
+	
+	#previewCanvas canvas {
+		margin: 10px 15px;
+	}
+
+	#previewCanvas {
+		border: 1px solid white;
+		align-items: flex-start;
+		display: flex;
+		flex-wrap: wrap;
+	}
+	.ui.inverted.teal.segment {
+		background-color: #000 !important;
+		color: #fff !important;
+	}
+	
+</style>
+<script>
+	// Here we can adjust defaults for all color pickers on page:
+	jscolor.presets.default = {
+		palette: [
+			'#000000', '#7d7d7d', '#870014', '#ff0000', '#ff7e26', '#ffff00', '#00ff00', '#00ffff', '#0000ff', '#a349a4',
+			'#ffffff', '#c3c3c3', '#b87957', '#feaec9', '#ffc80d', '#eee3af', '#b5e61d', '#99d9ea', '#7092be', '#c8bfe7',
+		],
+	}
+	jscolor.trigger('input change');
+</script>
+
+</head>
+<!-------------------------------->
+<body>
+<!-------------------------------->
+	<div style="background-color: #37f21c54; margin-top: 15px;" class="ui red segment">
+			<h2 align="center" style="font-size: 30px;">Generator Gradasi warna + BMP Array splitter untuk library lcd TFT</h2>
+	</div>
+	<p align="left" style="padding: 10 25px;">
+			<b>Tool ini untuk membagi gambar array bmp, agar bisa dirender dengan warna gradasi.<br>
+			Hasil generator tool ini bisa langsung di copy-pastekan ke sketch arduino.<br>
+			Karya dari <a href="https://www.facebook.com/profile.php?id=100015443235767" target="_blank">Dony Oprekers. </a>
+			Source kodenya bisa diakses di 
+			<a href="https://github.com/OprekersMania" target="_blank">Github repository saya.</a><br>
+			Mohon masukan dan kritiknya untuk perbaikan kedepan.<br>
+			</b>
+			<em>Sumber original kode generator gradasi diambil  
+				<a href="https://www.thingiverse.com/thing:3017556" target="_blank">disini.</a> Karya dari 
+				<a href="https://www.thingiverse.com/jamesvilleneuve/designs" target="_blank">james villeneuve</a>
+			</em> <br>
+	</p>
+<!-------------------------------->
+	
+  <div class="ui teal inverted segment" style="border:8px solid red; background-color:#aecfe7;">
+	<div class="ui form">
+		<div class="two fields" style="padding:10 10px">
+				<div class="two fields" style="width:60%">
+					<div class="field" style="width:70%">
+						<h3>Data BMP yang akan di Split</h3>
+						<textarea id="source" style="font-weight: bolder; height:230px">
+						
+	// Sample image for this page
+	const uint8_t sample [] PROGMEM ={
+		0x38, 0x00, 0x00, 0x00, 0x00,
+		0x7e, 0x00, 0x3e, 0x00, 0x00,
+		0xe6, 0x00, 0x3e, 0x00, 0x00,
+		0xe7, 0x80, 0x3f, 0x00, 0x00,
+		0x7f, 0xe1, 0xff, 0xe1, 0x80,
+		0x1f, 0xe3, 0xff, 0xf3, 0xc0,
+		0x0f, 0xfb, 0xff, 0xff, 0xe0,
+		0x03, 0xfc, 0xff, 0xff, 0xf0,
+		0x03, 0xfe, 0x7f, 0xff, 0xe0,
+		0x00, 0xfe, 0x00, 0x3f, 0xe0,
+		0x00, 0x7f, 0x80, 0x1f, 0xe0,
+		0x00, 0x3f, 0xc0, 0x07, 0xe0,
+		0x03, 0x9f, 0xee, 0x03, 0xe0,
+		0x03, 0xe7, 0xff, 0xe3, 0xf0,
+		0x3f, 0xe3, 0xff, 0xe1, 0xfe,
+		0x3f, 0xe1, 0xff, 0xf1, 0xff,
+		0x3f, 0xe1, 0xf8, 0x71, 0xff,
+		0x3f, 0xe1, 0xf0, 0x71, 0xff,
+		0x3f, 0xe1, 0xe0, 0x31, 0xff,
+		0x0f, 0xe1, 0xf0, 0x13, 0xfc,
+		0x03, 0xe0, 0xf8, 0x03, 0xf0,
+		0x03, 0xf0, 0x3c, 0x03, 0xe0,
+		0x03, 0xfc, 0x1e, 0x0f, 0xe0,
+		0x01, 0xfe, 0x00, 0x1f, 0xc0,
+		0x03, 0xff, 0xc1, 0xff, 0xe0,
+		0x03, 0xff, 0xff, 0xff, 0xf0,
+		0x03, 0xff, 0xff, 0xff, 0xf0,
+		0x01, 0xef, 0xff, 0xfb, 0xe0,
+		0x00, 0xe3, 0xff, 0xe1, 0xc0,
+		0x00, 0x00, 0x3f, 0x00, 0x00,
+		0x00, 0x00, 0x3f, 0x00, 0x00,
+		0x00, 0x00, 0x3e, 0x00, 0x00
+	};
+									</textarea>
+							
+						<div class="ui right labeled input" style="background:aquamarine; padding:5 9; height:36px; margin: 10 0;">
+							<!-- <a class="ui red label"> Dimensi Gambar </a>&emsp; --><b>
+							<span style=" padding-top: 4px;">Dimensi Gambar &emsp;</span>
+							<input type="number" id="bmpP" value="40" min="10" max="480" style="min-width: 50px; max-width: 55px; height: 26px;">
+							<a class="ui orange label" > Panjang </a>&emsp;
+
+							<input type="number" id="bmpT" value="32" min="10" max="480" style="min-width: 50px; max-width: 55px; height: 26px;">
+							<a class="ui orange label" > Lebar </a>&emsp; 
+							<span style=" padding-top: 4px;"><font color="red">*Wajib sesuai</font> </span></b>
+							
+						</div>
+						<div class="field">
+								<label for="BukaFile" class="ui inverted yellow button left floated" style="background-color:0;"> Buka File BMP (*.h)</label>
+								<input id="BukaFile" type="file" style="display:none;" > 
+								<label for="hapus" class="ui inverted red button left floated" style="background-color:0; margin: 0 5;"> Hapus area teks</label>
+								<input id="hapus" style="display:none;" onclick="hapus()">
+						</div>
+						<div class="field" style="padding:10 0;">
+								<button id="proses" class="ui blue button left floated" onclick="jadiin()" style="margin-right:10;"> Proses Gambar </button>
+							<b>Klik beberapa kali agar hasil warna gradasi lebih maksimal. (BUG, barangkali ada yg bisa bantu fix.)</b>
+						</div>
+							<!-- Jumlah warna gradasi yang dihasilkan adalah &nbsp;&emsp; <input type="number" id="hasilWarna" value="" />  -->
+					</div>
+					<div class="field" style="width:30%">
+					<h3>BMP Preview Zoomed</h3>
+						<div id="preview">
+							<canvas id="previewCanvas" width="100" height="100" ></canvas>
+							<em class="zoom" style="display:none"></em>
+						</div>
+						<div class="field">
+						<label for="invert" class="ui inverted green button left floated" style="background-color:0; margin: 10 0;"> Tes invert warna obyek</label>
+						<input id="invert" style="display:none;" onclick="invertion()">
+						</div>
+						<div class="field">
+						<br>
+						<h4><font color="red">PENTING DIKETAHUI !!!</font></h4>
+						<br>
+						<em>
+						**Tes inversi warna hanya berlaku untuk tampilan disini saja, bukan untuk hasil arary gambar.<br>
+						<br>
+						**Jika ingin warna gambar terinversi, maka lakukan pada sumber gambar dulu sebelum diproses disini.
+						</em>
+						</div>
+					</div>
+				</div>
+
+				<div class="field" style="width:40%; margin-left:10px;">
+				
+						<h3>Pilih Base warna Gradasi</h3>
+				<input type="radio" name="BaseWarna" onchange="handleChange1();" value="3" /> 3 warna &emsp; 
+				<input type="radio" name="BaseWarna" onchange="handleChange2();" value="4" /> 4 warna &emsp; 
+				<input type="radio" name="BaseWarna" onchange="handleChange3();" value="5" /> 5 warna &emsp; 
+				<input type="radio" name="BaseWarna" onchange="handleChange4();" value="6" checked/> 6 warna 
+				<hr>
+					<div class="six fields">
+						<div class="field">
+							<!-- <label style="text-align:center" > Warna 1 </label> -->
+							<input type="text" id="color1" name="color1" value="FF00FF" />
+							<button class="color" data-jscolor="{valueElement:'#color1'}"></button>
+						</div>
+						<div class="field">
+							<!-- <label style="text-align:center" > Warna 2 </label> -->
+							<input type="text"  id="color2" name="color2" value="000fff" />
+							<button class="color" data-jscolor="{valueElement:'#color2'}"></button>
+						</div>
+						<div class="field">
+							<!-- <label style="text-align:center" > Warna 3 </label> -->
+							<input type="text"  id="color3" name="color3" value="00ff0f" />
+							<button class="color" data-jscolor="{valueElement:'#color3'}"></button>
+						</div>
+						<div class="field" id="Warna4" style="display: block;">
+							<!-- <label style="text-align:center" > Warna 4 </label> -->
+							<input type="text" id="color4" name="color4" value="FFFF00" />
+							<button class="color" data-jscolor="{valueElement:'#color4'}"></button>
+						</div>
+						<div class="field" id="Warna5" style="display: block;">
+							<!-- <label style="text-align:center" > Warna 5 </label> -->
+							<input type="text" id="color5" name="color5" value="FfA544" />
+							<button class="color" data-jscolor="{valueElement:'#color5'}"></button>
+						</div>
+						<div class="field"  id="Warna6" style="display: block;">
+							<!-- <label style="text-align:center" > Warna 6 </label> -->
+							<input type="text" id="color6" name="color6" value="ff0000" />
+							<button class="color" data-jscolor="{valueElement:'#color6'}"></button>
+						</div>
+					</div>
+					Klik pada kotak warna untuk merubah warna.
+					<hr>
+
+					<h4>Parameter dibawah ini untuk pembuatan fungsi pembuatan gradasi,<br>
+					dan fungsi pemanggilan tft.DrawBitmap (Gambar BMP Dibagi Jumlah pembagi gradasi)</h4><br>
+					
+					Nama BMP baru &emsp;<input id="NamaFILE" value="" style="width:100px; height:20px"> &emsp; <font color="cyan"><b>*opsional</b></font>
+					
+
+					<hr>
+					<div class="ui right labeled input" style="background: aquamarine;padding: 5 9; height: 36px;">
+						<!-- <a class="ui red label"> Dimensi Gambar </a>&emsp; -->
+						<b>
+						<span style=" padding-top: 4px;">Set kursor lcd : &nbsp; </span>
+						<input type="number" id="xPos" value="0" min="0" max="480" style="min-width: 50px; max-width: 55px; height: 26px;">
+						<a class="ui orange label" > X_Pos </a>&emsp;
+						<input type="number" id="yPos" value="0" min="0" max="480" style="min-width: 50px; max-width: 55px; height: 26px;">
+						<a class="ui orange label" > Y_Pos </a>
+						<span style=" padding-top: 4px;"><font color="blue">&emsp; * Opsional</font> </span>
+						</b>
+					</div>
+					<hr>
+					<div class="ui right labeled input" style="background:aquamarine; padding:5 9; height:36px;">
+						<b>
+						<span style=" padding-top: 4px;">Jumlah Pembagi baris gambar &emsp; </span>
+						<input type="number" id="pembagigradasi" value="2" min="1" max="50" style="min-width: 50px; max-width: 55px; height: 26px;">
+						<span style=" padding-top: 4px;"><font color="red">&emsp; * Wajib</font> </span>
+						</b>
+					</div>
+					<hr>
+					
+					<div class="field">
+					<em>
+						** Pada akhir nama di kode yang dihasilkan, akan ditambah angka urut dari 0 sampai maks jumlah warna gradasi yang dihasilkan.
+						<br>
+						** Hasil gradasi yg ditampilkan adalah perhitungan dari tinggi gambar dibagi dengan nilai pembagi baris gambar
+					</em>
+					</div>
+				</div>
+		</div>	
+	 </div>
+  </div>
+<!-------------------------------->
+
+ <div id="hasilnya" style="display:none;">
+ 
+	<canvas id="GradientCanvas" width="1030" height="180" style="border:1px solid #d3d3d3;">
+	Jika kamu melihat tulisan ini, Berarti browsermu tidak suport HTML5 canvas tag.</canvas>
+
+	<h3 style="margin:10;">Hasil kode akhir fungsi gradasi warna untuk lcd arduino</h3>
+	<div class="eight wide column" >
+      <div class="ui secondary inverted segment" id="resultWrapper">
+        <div class="ui form">
+          <div class="two fields">
+			  <div class="field">
+					<label><font color="white">Fungsi pemangil tft.drawBitmap</font></label>
+					<textarea id="lcdDrawCmd" ></textarea>
+					<br>
+					<br>
+					<button class="ui inverted teal button" id="copying">Salin ke clipboard</button>
+			  </div>
+			  <div class="field">
+					<label><font color="white">Data BMP Split array</font></label>
+					<textarea id="bmpArray" ></textarea>
+					<br>
+					<br>
+					<button class="ui inverted teal button" id="copying2">Salin ke clipboard</button>
+			  </div>
+          </div>
+		  
+        </div>
+      </div>
+    </div>
+   </div>
+	
+	<br><br><br>
+	
+	<div align="center">
+		<h3>------------- &emsp;    Dony Oprekers 2023  &emsp;  --------------</h1>
+					<br>
+	</div>
+ 
+
+</body>
+<script>
+<!-------------------------------->
+
+
+document.getElementById('BukaFile')
+  .addEventListener('change', getFile)
+  
+var name;
+var ranges;
+var newname = "";
+var pilihanwarna = 6;
+
+var canvas = document.getElementById('previewCanvas');
+var ctrx = canvas.getContext('2d');
+
+var invert = '1';
+var Bagian;
+var databmp;
+var datacolor;
+var arraylist;
+var hasilWarna;
+// var xPos=document.getElementById('xPos').value;
+// var yPos = document.getElementById('yPos').value;
+	
+function Split() {
+		let Newdata = 0;
+		let data = document.getElementById("source").value;
+		newname = document.getElementById('NamaFILE').value;
+		Bagian = document.getElementById('pembagigradasi').value;
+		
+	  re = /(.*)(const)/;
+	  const found = data.match(re);
+			console.log('test', found);
+	  
+	  if (found != null && found.length > 1) {
+		//alert('Ditemukan text yang tidak diperlukan sebelum aray file.\nSemua text dibelakang kata "const uint8_t...." akan dihapus dulu.');
+		
+		// hapus semua text sebelum kata tertentu
+		Newdata = data.substring(data.indexOf("const"));
+		// hapus semua text dan ganti setelah kata tertentu
+		//Newdata = Newdata.replace(/\n};.*/," \n};");
+		$('#source').val(Newdata);
+		
+	  } else {
+		Newdata = data;
+	  }
+			console.log('test', Newdata);
+		
+	  re = /const unsigned\schar|uint8_t\ (.*) \[\]/;
+	  const nfound = Newdata.match(re);
+	  
+	  if (nfound != null && nfound.length > 1) {
+		  name = nfound[1];
+		  if(!newname){
+			newname = name;
+			document.getElementById('NamaFILE').value = name;
+		  }
+	  } else {
+		alert('Tidak ditemukan kode BMP array yang benar,\nsilakan buka file, atau tempelkan kode array BMP terlebih dahulu.\n\nPastikan format/data array BMP mirip seperti contoh dibawah ini:\n\nconst uint8_t NAMA [] PROGMEM = {\n   0xff, 0xf5, 0xff,0x0A.....dst\n};');
+		return 0;
+	  }
+
+		var lines = Newdata.trim().split(/\n/).slice(0, -1);
+		let ii = 0, prefix = lines.splice(0, 1)[0], result = [];
+		let groups = lines.reduce((b, a, i) => {
+		if (i % Bagian === 0) {
+		  b.push([a]);
+		  ii++
+		} else b[ii].push(a);
+			return b;
+		}, [[]]).filter(a => a.length > 0);
+
+		groups.forEach((g,i) => {
+			g.unshift(prefix.replace(name, newname + `_${i}`))
+			g[g.length-1] = g[g.length-1].slice(0,-1)
+			ranges = i;
+			g.push("};");
+			result.push(g.join("\n"))
+		})
+
+		document.getElementById("bmpArray").value = result.join("\n");
+		return 1;
+}
+
+function jadiin(){
+		$('#hasilnya').show()
+		Split();
+	var c = document.getElementById("GradientCanvas");
+	var ctx = c.getContext("2d");
+	var hexinfo="000000";
+
+	// var pilihanwarna = document.getElementById('base').value;
+		
+	//we copy old color data into place
+	if (pilihanwarna == 3 || pilihanwarna == 4 || pilihanwarna == 5 || pilihanwarna == 6){
+	var color1=document.getElementById('color1').value;
+	var color2=document.getElementById('color2').value;
+	var color3=document.getElementById('color3').value;
+	}
+	if (pilihanwarna == 4 || pilihanwarna == 5 || pilihanwarna == 6) { 
+	var color4=document.getElementById('color4').value;
+	}
+	if (pilihanwarna == 5 || pilihanwarna == 6) { 
+	var color5=document.getElementById('color5').value;
+	}
+	if (pilihanwarna == 6) { 
+	var color6=document.getElementById('color6').value;
+	}
+
+	var across = 6;
+	var repeat= 1; 
+	//var range =document.getElementById('hasilWarna').value;
+	var startsamplingat=1;
+	//we get old color table values to compare color data
+	var dataOldColor= new Array(1024);//we get old color data of 256 words of color information
+
+
+	// Create gradient
+	var grd = ctx.createLinearGradient(0,0,1520,0);
+	//we show gradience of 6 colors 1/6=
+
+		if (pilihanwarna == 3) { 
+			grd.addColorStop(0,color1);//0.1666
+			grd.addColorStop(0.3333*1,color2);
+			grd.addColorStop(0.3333*2,color3);
+		} else if (pilihanwarna == 4) { 
+			grd = ctx.createLinearGradient(0,0,1340,0);
+			grd.addColorStop(0,color1);//0.1666
+			grd.addColorStop(0.25*1,color2);
+			grd.addColorStop(0.25*2,color3);
+			grd.addColorStop(0.25*3,color4);
+		} else if (pilihanwarna == 5) { 
+			grd = ctx.createLinearGradient(0,0,1255,0);
+			grd.addColorStop(0,color1);//0.1666
+			grd.addColorStop(0.2*1,color2);
+			grd.addColorStop(0.2*2,color3);
+			grd.addColorStop(0.2*3,color4);
+			grd.addColorStop(0.2*4,color5);
+		} else if (pilihanwarna == 6) { 
+			grd = ctx.createLinearGradient(0,0,1210,0);
+			grd.addColorStop(0,color1);//0.1666
+			grd.addColorStop(0.1666*1,color2);
+			grd.addColorStop(0.1666*2,color3);
+			grd.addColorStop(0.1666*3,color4);
+			grd.addColorStop(0.1666*4,color5);
+			grd.addColorStop(0.1666*5,color6);
+		}
+	// Fill with gradient
+
+
+	ctx.fillStyle = grd;
+	ctx.fillRect(0,10,1600,50);
+	ctx.beginPath();
+	ctx.font="15px Arial Black";
+	ctx.fillStyle = '#000000';
+	ctx.fillText("[Contoh Gradasi 24bit RGB]",300,40);
+	ctx.fillStyle = grd;
+	//data=0;
+	var imgData = ctx.getImageData(0, 0, 1024, 210);
+	 //var imgData=ctx.getImageData(1, 1, 1024, 100).data  
+	 //'rgb(0,'+Math.floor(i)+','+Math.floor(i)+')';
+	 var red,green,blue;
+	var space =" ";
+	var temp=0;
+
+	// Penambahan pemanggilan fungsi tft.drawbmp pada tap baris hasil warna.
+
+	var namaBMP=newname;
+	var bmp_P=document.getElementById('bmpP').value;
+	var bmp_T= document.getElementById('bmpT').value;
+
+	var xPos = document.getElementById('xPos').value;
+	var yPos = document.getElementById('yPos').value;
+	var awaltft = 'tft.drawBitmap(' + xPos + ', ';
+	var tengahtft = ', ' + namaBMP + '_';
+	var akhirtft = ', ' + bmp_P + ', ' + Bagian + ', 0x';
+
+	hasilWarna = ranges;
+
+	// THIS FUNCTION FOR GENERATE RESULT HEX COLOR DATA
+	document.getElementById('lcdDrawCmd').innerHTML="\n ";//start for data .toString(16) makes data hex
+	for (  i=0;i<=ranges;i++){
+	  for (  j=0;j<1024/ranges;j++){
+	  
+	 //if (temp>Math.round1024/ hasilWarna){temp=0;}
+	  ctx.beginPath();
+
+	var imgData = ctx.getImageData(i*(1024/ranges)+j+Math.floor(startsamplingat), 10,2, 2);
+	 
+	if (j==0){
+
+	red = imgData.data[0];
+	green = imgData.data[1];
+	blue = imgData.data[2];
+	}
+	ctx.moveTo(i*(1024/ranges)+j, 130);
+	ctx.lineTo(i*(1024/ranges)+j, 180);
+
+	ctx.strokeStyle ='rgb('+Math.floor(red&248)+','+Math.floor(green&252)+','+Math.floor(blue&248)+')';
+	//ctx.strokeStyle ='rgb(0,0,255)';
+
+	//'rgb('+Math.floor(red/16)+','+Math.floor(green/8)+','+Math.floor(blue/16)+') ';
+
+	//getPixelXY(temp,i,50)
+
+
+
+	ctx.stroke();
+	}
+	var temprepeat=repeat;//if we are repeating data we have this to do it
+	while (temprepeat>0){ temprepeat--;
+
+	if (yPos<10){ yPos = ' ' + yPos;}
+	if (i<10){ i = i + ' ';}
+
+	//document.getElementById('lcdDrawCmd').innerHTML+='rgb('+Math.floor(red&248)+','+Math.floor(green&252)+','+Math.floor(blue&248)+')';
+	hexinfo= awaltft + yPos + tengahtft + i + akhirtft + (Math.floor(red/8)*2048+Math.floor(green/4)*32+Math.floor(blue/8)).toString(16) + ');\n ';
+
+	while (hexinfo.length<5){hexinfo='0'+hexinfo;} //this adds leading zeros
+	document.getElementById('lcdDrawCmd').innerHTML+= hexinfo;
+	temp++;
+	}
+
+	yPos = Math.floor(yPos)+Math.floor(Bagian);
+
+	if (temp>across){temp=0;} //we ad a return to make things go to next line to be nice
+
+	}
+
+	//this is at end of loop, all values in table text area, 
+	// now we need to clean up last comment and close loop 
+	var temptable=document.getElementById('lcdDrawCmd').innerHTML
+	document.getElementById('lcdDrawCmd').innerHTML=temptable.substring(0,temptable.length-1);//we remove last coma
+	//document.getElementById('lcdDrawCmd').innerHTML+=" \n};";//we want number to stay after refresh;//start for data .toString(16) makes data hex
+	//this part simulates actual chart data
+
+	for (  i=0;i<64;i++){
+	 for (j=0;j<16;j++){
+	  
+	 //if (temp>Math.round1024/ hasilWarna){temp=0;}
+	  ctx.beginPath();
+
+	var imgData = ctx.getImageData(i*16+Math.floor(startsamplingat), 10,2, 2);
+	 
+
+	if (j==0){
+	red = imgData.data[0];
+	green = imgData.data[1];
+	blue = imgData.data[2];
+	}
+
+		// this is 64 color reference bar image
+	ctx.moveTo(i*16+j, 70);
+	ctx.lineTo(i*16+j, 120);
+
+	 
+	ctx.strokeStyle ='rgb('+Math.floor(red&248)+','+Math.floor(green&252)+','+Math.floor(blue&248)+')';
+	//getPixelXY(temp,i,50)
+
+	ctx.stroke();
+	}
+	}
+	//copy();
+	ctx.beginPath();
+	ctx.font="15px Arial Black";
+	ctx.fillStyle = '#000000';
+	ctx.fillText("[Contoh gradasi 64 warna.]",300,102);
+	ctx.fillText("[ " + (ranges+1) + " warna hasil akhir]",300,163);
+	ctx.stroke();
+	Proses();
+}
+
+function Proses(){
+		
+		var colordata = document.getElementById("lcdDrawCmd").value;
+		var imagedata = document.getElementById("bmpArray").value;
+		
+		canvas.width  = document.getElementById("bmpP").value;
+		canvas.height = document.getElementById("bmpT").value;
+			ctrx.clearRect(0, 0, canvas.width, canvas.height);
+		//for proccessing color data array
+		let color = colordata.replace(/(.*,\s)/g,"");
+			color = color.replace(/([)];\s)/g,",");
+			datacolor = color.split(",");
+			
+		arraylist = imagedata;
+			for (var i=0;i<=hasilWarna;i++){
+				readSplitData();
+				listToImageHorizontal(databmp, Bagian, Bagian*i,datacolor[i]);
+				}
+}
+
+function readSplitData() {
+		let input = arraylist;
+		
+	  re = /};([\s\S]*)/;
+	  const xfound = input.match(re);
+	  if (xfound != null && xfound.length > 1) {
+		  arraylist = xfound[1];
+	  } 
+	
+		input = input.replace(/};([\s\S]*)/g, "");
+		input = input.replace(/[\s\S]*const\s+(unsigned\s+char|uint8_t)\s+[a-zA-Z0-9\d\D]+\s*\[\]\s*(PROGMEM\s*)?=\s*{/g, "");
+			// Convert newlines to comma (helps to remove comments later)
+			input = input.replace(/\r\n|\r|\n/g, ",");
+			// Convert multiple commas in a row into a single one
+			input = input.replace(/,{2,}/g, ",");
+			// Remove whitespace
+			input = input.replace(/\s/g, "");
+			//Remove comments
+			input = input.replace(/\/\/(.+?),/g, "");
+			// Remove "0x"
+			input = input.replace(/0[xX]/g, "");
+			databmp = input.split(",");
+}
+
+function listToImageHorizontal(list, bmpH, ypos, hexColor) {
+  var imgData = ctrx.createImageData(canvas.width, bmpH);
+  var index = 0;
+
+  // Extract individual RGB components from the 16-bit color
+  var red = (hexColor >> 8) & 0xF8; // 5 bits for red
+  var green = (hexColor >> 3) & 0xFC; // 6 bits for green
+  var blue = (hexColor << 3) & 0xF8; // 5 bits for blue
+
+  // round the width up to the next byte
+  var widthRoundedUp = Math.floor(canvas.width / 8 + (canvas.width % 8 ? 1 : 0)) * 8;
+  var widthCounter = 0;
+
+  // Move the list into the imageData object
+  for (var i = 0; i < list.length; i++) {
+    var binString = hexToBinary(list[i]).result;
+	
+    if (binString.length == 4) {
+      binString = binString + "0000";
+    }
+
+    // Check if pixel is white or black
+    for (var k = 0; k < binString.length; k++, widthCounter++) {
+      // if we've counted enough bits, reset counter for next line
+      if (widthCounter >= widthRoundedUp) {
+        widthCounter = 0;
+      }
+      // skip 'artifact' pixels due to rounding up to a byte
+      if (widthCounter >= canvas.width) {
+        continue;
+      }
+	  
+      if (binString.charAt(k) == invert) {
+        // Use the provided 16-bit color for black pixels
+        imgData.data[index] = red;
+        imgData.data[index + 1] = green;
+        imgData.data[index + 2] = blue;
+        imgData.data[index + 3] = 255;
+      } else {
+        // Use white color for white pixels
+        imgData.data[index] = 0;
+        imgData.data[index + 1] = 0;
+        imgData.data[index + 2] = 0;
+        imgData.data[index + 3] = 255;
+      }
+
+      index += 4;
+    }
+  }
+
+  ctrx.putImageData(imgData, 0, ypos);
+  //img.src = canvas.toDataURL('image/png');
+  //place_image();
+  if(canvas.width<200){
+  document.getElementById('previewCanvas').style="width:100%;";
+  }
+  else {
+  document.getElementById('previewCanvas').style="width:100%;";
+  }
+  
+    //$('#previewCanvas').attr('width', 100px)
+}
+
+function invertion(){
+	
+      if (invert == '0') invert = '1'
+	  else if (invert == '1') invert = '0'
+	Proses()
+}
+
+function hexToBinary(s) {
+
+			var i, k, part, ret = "";
+			// lookup table for easier conversion. "0" characters are
+			// padded for "1" to "7"
+			var lookupTable = {
+				"0": "0000", "1": "0001", "2": "0010", "3": "0011", "4": "0100",
+				"5": "0101", "6": "0110", "7": "0111", "8": "1000", "9": "1001",
+				"a": "1010", "b": "1011", "c": "1100", "d": "1101", "e": "1110",
+				"f": "1111", "A": "1010", "B": "1011", "C": "1100", "D": "1101",
+				"E": "1110", "F": "1111"
+			};
+			for (i = 0; i < s.length; i += 1) {
+				if (lookupTable.hasOwnProperty(s[i])) {
+					ret += lookupTable[s[i]];
+				} else {
+					return { valid: false, s: s };
+				}
+			}
+			return { valid: true, result: ret };
+		}
+
+function hapus() {
+	$('#source').val('');
+}
+
+function getFile(event) {
+	const input = event.target
+  if ('files' in input && input.files.length > 0) {
+	  placeFileContent(
+      document.getElementById('source'),
+      input.files[0])
+  }    
+}
+
+function readFileContent(file) {
+	const reader = new FileReader()
+  return new Promise((resolve, reject) => {
+    reader.onload = event => resolve(event.target.result)
+    reader.onerror = error => reject(error)
+    reader.readAsText(file)
+  })
+}
+
+function placeFileContent(target, file) {
+	readFileContent(file).then(content => {
+  	target.value = content
+  }).catch(error => console.log(error))
+}
+
+$(document).ready(function () {
+    $('input:radio[name="BaseWarna"]').change(function() {
+        if ($(this).val() == '3') {
+			pilihanwarna = 3;
+			$('#Warna4').hide()
+			$('#Warna5').hide()
+			$('#Warna6').hide()
+        } else if ($(this).val() == '4') {
+			pilihanwarna = 4;
+			$('#Warna4').show()
+			$('#Warna5').hide()
+			$('#Warna6').hide()
+        } else if ($(this).val() == '5') {
+			pilihanwarna = 5;
+			$('#Warna4').show()
+			$('#Warna5').show()
+			$('#Warna6').hide()
+        } else if ($(this).val() == '6') {
+			pilihanwarna = 6;
+			$('#Warna4').show()
+			$('#Warna5').show()
+			$('#Warna6').show()
+        }
+    });
+<!---------------------------------------------------->
+<!------        FUNGSI copy to clipboard        ------>
+<!---------------------------------------------------->
+  $('#copying').click(function () {
+  
+	  var copyText = document.getElementById("lcdDrawCmd");
+	  copyText.select();
+	  copyText.setSelectionRange(0, 9999999); 
+			  document.execCommand("copy");
+  });
+<!---------------------------------------------------->
+<!------        FUNGSI copy to clipboard        ------>
+<!---------------------------------------------------->
+  $('#copying2').click(function () {
+  
+	  var copyText = document.getElementById("bmpArray");
+	  copyText.select();
+	  copyText.setSelectionRange(0, 9999999);
+			  document.execCommand("copy");
+  });
+
+
+});
+
+
+</script>
+</html>

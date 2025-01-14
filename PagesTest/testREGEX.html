@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Regex Tester</title>
+		<script src="./semantic-ui/index.min.js"></script>
+		<script src="./semantic-ui/jscolor.js"></script>
+    <link rel="stylesheet" href="./semantic-ui/semantic.min.css">
+    <script src="./semantic-ui/jquery-3.2.1.min.js"></script>
+    <script src="./semantic-ui/semantic.min.js"></script>
+    <style>
+	html, body {
+		margin: 0 10px;
+	}
+	textarea {
+    overflow-wrap: normal;
+	}
+    </style>
+</head>
+<body>
+    <h1>Regular Expression Tester</h1>
+
+<div class="ui blue inverted segment">
+<div class="ui form">
+<div class="two fields">
+
+<div class="field">
+	<label for="textInput">Sumber Text:</label>
+	<textarea id="Sumber" rows="4" cols="50">
+//sample test buat regex complex
+	oihoihio
+	kjbkj';k'
+	//l;j'[;
+	./,;jlol
+	//
+const uint8_t Free_Wi-Fi_101 [] PROGMEM = {
+0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xfe,
+0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xfe,
+0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xfe,
+0xff,0xff,0xff,0xff,0xff,0xff,0xfc,0x00,0x00,0x3f,0xff,0xff,0xff,0xff,0xff,0xfe,
+0xff,0xff,0xff,0xff,0xff,0xff,0xc0,0x00,0x00,0x03,0xff,0xff,0xff,0xff,0xff,0xfe,
+0xff,0xff,0xff,0xff,0xff,0xfc,0x00,0x03,0xc0,0x00,0x3f,0xff,0xff,0xff,0xff,0xfe,
+0xff,0xff,0xff,0xff,0xff,0xc0,0x0f,0xff,0xff,0xe0,0x07,0xff,0xff,0xff,0xff,0xfe,
+0xff,0xff,0xff,0xff,0xff,0x00,0xff,0xff,
+};
+
+// test komend dengan_kat-yang sulit 1245
+		</textarea>
+		<br>
+		
+		<label for="regexInput">Regex Expression /  Kata kunci pencarian :</label>
+		<textarea id="regexInput" rows="2" cols="50">[\s\S]*const\s+(unsigned\s+char|uint8_t)\s+[a-zA-Z0-9\d\D]+\s*\[\]\s*(PROGMEM\s*)?=\s*</textarea>
+		<button id="testButton">Test Regex</button>
+		<button onclick="hapus('regexInput')">Hapus Regex</button>
+	</div>
+	
+	<div class="field">
+		<label for="result">HASIL:</label>
+		<textarea id="HASIL" rows="6" cols="50"></textarea>
+		<button onclick="hapus('HASIL')">Hapus result</button>
+	</div>
+	</div>
+	<br>
+				
+	<div class="two fields">
+	<div class="field">
+		<label for="javascriptInput">JavaScript untuk tes dari area HASIL di kanan atas:</label>
+		<textarea id="javascriptInput" rows="10" cols="50" placeholder="Type JavaScript code here">
+var input = document.getElementById('Sumber').value;
+
+let re = /\};|([\s\S]*?)}/;
+let last_match = input.match(re);
+input = last_match ? last_match[0] : "";
+
+// get the result function on textinput area
+document.getElementById('javascriptResult').value = input;</textarea>
+
+    <button id="executeFunction">Execute JavaScript</button>
+    <button onclick="hapus('javascriptInput')">Hapus JavaScript</button>
+				</div>
+				<div class="field">
+    <label for="javascriptInput">Hasil tes JavaScript:</label>
+    <textarea id="javascriptResult" rows="10" cols="50" placeholder="Type JavaScript code here"></textarea>
+		<button onclick="hapus('javascriptResult')">Hapus hasil tes</button>
+				</div>
+				</div>
+				</div>
+				</div>
+
+    <script>
+        const regexInput = document.getElementById("regexInput");
+        const Sumber = document.getElementById("Sumber");
+        const result = document.getElementById("HASIL");
+        const testButton = document.getElementById("testButton");
+        const javascriptInput = document.getElementById("javascriptInput");
+        const executeFunctionButton = document.getElementById("executeFunction");
+
+        testButton.addEventListener("click", function() {
+            const regexString = regexInput.value;
+            const sourceText = Sumber.value;
+
+            try {
+                const regex = new RegExp(regexString, "g");
+                const matches = sourceText.match(regex);
+
+                if (matches) {
+                    const coloredText = sourceText.replace(regex, '');
+                    result.innerHTML = coloredText;
+                } else {
+                    result.innerHTML = sourceText;
+                }
+            } catch (error) {
+                result.innerHTML = "Invalid regular expression: " + error.message;
+            }
+        });
+
+        executeFunctionButton.addEventListener("click", function() {
+            const code = javascriptInput.value;
+
+            try {
+                // Wrap the code in a function and execute it
+                const customFunction = new Function(code);
+                customFunction();
+            } catch (error) {
+                console.error("Error executing JavaScript code: " + error);
+            }
+        });
+		
+		// Convert hex to binary
+		function hexToBinary(s) {
+
+			var i, k, part, ret = '';
+			// lookup table for easier conversion. '0' characters are padded for '1' to '7'
+			var lookupTable = {
+				'0': '0000', '1': '0001', '2': '0010', '3': '0011', '4': '0100',
+				'5': '0101', '6': '0110', '7': '0111', '8': '1000', '9': '1001',
+				'a': '1010', 'b': '1011', 'c': '1100', 'd': '1101',
+				'e': '1110', 'f': '1111',
+				'A': '1010', 'B': '1011', 'C': '1100', 'D': '1101',
+				'E': '1110', 'F': '1111'
+			};
+			for (i = 0; i < s.length; i += 1) {
+				if (lookupTable.hasOwnProperty(s[i])) {
+					ret += lookupTable[s[i]];
+				} else {
+					return { valid: false };
+				}
+			}
+			return { valid: true, result: ret };
+		}
+
+
+function hapus(kotak) {
+	document.getElementById(kotak).value = "";
+}
+
+    </script>
+</body>
+</html>

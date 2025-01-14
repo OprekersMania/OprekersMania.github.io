@@ -1,0 +1,1519 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Test gradiern</title>
+    <link rel="stylesheet" type="text/css" href="animation_app.css">
+
+	<script src="https://cdn.jsdelivr.net/npm/index-of-js@1.0.0/index.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jscolor/2.5.2/jscolor.js" integrity="sha512-IShZ5NZxEaotdJdpd853DUKXbgYUH7O/PaeGDp2eiS3XxNDnIQ9+GuRX3d5c4joOqs7Ni8ZKQmRFbKImtcwLaA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" crossorigin="anonymous"></script>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
+	<script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
+  
+    <title>Bitmap on Canvas</title>
+</head>
+<body>
+
+
+<div class="ui form">
+
+
+<!-- Top Navbar-->
+	<div class="field">
+	<div class="ui inverted menu">
+		<a class="ui dropdown item">
+		  Animation Effect
+		  <i class="dropdown icon"></i>
+		  <div class="menu">
+				<div class="item" onClick="animation.testing()">testing</div>
+				<div class="item" onClick="gradient('testing',true)">testing-true</div>
+				<div class="item" onClick="gradient('fullMatrix',false)">fullMatrix</div>
+				
+				<div class="item">
+				  <i class="dropdown icon"></i>
+				  <span class="text">Diamond</span>
+				  <div class="menu">
+					<div class="item" onClick="Diamond('diamondinline',false)">Zoom In line</div>
+					<div class="item" onClick="Diamond('diamondoutline',false)">Zoom Out line</div>
+					<div class="item" onClick="Diamond('diamondinfull',false)">Zoom In full</div>
+					<div class="item" onClick="Diamond('diamondoutfull',false)">Zoom Out full</div>
+					<div class="item" onClick="Diamond('diamondindouble',false)">Zoom In double</div>
+					<div class="item" onClick="Diamond('diamondoutdouble',false)">Zoom Out double</div>
+				  </div>
+				</div>
+				<div class="item">
+				  <i class="dropdown icon"></i>
+				  <span class="text">Diagonal line</span>
+				  <div class="menu">
+					<div class="item" onClick="gradient('diagonal-topleft',false)">diag top left Line</div>
+					<div class="item" onClick="gradient('diagonal-topleft',true)">diag top left Pixel</div>
+					<div class="item" onClick="gradient('diagonal-topright',false)">diag top right Line</div>
+					<div class="item" onClick="gradient('diagonal-topright',true)">diag top right Pixel</div>
+					<div class="item" onClick="gradient('diagonal-bottomleft',false)">diag bot left L</div>
+					<div class="item" onClick="gradient('diagonal-bottomleft',true)">diag bot left P</div>
+					<div class="item" onClick="gradient('diagonal-bottomright',false)">diag bot right L</div>
+					<div class="item" onClick="gradient('diagonal-bottomright',true)">diag bot right P</div>
+				  </div>
+				</div>
+				<div class="item">
+				  <i class="dropdown icon"></i>
+				  <span class="text">Vertical line</span>
+				  <div class="menu">
+					<div class="item" onClick="gradient('VerticalToRight',false)">| left To Right</div>
+					<div class="item" onClick="gradient('VerticalToLeft',false)">| right To Left</div>
+				  </div>
+				</div>
+				<div class="item">
+				  <i class="dropdown icon"></i>
+				  <span class="text">Horizontal line</span>
+				  <div class="menu">
+					<div class="item" onClick="gradient('HorizonUpDown',false)">-- up go down</div>
+					<div class="item" onClick="gradient('HorizonDownUp',false)">-- down go up</div>
+				  </div>
+				</div>
+		  </div>
+		</a>
+		<a class="ui dropdown item">
+			Make animation
+			<i class="dropdown icon"></i>
+			<div class="menu">
+				<div class="header">
+				  <i class="tags icon"></i>
+				  Clone Step value
+				</div>
+				<div class="ui input">
+				  <i class="random icon"></i>
+					<input id="C_anim" type="number" 
+							onchange="updateInteger('C_anim')" 
+							value="32" min="0" style="width:15px;"/>
+				</div>
+				<div class="header">
+				  <i class="tags icon"></i>
+				  Move clone target
+				</div>
+				<div class="ui input">
+				  <i class="random icon"></i>
+					<input id="Move_val" type="number" 
+							onchange="updateInteger('Move_val')" 
+							value="1" min="1" style="width:15px;"/>
+				</div>
+				<div class="header">
+				  Move Direction
+				</div>
+				<div class="item">
+					<input class="centang" onChange="moveMode(this.checked,'left')" type="checkbox"/>L
+					<input class="centang" onChange="moveMode(this.checked,'right')" type="checkbox"/>R
+					<input class="centang" onChange="moveMode(this.checked,'up')" type="checkbox"/>U
+					<input class="centang" onChange="moveMode(this.checked,'down')" type="checkbox"/>D
+				</div>							  
+				<button class="ui red button" onClick="animation.cloneMove()">Create Animation</button>
+		  </div>
+		</a>
+				
+				
+		<a class="ui dropdown item">
+		  Shape Effect
+		  <i class="dropdown icon"></i>
+		  <div class="menu">
+			<div class="item" onClick="drawRectangle()">drawRectangle</div>
+		  </div>
+		</a>
+		<a class="ui dropdown item">
+		  Fill Tool
+		  <i class="dropdown icon"></i>
+		  <div class="menu">
+			<div class="item" onClick="animation.Diamond('#00ffff', 9, 16, 16, 'inline',true)">tes grad</div>
+			<div class="item" onClick="animation.changeColor()">Change active color</div>
+			<div class="item" onClick="fillRingRectangle()">fill blank pixel</div>
+			<div class="item" onClick="fillRectangle()">fill Screen</div>
+		  </div>
+		</a>
+	  </div>
+	</div>
+
+<!-- canvas and edit tool -->
+	<div class="two fields"> 
+		<div class="field" style="padding-left: 0 !important;">
+			<div class="ui inverted segment" style="width:fit-content;">
+				<div class="two fields">
+					<div class="field" style="width:-webkit-fill-available;">
+						<div class="field">
+							<div class="steps">
+								Animation Step &nbsp <span class="currentStep">0</span>
+								&nbsp of &nbsp <span class="totalSteps">0</span>
+							</div>
+						</div>
+						<div class="field">
+							<canvas id="canvas" width="800" height="400"></canvas>
+						</div>
+					</div>
+					<div class="field" style="margin-left:10px;width:fit-content;">
+						<div class="field">
+							<label style="color:white;">Tools</label>
+							<button class="editbutton" style="color:#ff00ff" 
+									data-tooltip="Draw mode Pen [ f ]" 
+									data-variation="basic" 
+									data-position="top left" 
+									onClick="setMode('pencil')">
+								<i class="pencil alternate icon"></i>
+							</button>
+						</div>
+						<div class="field">
+							<button class="editbutton" style="color:#ff00ff" 
+									data-tooltip="Erase mode [ e ]" 
+									data-variation="basic" 
+									data-position="top left" 
+									onClick="setMode('eraser')">
+								<i class="eraser icon"></i>
+							</button>
+						</div>
+						<div class="field">
+							<button class="editbutton" style="color:#ff00ff" 
+									data-tooltip="Color Pick mode [ i/alt ]" 
+									data-variation="basic" 
+									data-position="top left" 
+									onClick="colorPick(true)">
+								<i class="eyedropper icon"></i>
+							</button>
+						</div>
+						<div class="field">
+							<button class="editbutton" style="color:#ff00ff" 
+									data-tooltip="Clone pixel area [ s ]" 
+									data-variation="basic" 
+									data-position="top left" 
+									onClick="startSelectionMode()">
+								<i class="object ungroup icon"></i>
+							</button>
+						</div>
+						<div class="field">
+							<button class="editbutton" style="color:#ff00ff" 
+									data-tooltip="Erase All led on current step [ del ]" 
+									data-variation="basic" 
+									data-position="top left" 
+									onClick="clearAll()">
+								<i class="recycle icon"></i>
+							</button>
+						</div>
+					</div>
+					<div class="field" style="width:fit-content;">
+						<div class="field">
+							<label style="color:white;">GRID_SIZE</label>
+							<input id="grid_length" type="number" onchange="updateInteger('grid_length')" value="32"/> Width
+						</div>
+						<div class="field">
+							<input id="grid_height" type="number" onchange="updateInteger('grid_height')" value="16" /> Height
+						</div>
+						<div class="field">
+							<button id="reset" class="reset" onClick="updateCanvas()">
+								<i class="refresh icon"></i> Resize &nbsp Grid
+							</button>
+						</div>
+						<div class="field">
+							<label style="color:white;">Play Speed</label>
+							<input id="animation_timing_ms" type="number" onchange="updateInteger('animation_timing_ms')" value="100" />
+						</div>
+						<div class="field">
+							<button class="reset" onClick="animation.hajar()">
+								<i class="refresh icon"></i> pecah &nbsp Grid
+							</button>
+						</div>
+					</div>
+				</div>		
+			</div>
+		</div>
+	</div>
+	
+
+<!-- Function Tool -->						
+	<div class="ui inverted segment" style="width:max-content;">
+		<div class="field">
+			<div id="draggable" style="position:absolute; min-width:max-content;">
+				<input class="colorpicker" id="colorpicker">
+			</div>
+		</div>
+		<div class="field" >
+			<div class="three fields">
+				<div class="field" style="border:1px solid teal; border-radius: 0.28571429rem; padding:3px 8px;  width:max-content;text-align: center;">
+					<label style="color:white;">Step tools</label>
+					<button class="editbutton" style="color:red" 
+							data-tooltip="Insert new step [ q ]" 
+							data-variation="basic" data-position="top left" 
+							onClick="newStep()">
+						<i class="sign in alternate icon"></i>
+					</button>
+					<button class="editbutton" style="color:red" 
+							data-tooltip="Duplicate this step [ r ]" 
+							data-variation="basic" data-position="top left" 
+							onClick="copyStep()">
+						<i class="sign out alternate icon"></i>
+					</button>
+					<button class="editbutton" style="color:red" 
+							data-tooltip="Copy step and place at the end of total step " 
+							data-variation="basic" data-position="top left" 
+							onClick="insertAfter()">
+						<i class="share square icon"></i>
+					</button>
+					<button class="editbutton" style="color:red" 
+							data-tooltip="Delete step         [ x ]" 
+							data-variation="basic" data-position="top left" 
+							onClick="removeStep(event)">
+						<i class="trash icon"></i>
+					</button>
+					<button class="editbutton" style="color:red" 
+							data-tooltip="Delete ALL step  [ Shift + x ]" 
+							data-variation="basic" data-position="top left" 
+							onClick="animation.deleteStep(true)">
+						<i class="trash alternate icon"></i>
+					</button>
+				</div>
+				<div class="field" style="border:1px solid #00f; border-radius: 0.28571429rem; padding:3px 8px;  margin-left:10px; width:max-content;text-align: center;">
+					<label style="color:white;">Move Step and Play</label>
+					<button class="editbutton" style="color:#00f" 
+							data-tooltip="Step animation backward [ a ]" 
+							data-variation="basic" data-position="top left" 
+							onClick="stepBackward()">
+						<i class="fast backward icon"></i>
+					</button>
+					<button class="editbutton" style="color:#00f" 
+							data-tooltip="Step animation forward [ d ]" 
+							data-variation="basic" data-position="top left" 
+							onClick="stepForward()">
+						<i class="fast forward icon"></i>
+					</button>
+					<button class="editbutton" style="color:#00f;" 
+							data-tooltip="Play animation [ space ]" 
+							data-variation="basic" data-position="top left" 
+							onClick="play()">
+						<i class="play icon"></i>
+					</button>
+					<button class="editbutton" style="color:#00f;" 
+							data-tooltip="Stop animation [ space ]" 
+							data-variation="basic" data-position="top left" 
+							onClick="stop()">
+						<i class="pause icon"></i>
+					</button>
+				</div>
+				<div class="field" style="border:1px solid #00ff00; border-radius: 0.28571429rem; padding:3px 8px;  margin-left:10px; width:max-content; text-align: center;">
+					<label style="color:white;">Move & Clone step 4 in 1</label>
+					<button class="editbutton" style="color:#00ff00;" 
+							data-tooltip="Function________________&emsp;shortcut&#10;Move up________________&emsp;[ &uarr; ] &#xa;Move up looping_________&nbsp;&emsp;[ shift + &uarr; ] &#xa;Move up and cloning______&emsp;[ ctrl + &uarr; ] &#xa;Move up looping and cloning&emsp;[ ctrl + shift + &uarr; ]" 
+							data-variation="basic" data-position="top left" 
+							onClick="handleButtonClick('up', event)">
+					<i class="angle double up icon"></i>
+					</button>
+					<button class="editbutton" style="color:#00ff00;" 
+							data-tooltip="Function________________&emsp;shortcut&#10;Move down________________&emsp;[ &darr; ] &#xa;Move down looping_________&nbsp;&emsp;[ shift + &darr; ] &#xa;Move down and cloning______&emsp;[ ctrl + &darr; ] &#xa;Move down looping and cloning&emsp;[ ctrl + shift + &darr; ]" 
+							data-variation="basic" data-position="top left"  
+							onClick="handleButtonClick('down', event)">
+					<i class="angle double down icon"></i>
+					</button>
+					<button class="editbutton" style="color:#00ff00;" 
+							data-tooltip="Function________________&emsp;shortcut&#10;Move left________________&emsp;[ &larr; ] &#xa;Move left looping_________&nbsp;&emsp;[ shift + &larr; ] &#xa;Move left and cloning______&emsp;[ ctrl + &larr; ] &#xa;Move left looping and cloning&emsp;[ ctrl + shift + &larr; ]" 
+							data-variation="basic" data-position="top left"  
+							onClick="handleButtonClick('left', event)">
+					<i class="angle double left icon"></i>
+					</button>
+					<button class="editbutton" style="color:#00ff00;" 
+							data-tooltip="Function__________________&emsp;shortcut&#10;Move right________________&emsp;[ &rarr; ] &#xa;Move right looping_________&nbsp;&emsp;[ shift + &rarr; ] &#xa;Move right and cloning______&emsp;[ ctrl + &rarr; ] &#xa;Move right looping and cloning&emsp;[ ctrl + shift + &rarr; ]" 
+							data-variation="basic" data-position="top left" 
+							onClick="handleButtonClick('right', event)">
+					<i class="angle double right icon"></i>
+					</button>
+				</div>
+			</div>
+		</div>
+		
+		<div class="field" style="margin-top:10px;">
+			<p style="margin-top: 10px; font-size: 12px;">
+			<input onChange="shiftMode(this.checked)" type="checkbox"/>Shift effect
+			<input onChange="Trailling(this.checked)" type="checkbox"/>Trailling effect
+			<input onChange="drawmode(this.checked)" type="checkbox"/>draw mode
+			<input onChange="pasteMode(this.checked)" type="checkbox"/>paste mode
+			</p>
+		</div>
+		
+		<div class="field" style="margin-top:10px;">
+			<div class="six fields">
+				<div class="field">
+					<label>X-pos</label>
+					<input class="canvasGrid" id="xpos" type="number" 
+							name="xpos" min="0" max="8" value="0" 
+							onchange="updateInteger('xpos')" />
+				</div>
+				<div class="field">
+					<label>Y-pos</label>
+					<input class="canvasGrid" id="ypos" type="number" 
+							name="ypos" min="0" max="8" value="0" 
+							onchange="updateInteger('ypos')" /> 
+				</div>
+				<div class="field">
+					<label>Width</label>
+					<input class="canvasGrid" id="gridwidth" type="number" 
+							name="gridwidth" min="0" max="8" value="8"
+							onchange="updateInteger('gridwidth')" /> 
+				</div>
+				<div class="field">
+					<label>Height</label>
+					<input class="canvasGrid" id="gridheight" type="number" 
+							name="gridheight" min="0" max="8" value="8" 
+							onchange="updateInteger('gridheight')" />
+				</div>
+				<div class="field">
+					<label>Frame</label>
+					<input class="canvasGrid" id="Frame" type="number" 
+							name="Frame" min="0" value="32" 
+							onchange="updateInteger('Frame')" />
+				</div>
+				<div class="field">
+					<label>Repeat</label>
+					<input class="canvasGrid" id="repeat" type="number" 
+							name="repeat" min="0" value="1" 
+							onchange="updateInteger('repeat')" 
+							title="repeat step generation from gradient mode" />
+				</div>
+			</div>
+		</div>
+		
+		<div class="field" style="margin-top:10px;">
+			<div class="six fields">
+				<div class="field" style="border:1px solid teal; border-radius: 0.28571429rem; padding:3px 8px; width:max-content;text-align: center;">
+					<label>Edit and Coloring Tools</label>
+					Row  &nbsp
+					<input class="canvasGrid" type="number" id="rowInput" min="0"/> &nbsp
+					Col  &nbsp
+					<input class="canvasGrid" type="number" id="columnInput" min="0"/>
+					
+					<button class="editbutton" style="color:#ff8f00" 
+							data-tooltip="Copy inputed specific Row/Column, or leave it blank to copy all [c]" 
+							data-variation="basic" data-position="top left" 
+							onclick="animation.copyData()">
+						<i class="copy icon"></i>
+					</button>
+					<button class="editbutton" style="color:#ff8f00" 
+							data-tooltip="Paste just selected Row/Column from all copyed matrix, or leave it blank to paste all [v]" 
+							data-variation="basic" data-position="top left" 
+							onclick="animation.pasteData()">
+						<i class="paste icon"></i>
+					</button>
+				</div>
+				<div class="field" style="border:1px solid #ffff00; border-radius: 0.28571429rem; padding:3px 8px; width:max-content;text-align: center; margin-left:10px; ">
+					<label>Export</label>
+					<button class="reset" onClick="exportFormat()">
+						<i class="upload icon"></i> Export
+					</button>
+				</div>
+				<div class="field" style="border:1px solid #ffff00; border-radius: 0.28571429rem; padding:3px 8px; width:max-content;text-align: center; margin-left:10px; ">
+					<label>Open & Save</label>
+			<button class="ui inverted red button" onclick="animation.saveToFile()">Simpan ke file</button>
+			<button class="ui inverted red button" onclick="animation.loadFromFile()">Open file</button>
+				</div>
+			</div>
+		</div>
+		
+	</div>
+	
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+			<textarea id="hasil" style="overflow-x:scroll;font-weight: bolder; width:100%; height:100%"></textarea>
+		
+
+</body>
+
+    <script>
+	
+var CTX;
+
+var CONFIG = {
+    "animation_timing_ms": 100,
+    "none_color": "#333333",
+    "grid_height": 16,
+    "grid_length": 32,
+    "led_size": 15,
+    "led_spacing": 10,
+    "set_color": "#ff0000",
+    "Frame": 32,
+    "repeat": 1,
+    "C_anim": 32,
+    "Move_val": 1,
+    "xpos": 0,
+    "ypos": 0,
+    "gridwidth": 32,
+    "gridheight": 16
+}
+
+var animation; 
+var playing = false;
+var insertAtTheEnd = false;
+var colorPicking = false;
+
+/* pencil, eraser */
+var mode = "pencil"
+
+var pixelMode = false;
+var Trailcolor = false;
+var draw_mode = false;
+var paste_Mode = false;
+var OpenFile = false;
+var move_mode = false;
+var shift_Mode = false;
+var dir_move = ""
+
+var ledDataCopy = []
+var mouseDown = false;
+var selectingArea = false;
+var moveArea = false;
+var startX;
+var startY;
+var selectedArea = { startX: 0, startY: 0, endX: 0, endY: 0, w:0, h:0 };
+	function hexToRgb(hex) {
+  var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+  return result ? {
+    r: parseInt(result[1], 16),
+    g: parseInt(result[2], 16),
+    b: parseInt(result[3], 16)
+  } : null;
+}
+
+function rgbToHex(rgb) {
+    return `#${((1 << 24) + (rgb.r << 16) + (rgb.g << 8) + rgb.b).toString(16).slice(1)}`;
+}
+
+function hslToRgb(h, s, l) {
+    h /= 360;
+    s /= 100;
+    l /= 100;
+
+    let r, g, b;
+
+    if (s === 0) {
+        r = g = b = l;
+    } else {
+        const hue2rgb = (p, q, t) => {
+            if (t < 0) t += 1;
+            if (t > 1) t -= 1;
+            if (t < 1 / 6) return p + (q - p) * 6 * t;
+            if (t < 1 / 2) return q;
+            if (t < 2 / 3) return p + (q - p) * (2 / 3 - t) * 6;
+            return p;
+        };
+
+        const q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+        const p = 2 * l - q;
+
+        r = hue2rgb(p, q, h + 1 / 3);
+        g = hue2rgb(p, q, h);
+        b = hue2rgb(p, q, h - 1 / 3);
+    }
+
+    return {
+        r: Math.round(r * 255),
+        g: Math.round(g * 255),
+        b: Math.round(b * 255),
+    };
+}
+
+function interpolateColor(color1, color2, ratio) {
+    return {
+        r: Math.round(color1.r + ratio * (color2.r - color1.r)),
+        g: Math.round(color1.g + ratio * (color2.g - color1.g)),
+        b: Math.round(color1.b + ratio * (color2.b - color1.b))
+    };
+}
+
+function generateColorGradient(startColor, endColor, steps) {
+    const startRGB = hexToRgb(startColor);
+    const endRGB = hexToRgb(endColor);
+
+    const colorSteps = [];
+    for (let i = 0; i < steps; i++) {
+        const ratio = i / (steps - 1);
+        const currentColor = interpolateColor(startRGB, endRGB, ratio);
+        const hexColor = rgbToHex(currentColor);
+        colorSteps.push(hexColor);
+    }
+
+    return colorSteps;
+}
+
+function generateFullSpectrumColors(steps) {
+    const colors = [];
+    const hueStep = 360 / steps;
+
+    for (let i = 0; i < steps; i++) {
+        const hue = i * hueStep;
+        const rgb = hslToRgb(hue, 100, 50);
+        const hexColor = rgbToHex(rgb);
+        colors.push(hexColor);
+    }
+
+    return colors;
+}
+
+function updateInteger(fieldName){
+			CONFIG[fieldName] = document.getElementById(fieldName).value;
+			// console.log(CONFIG[fieldName]);
+}
+
+class Animation {
+    constructor(leds) {
+        this.leds = leds;
+        this.stepCount = 0;
+        this.currentIndex = 0;
+        this.playing = false;
+        this.use_color = "#ffffff"
+        this.colors = [{}]
+        this.clipboard = [];
+        this.emptyGrid = false;
+    }
+
+    clickLed(x, y) {
+        for (let i = 0; i < CONFIG["grid_height"] * CONFIG["grid_length"]; i++) {
+            if (this.leds[i].checkCollision(x, y)) {
+                if (colorPicking) {
+                    let color = this.leds[i].getColor()
+                    if (color != CONFIG["none_color"]) {
+                        this.setColor(color.substr(1));
+						$("#colorpicker").spectrum("set", color);
+                    }
+                }
+                else if (mode == "pencil") {
+                        this.leds[i].updateColor(this.use_color);
+                        this.colors[this.currentIndex][this.use_color] = 1;
+                }
+
+                else if (mode == "eraser")
+                        this.leds[i].updateColor(CONFIG["none_color"]);
+                return true;
+            }
+        }
+        return false;
+    }
+
+	checkEmptyGrid(){
+    // Check if all LED colors match the default none_color
+    const allColorsMatchNoneColor = this.leds.every((led) => {
+        return led.colorState[this.currentIndex] === CONFIG["none_color"];
+    });
+
+    if (allColorsMatchNoneColor) {
+		this.emptyGrid = true;
+    } else {
+		this.emptyGrid = false;
+    }
+}
+	
+	generateGradientAnimation(orientation, frame) {
+		let ulang = 1;
+		// Number of steps in the animation
+		let steps = frame;
+		let dir = '';
+		let pixel = CONFIG["grid_length"];
+		
+		// Calculate color gradient steps
+		const allColors = generateFullSpectrumColors(frame);
+
+			switch (orientation) {
+				case 'testing':
+				case 'VerticalToRight':
+				case 'VerticalToLeft':
+						if( steps > CONFIG["grid_length"]){
+							ulang = Math.ceil(steps / CONFIG["grid_length"] );
+							steps = CONFIG["grid_length"];
+						}
+					break;
+					
+				case 'HorizonUpDown':
+				case 'HorizonDownUp':
+						if(steps > CONFIG["grid_height"]){
+							if (steps % CONFIG["grid_height"] === 0) {
+								ulang = steps / CONFIG["grid_height"];
+							} else {
+								ulang = Math.ceil(steps / CONFIG["grid_height"] );
+							}
+						}
+							if(!shift_Mode)
+							steps = CONFIG["grid_height"];
+							
+					break;
+				default:
+					steps = CONFIG["grid_length"] + CONFIG["grid_height"]-1;
+					break;
+			}
+			
+		
+		// Repeat generation of total frames
+		for (let repeat = 0; repeat < ulang; repeat++) {
+			// Generate animation frames
+			for (let i = 0; i < steps; i++) {
+				const currentColor = allColors[(i + repeat * steps) % allColors.length];
+				if(pixelMode) pixel = i;
+				switch (orientation) {
+					case 'testing':
+						for (let y = 0; y < pixel; y++) {
+							this.drawPixel(i, y, currentColor);
+							this.drawPixel(CONFIG["grid_length"] - 1 - i, y, currentColor);
+							this.drawPixel(y, i, currentColor);
+							this.drawPixel(y, CONFIG["grid_height"] - 1 - i, currentColor);
+						}
+						break;
+					case 'VerticalToRight':
+						dir = 'left';
+						for (let y = 0; y < CONFIG["grid_height"]; y++) {
+							this.drawPixel(i, y, currentColor);
+						}
+						break;
+					case 'VerticalToLeft':
+						dir = 'right';
+						for (let y = 0; y < CONFIG["grid_height"]; y++) {
+							this.drawPixel(CONFIG["grid_length"] - 1 - i, y, currentColor);
+						}
+						break;
+					case 'HorizonUpDown':
+						dir = 'up';
+						for (let x = 0; x < CONFIG["grid_length"]; x++) {
+							let y = (i >= CONFIG["grid_height"])? CONFIG["grid_height"]-1 : i ;
+							this.drawPixel(x, y, currentColor);
+						}
+						break;
+					case 'HorizonDownUp':
+						dir = 'down';
+						for (let x = 0; x < CONFIG["grid_length"]; x++) {
+							this.drawPixel(x, CONFIG["grid_height"] - 1 - i, currentColor);
+						}
+						break;
+					case 'diagonal-topleft':
+						if(pixelMode) {
+							for (let d = 0; d <= pixel; d++) {
+								this.drawPixel(d, d, currentColor);
+							}
+						}else{
+						for (let d = 0; d < pixel; d++) {
+							const x = d;
+							const y = i - d;
+							if (y >= 0 && y < CONFIG["grid_height"]) {
+								this.drawPixel(x, y, currentColor);
+							}
+						}
+						}
+						break;
+				}
+
+
+				this.draw();
+				this.checkEmptyGrid();
+				
+					if (paste_Mode){
+						this.stepForward();
+					}else{	
+						if (Trailcolor){
+							this.newStep(true);
+								console.log("trail");
+						}else{
+							this.newStep();
+						}
+					}
+				if(this.emptyGrid){
+					this.deleteStep();
+				}
+							if (shift_Mode && i > CONFIG["grid_height"]){
+								this.movePixels(dir, false, false)
+							}
+			}
+		}
+			if (!paste_Mode){
+			this.deleteStep();
+			}
+	}
+
+	drawPixel(x, y, color) {
+		const led = this.leds[y * CONFIG["grid_length"] + x];
+		// Hanya mengganti warna jika led tersebut belum memiliki warna
+		if (draw_mode) {
+			led.colorState[this.currentIndex] = color;
+		} else {
+			// Hanya mengganti warna jika led tersebut belum memiliki warna
+			if (led.colorState[this.currentIndex] === CONFIG["none_color"]) {
+				led.colorState[this.currentIndex] = color;
+			}
+		}
+	}
+
+	cloneMove(){
+		const allColors = generateFullSpectrumColors(CONFIG["C_anim"]);
+		for (let x = 0; x < CONFIG["C_anim"]; x++){
+			const currentColor = allColors[x];
+			this.copyData();
+			if(draw_mode){
+				this.use_color = currentColor;
+				}
+				
+			this.newStep();
+			this.pasteData();
+				if (!Trailcolor&&draw_mode){
+			this.changeColor();
+				}
+			console.log(currentColor);
+			for (let y = 0; y < CONFIG["Move_val"]; y++){
+				this.movePixels(dir_move,true,false);
+			}
+			
+				if (Trailcolor){
+			if(draw_mode){
+			this.changeColor();
+			}
+			this.copyData();
+			this.deleteStep();
+			this.pasteData();
+			this.copyData();
+			this.newStep(true);
+			this.pasteData();
+				}
+			
+		}
+	}
+
+
+	movePixels(direction, loopEnd, addStep) {	
+	  const shiftedRowData = [];
+	  const shiftedColumnData = [];
+	  let width = CONFIG["grid_length"];
+	  let height = CONFIG["grid_height"];
+	  
+	  if (addStep){
+		  this.newStep(true);
+	  }
+	  
+		switch (direction) {
+		case 'down':
+			for (let y = height-1; y > 0; y--) {
+			  for (let x = 0; x < width; x++) {
+				const currentLed = this.leds[y * width + x];
+				const upperLed = this.leds[(y - 1) * width + x];
+				if (loopEnd){
+					shiftedRowData.push(this.leds[y * width + x].colorState[this.currentIndex]);
+				}
+				if (currentLed.currentState === upperLed.currentState) {
+				  currentLed.colorState[this.currentIndex] = upperLed.colorState[this.currentIndex];
+				}
+			  }
+			}
+			break;
+		case 'up':
+			for (let y = 0; y < height-1; y++) {
+			  for (let x = 0; x < width; x++) {
+				const currentLed = this.leds[y * width + x];
+				const lowerLed = this.leds[(y + 1) * width + x];
+				if (loopEnd){
+					shiftedRowData.push(this.leds[y * width + x].colorState[this.currentIndex]);
+				}
+				if (currentLed.currentState === lowerLed.currentState) {
+				  currentLed.colorState[this.currentIndex] = lowerLed.colorState[this.currentIndex];
+				}
+			  }
+			}
+			break;
+		case 'right':
+			for (let y = 0; y < height; y++) {
+			  if (loopEnd){
+				shiftedColumnData.push(this.leds[y * width + width-1].colorState[this.currentIndex]);
+			}
+			  for (let x = width-1; x > 0; x--) {
+				const currentLed = this.leds[y * width + x];
+				const leftLed = this.leds[y * width + (x - 1)];
+
+				if (currentLed.currentState === leftLed.currentState) {
+				  currentLed.colorState[this.currentIndex] = leftLed.colorState[this.currentIndex];
+				}
+			  }
+			}
+			  if (loopEnd){
+				for (let y = 0; y < height; y++) {
+				  const leftmostLed = this.leds[y * width];
+				  leftmostLed.colorState[this.currentIndex] = shiftedColumnData[y];
+				}
+			  }
+			break;
+		case 'left':
+			for (let y = 0; y < height; y++) {
+			  if (loopEnd){
+				shiftedColumnData.push(this.leds[y * width].colorState[this.currentIndex]);
+			  }
+			  for (let x = 0; x < width-1; x++) {
+				const currentLed = this.leds[y * width + x];
+				const rightLed = this.leds[y * width + (x + 1)];
+
+				if (currentLed.currentState === rightLed.currentState) {
+				  currentLed.colorState[this.currentIndex] = rightLed.colorState[this.currentIndex];
+				}
+			  }
+			}
+			  if (loopEnd){
+				for (let y = 0; y < height; y++) {
+				  const rightmostLed = this.leds[y * width + width-1];
+				  rightmostLed.colorState[this.currentIndex] = shiftedColumnData[y];
+				}
+			  }
+			break;
+		}
+
+	  // Reset the color state of the appropriate row or column based on the direction
+	  if (direction === 'down' || direction === 'up') {
+		const resetRow = (direction === 'down') ? 0 : height-1;
+		for (let x = 0; x < width; x++) {
+			if (loopEnd){
+				this.leds[resetRow * width + x].colorState[this.currentIndex] = shiftedRowData[x];
+			} else {
+				this.leds[resetRow * width + x].colorState[this.currentIndex] = CONFIG["none_color"];
+			}
+		}
+	  } else if (direction === 'right' || direction === 'left') {
+		const resetColumn = (direction === 'right') ? 0 : width-1;
+		for (let y = 0; y < height; y++) {
+			if (loopEnd){
+				this.leds[y * width + resetColumn].colorState[this.currentIndex] = shiftedColumnData[y];
+			} else {
+				this.leds[y * width + resetColumn].colorState[this.currentIndex] = CONFIG["none_color"];
+			}
+		}
+	  }
+
+	  this.draw();
+	}
+
+    update() {
+        this.updateLedState();
+        this.draw();
+    }
+    
+    insertStep() {
+        this.leds.forEach(led => {
+            led.insert();
+        });
+    }
+    
+	newStep(copy = false) {
+		
+        this.stepCount++;
+        var previousIndex = this.currentIndex;
+        if (insertAtTheEnd) {
+            this.currentIndex = this.stepCount;
+            this.colors.push({});
+			insertAtTheEnd = false;
+        } else {
+            this.currentIndex++;
+            this.colors.splice(this.currentIndex, 0, {});
+            this.insertStep();
+        }
+
+        this.update();
+
+        if (copy && this.stepCount > 0) 
+        {
+            for (const color of Object.keys(this.colors[previousIndex])) 
+            {
+                this.colors[this.currentIndex][color] = 1;
+            }
+
+            this.leds.forEach(led => {
+                led.copyIndex(previousIndex);
+            });
+        }
+        this.update();
+    }
+
+    stepForward() {
+        if (this.currentIndex < this.stepCount) {
+            this.currentIndex++;
+        }
+        else {
+            this.currentIndex = 0;
+        }
+        this.update();
+    }
+    
+    clearAll() {
+        this.leds.forEach(led => {
+            led.updateColor(CONFIG["none_color"]);
+        });
+        this.update();
+    }
+	
+    stepBackward(){
+        this.currentIndex--;
+        if (this.currentIndex < 0){
+			this.currentIndex = this.stepCount;
+		}
+        this.update();
+    }
+
+    updateLedState() {
+        this.leds.forEach(led => {
+            led.updateState(this.currentIndex)
+        });
+    }
+
+    animationStep() {
+
+        if (this.stepCount == 0) 
+        {
+            this.stop();
+            return;
+        }
+        this.currentIndex++;
+        this.currentIndex = (this.currentIndex % (this.stepCount + 1))
+        this.update();
+    }
+    
+    setColor(color){
+        this.use_color = "#" + color;
+    }
+
+    play() {	
+        if (!playing) {
+            playing = true;
+            this.playingInterval = setInterval(() => {this.animationStep()}, CONFIG["animation_timing_ms"]);
+        }
+    }
+     
+    stop() {
+        playing = false;
+        clearTimeout(this.playingInterval);
+        this.update();
+    }
+    
+    deleteStep(shiftKey) {
+     if (this.stepCount > 0)   {
+        this.leds.forEach(led => {
+            led.removeStep(this.currentIndex);
+            led.updateState(this.currentIndex - 1);
+        });
+
+        if (shiftKey) {
+            // Hapus semua langkah jika tombol Shift ditekan
+            this.currentIndex = 0;
+            this.stepCount = 0; 
+			this.update();
+			clearAll();
+        } else {
+            // Hapus satu langkah jika tidak ada tombol Shift
+            this.colors.splice(this.currentIndex, 1);
+			 if (this.currentIndex != 0)
+				this.currentIndex--;
+            this.stepCount--;
+			this.update();
+        }
+     }
+    }
+    
+    draw() {
+        clearCanvas()
+        updateCurrentStep()
+        updateTotalSteps()
+		this.leds.forEach(led => {
+           led.draw(); 
+        });
+    }
+
+}//----- class animation end
+
+class Led {
+    constructor(x, y) {
+        this.x = x;
+        this.y = y;
+        this.colorState = [CONFIG["none_color"]]
+        this.currentState = 0;
+        this.size = CONFIG["led_size"]
+        this.spacing = CONFIG["led_spacing"]
+        this.posX = this.x * this.size + this.x * this.spacing;
+        this.posY = this.y * this.size + this.y * this.spacing;
+
+    }
+
+    removeStep(idx) {
+        this.colorState.splice(idx, 1)
+    }
+	
+    hasColorInState(state, color) {
+        return this.colorState[state] == color;
+    }
+
+    getColor(){
+        return this.colorState[this.currentState];
+    }
+
+    getIndex(){
+        return this.y * CONFIG["grid_length"] + this.x;
+    }
+
+    insert() {
+        this.colorState.splice(this.currentState + 1, 0,  CONFIG["none_color"]);
+    }
+
+    copyIndex(idx){
+        this.colorState[this.currentState] = this.colorState[idx];
+    }
+
+    checkCollision(x, y) {
+        return (x >= this.posX && x <= this.posX + this.size && y >= this.posY && y <= this.posY + this.size)
+    }
+
+    updateColor(color) {
+        this.colorState[this.currentState] = color;
+    }
+
+    updateState(step) {
+        this.currentState = step;
+        if (step == this.colorState.length) {
+            this.colorState.push(CONFIG["none_color"])
+        }
+    }
+
+    draw() {
+        if (this.colorState[this.currentState - 1] != CONFIG["none_color"] && this.colorState[this.currentState] == CONFIG["none_color"] && this.currentState != 0 && !playing) {
+            CTX.fillStyle = this.colorState[this.currentState - 1];
+            CTX.globalAlpha = 0.1;
+            CTX.shadowBlur = 0;
+        }
+        else {
+            CTX.fillStyle = this.colorState[this.currentState];
+            CTX.shadowColor = this.colorState[this.currentState];
+            CTX.globalAlpha = 1;
+            CTX.shadowBlur = 0;
+        }
+
+        CTX.beginPath();
+        CTX.fillRect(this.x * this.size + this.x * this.spacing, this.y * this.size + this.y * this.spacing, this.size, this.size);
+        CTX.stroke();
+    }
+
+}//---- class led end
+
+function gradient(direction, cond) {
+	let frame = CONFIG["Frame"];
+	pixelMode = cond;
+    animation.generateGradientAnimation(direction, frame );	
+}
+
+function clearCanvas() {
+    CTX.clearRect(0, 0, canvas.width, canvas.height);
+}
+
+function updateCurrentStep() {
+    $(".totalSteps").each(function() {
+        this.innerHTML = animation.stepCount + 1;
+    })
+}
+
+function updateTotalSteps() {
+    $(".currentStep").each(function() {
+        this.innerHTML = animation.currentIndex + 1;
+    })
+}
+
+function startDraw(){
+    var mouse_down = false;
+    var c = document.getElementById("canvas");
+    CTX = c.getContext("2d");
+	var BB = c.getBoundingClientRect();
+	var offsetX = BB.left;
+	var offsetY = BB.top;
+    var leds = []
+
+    for (i = 0; i < CONFIG["grid_height"]; i++) 
+    {
+        for (j = 0; j < CONFIG["grid_length"]; j++) 
+        {
+            leds.push(new Led(j, i))
+        }
+    }
+
+    animation = new Animation(leds);
+    animation.draw();
+	
+	if (OpenFile){
+		animation.loadFromFile(); // Load data on initialization
+	}
+
+    c.onclick = function(e) { 
+        if (animation.clickLed(e.offsetX, e.offsetY) ) 
+        {
+            animation.draw();
+        }
+    }
+
+    c.onmousedown = function(e) {
+        mouse_down = true;
+        if (selectingArea) {
+            startSelection(e);
+        }
+		if (moveArea) {
+			var mx = parseInt(e.clientX - offsetX);
+			var my = parseInt(e.clientY - offsetY);
+			
+			// test each rect to see if mouse is inside
+			if (mx > selectedArea.startX && mx < selectedArea.startX + (selectedArea.endX-selectedArea.startX) && my > selectedArea.startY && my < selectedArea.startY + (selectedArea.endY-selectedArea.startY)) {
+				// if yes, set that rects isDragging=true
+				moveArea = true;
+			}
+			// save the current mouse position
+			startX = mx;
+			startY = my;
+		}
+    }
+
+    c.onmousemove = function(e) {
+        if (mouse_down) 
+        {
+            if (selectingArea || moveArea) {
+                moveSelection(e);
+            } 
+			else 
+			{
+				if (animation.clickLed(e.offsetX, e.offsetY) ) 
+				{
+					clearCanvas()
+					animation.draw();
+				}
+            }
+        }
+    }
+	
+    c.onmouseup = function(e) { 
+        mouse_down = false;
+        if (selectingArea || moveArea) {
+            endSelection(e);
+        }
+    }
+	
+    function startSelection(e) {
+		ledDataCopy = []
+        selectedArea.startX = e.offsetX;
+        selectedArea.startY = e.offsetY;
+    }
+
+    function moveSelection(e) {
+        if (selectingArea) {
+			selectedArea.endX = e.offsetX;
+			selectedArea.endY = e.offsetY;
+			selectedArea.w = selectedArea.endX - selectedArea.startX;
+			selectedArea.h = selectedArea.endY - selectedArea.startY;
+		}
+        animation.draw();
+        if (selectingArea) {
+			CTX.strokeStyle = "#00FF00";
+			CTX.strokeRect(
+				selectedArea.startX,
+				selectedArea.startY,
+				selectedArea.w,
+				selectedArea.h
+			);
+		}
+		if (moveArea) {
+			// get the current mouse position
+			var mx = parseInt(e.clientX - offsetX);
+			var my = parseInt(e.clientY - offsetY);
+			// calculate the distance the mouse has moved
+			// since the last mousemove
+			var dx = mx - startX;
+			var dy = my - startY;
+			// move each rect that isDragging 
+			// by the distance the mouse has moved
+			// since the last mousemove
+			selectedArea.startX += dx;
+			selectedArea.startY += dy;
+			// redraw the scene with the new rect positions
+			CTX.strokeStyle = "#FF0000";
+			CTX.strokeRect(
+				selectedArea.startX,
+				selectedArea.startY,
+				selectedArea.w,
+				selectedArea.h
+			);
+			// reset the starting mouse position for the next mousemove
+			startX = mx;
+			startY = my;
+			selectedArea.endX = selectedArea.startX + selectedArea.w;
+			selectedArea.endY = selectedArea.startY + selectedArea.h;
+		}	
+    }
+
+	function endSelection(e) {
+        // Determine the selected LED grid area
+        var area = {
+            x: Math.min(selectedArea.startX, selectedArea.endX),
+            y: Math.min(selectedArea.startY, selectedArea.endY),
+            width: Math.abs(selectedArea.w),
+            height: Math.abs(selectedArea.h),
+        };
+		
+		if (moveArea) {
+			var number = 0;
+			animation.leds.forEach(led => {
+				if (
+					led.posX >= area.x &&
+					led.posX <= area.x + area.width &&
+					led.posY >= area.y &&
+					led.posY <= area.y + area.height
+				) {
+					led.colorState[led.currentState] = ledDataCopy[number]
+					number++;
+				}
+			});
+			animation.update();
+		}
+		
+		if (selectingArea) {
+			selectingArea = false;
+			moveArea = true;
+			animation.leds.forEach(led => {
+				if (
+					led.posX >= area.x &&
+					led.posX <= area.x + area.width &&
+					led.posY >= area.y &&
+					led.posY <= area.y + area.height
+				) {
+					ledDataCopy.push(led.colorState[led.currentState])
+				}
+			});
+		}
+	}
+}
+
+function stepForward() {
+    animation.stepForward();
+}
+
+function stepBackward() {
+    animation.stepBackward();
+}
+
+function play() {
+    animation.play();
+}
+
+function stop(){
+    animation.stop();
+}
+
+function setColor(color) {
+	// $("#testing").val(color.toString(16));
+	CONFIG["set_color"] = color;
+    animation.setColor(color);
+}
+
+function setMode(m) {
+    colorPicking = false;
+	moveArea = false;
+    mode = m
+    if (mode == "pencil") {
+        $('#canvas').css({'cursor': "url('pencilsmall.png') -10 40, pointer"});
+    }
+    else if (mode == "eraser") {
+        $('#canvas').css({'cursor': "url('eraser.png') -10 40, pointer"});
+    }
+}
+
+function clearAll() {
+    animation.clearAll()
+}
+
+function removeStep(e) {
+	var shiftKey = e.shiftKey;
+    animation.deleteStep(shiftKey);
+}
+
+function newStep() {
+    animation.newStep();
+}
+
+function copyStep() {
+    animation.newStep(true)
+}
+
+function handleButtonClick(arah, e) {
+	var ctrlKey = e.ctrlKey; 
+	var shiftKey = e.shiftKey;
+	animation.movePixels(arah, shiftKey, ctrlKey)
+}
+  
+function moveMode(v, dir){
+    move_mode = v;
+	dir_move = dir;
+}
+
+function shiftMode(v){
+    shift_Mode = v;
+}
+
+function drawmode(v){
+    draw_mode = v;
+}
+
+function Trailling(v){
+    Trailcolor = v;
+}
+
+function pasteMode(v){
+    paste_Mode = v;
+	// console.log(paste_Mode)
+}
+
+function insertAfter(){
+    insertAtTheEnd = true;
+    animation.newStep(true)
+}
+
+function colorPick(v) {
+    colorPicking = v;
+    if (colorPicking) {
+        $('#canvas').css({'cursor': "url('eyedrop.png') -10 40, pointer"});
+    }
+    else {
+        setMode(mode);
+    }
+}
+
+$(document).ready(function () {
+	//----------------------------
+	
+	startDraw();
+	  
+	$(document).keyup(function(e) {
+			switch(e.which) {
+				case 18:
+					colorPick(false);
+				break;
+		}
+	});
+
+	$(document).keydown(function(e) {
+		// console.log(e.which);
+			$('#testing').val(e.which);
+		if (e.keyCode == 65 && e.ctrlKey) {
+			e.target.select()
+		} 
+		else if (e.keyCode == 67 && e.ctrlKey) {
+			e.target.copy()
+		} 
+		else if (e.keyCode == 88 && e.ctrlKey) {
+			e.target.cut()
+		} 
+		else if (e.keyCode == 83 && e.ctrlKey) {
+			savefile()
+		} 
+		else if (e.keyCode == 86 && e.ctrlKey) {
+			e.target.paste()
+		} 
+		else if (e.which >= 49 && e.which <= 55) {
+			// Check if the focus is not on an input element
+			if (!$('input:focus').length) {
+				var colorCode;
+				switch (e.which) {
+					case 49: colorCode = "FF0000"; break;
+					case 50: colorCode = "00FF00"; break;
+					case 51: colorCode = "0000FF"; break;
+					case 52: colorCode = "FFFF00"; break;
+					case 53: colorCode = "00FFFF"; break;
+					case 54: colorCode = "FF00FF"; break;
+					case 55: colorCode = "FFFFFF"; break;
+				}
+
+				// Call your setColor function with the chosen color code
+				setColor(colorCode);
+			console.log(colorCode);
+
+				// Prevent the default action (scroll / move caret)
+				e.preventDefault();
+			}
+		} else {
+			switch(e.which) {
+				case 83:
+					startSelectionMode();
+				break; 
+				case 90:
+					clearAll();
+				break
+				case 88:
+					removeStep(e);
+				break
+				case 73:
+				case 18:
+					colorPick(true);
+				break
+				case 38:
+					handleButtonClick('up', e);
+					break;
+				case 40: // Down arrow
+					handleButtonClick('down', e);
+					break;
+				case 37: // Left arrow
+					handleButtonClick('left', e);
+					break;
+				case 39: // Right arrow
+					handleButtonClick('right', e);
+				break
+				case 69:
+					setMode("eraser");
+				break; 
+				case 70:
+					setMode("pencil");
+				break;
+				case 81:
+					newStep();
+				break;
+				case 82:
+					copyStep();
+				break;
+				case 65:
+					stepBackward();
+				break;
+				case 67:
+					animation.copyData();
+				break;
+				case 86:
+					animation.pasteData();
+				break;
+				case 68:
+					stepForward();
+				break;
+				case 46:
+					clearAll();
+				break;
+				case 32: 
+					if(playing) 
+						animation.stop();
+					else
+						animation.play();
+					break;
+				break;
+				default: return; // exit this handler for other keys
+			}
+		e.preventDefault(); // prevent the default action (scroll / move caret)
+		}
+	});
+
+	$('.dropdown').dropdown({
+		transition: 'drop', on: 'hover' 
+	});
+	  
+})
+
+	
+    </script>
+
+</html>

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Page Switcher with Semantic UI</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin: 0;
+            padding: 20px;
+            height: 100vh;
+            overflow: hidden;
+            background-color: #f9f9f9;
+        }
+
+        .button-container {
+            margin-bottom: 20px;
+        }
+
+        iframe {
+            width: 100%;
+            height: 100%;
+			padding 0 20px ;
+            border: solid 2px grey;
+            box-sizing: border-box;
+        }
+    </style>
+</head>
+<body>
+    <div class="ui container">
+        <div class="ui centered grid">
+            <div class="sixteen wide column">
+                <div class="ui mini buttons button-container">
+					<button class="ui blue button" onclick="loadPage('Adafruit_font_editor.html')">Adafruit_font_editor</button>
+					<div class="or"></div>
+					<button class="ui blue button" onclick="loadPage('BitmapGradientGenerator.html')">BitmapGradientGenerator</button>
+					<div class="or"></div>
+					<button class="ui blue button" onclick="loadPage('BmpGrad.html')">BmpGrad</button>
+					<div class="or"></div>
+					<button class="ui blue button" onclick="loadPage('BmpGradBWpreview.html')">BmpGradBWpreview</button>
+					<div class="or"></div>
+					<button class="ui blue button" onclick="loadPage('BmpGradColorpreview.html')">BmpGradColorpreview</button>
+					<div class="or"></div>
+					<button class="ui blue button" onclick="loadPage('bmp-resize.html')">bmp-resize</button>
+					<div class="or"></div>
+					<button class="ui blue button" onclick="loadPage('gfxv2.html')">gfxv2</button>
+					<div class="or"></div>
+					<button class="ui blue button" onclick="loadPage('GRADIEN.html')">GRADIEN</button>
+                </div>
+				<hr>
+                <div class="ui mini buttons button-container">
+					<button class="ui blue button" onclick="loadPage('HtmlRealtimeEditor.html')">HtmlRealtimeEditor</button>
+					<div class="or"></div>
+					<button class="ui blue button" onclick="loadPage('HTMLtest.html')">HTMLtest</button>
+					<div class="or"></div>
+					<button class="ui blue button" onclick="loadPage('image2cpp.html')">image2cpp</button>
+					<div class="or"></div>
+					<button class="ui blue button" onclick="loadPage('image2cpp-tes4.html')">image2cpp-tes4</button>
+					<div class="or"></div>
+					<button class="ui blue button" onclick="loadPage('tchapi.github.html')">tchapi.github</button>
+					<div class="or"></div>
+					<button class="ui blue button" onclick="loadPage('tes.html')">tes</button>
+					<div class="or"></div>
+					<button class="ui blue button" onclick="loadPage('previewfont.html')">previewfont</button>
+					<div class="or"></div>
+					<button class="ui blue button" onclick="loadPage('tchapi.github.2025.html')">tchapi.github.2025</button>
+					<div class="or"></div>
+					<button class="ui blue button" onclick="loadPage('testREGEX.html')">testREGEX</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr>
+                <iframe id="contentFrame" src="" ></iframe>
+
+    <script>
+        // Fungsi untuk memuat halaman ke dalam iframe
+		let openPage = '';
+        function loadPage(page) {
+            const iframe = document.getElementById('contentFrame');
+			openPage = page
+			console.log('page = ', page);
+            iframe.src = page;
+        }
+    </script>
+
+    <!-- Semantic UI JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js"></script>
+</body>
+</html>
