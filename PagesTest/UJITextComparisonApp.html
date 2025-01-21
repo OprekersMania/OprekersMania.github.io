@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UJI Text Comparison App.</title>
+	
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css">
+
+    <script src="https://offlinetext.com/diff_match_patch.js"></script>
+    <script src="https://cdn.telemetrydeck.com/websdk/telemetrydeck.min.js" data-app-id="20946619-DDDB-4230-99A4-A300B9FD6216"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #000;
+            color: #c7c6c6 !important;
+            padding-top: env(safe-area-inset-top);
+        }
+		
+        .bg-red {
+            background-color: #4b1111;
+        }
+
+        .bg-green {
+            background-color: #033f20;
+        }
+
+        .bg-gray {
+            background-color: #2a2c2f;
+        }
+
+        .highlight {
+            background-color: yellow !important;
+            color: black;
+        }
+        .field.line {
+            width: auto !important;
+			overflow: auto !important;
+			white-space: pre-line; 
+            background-color: black;
+        }
+        .field.output {
+			overflow: auto !important; 
+			white-space: nowrap; 
+			width:100% !important;
+        }
+	
+    .diff-icon {
+        display: inline-block;
+        width: 20px;
+        text-align: center;
+        font-weight: bold;
+        font-size: 20px;
+        line-height: 1;
+        vertical-align: middle;
+        flex-shrink: 0; /* Add this line */
+        margin-right: 5px; /* Add this line for some spacing */
+    }
+    .bg-red .diff-icon {
+        color: #ff0000;
+    }
+    .bg-green .diff-icon {
+        color: #00ff00;
+    }
+	
+
+    .ui.form textarea {
+        margin-bottom: 15px;
+    }
+
+         .ui.form textarea.dragover {
+            border-color: #f07bff;
+            background-color: #f0f00f;
+        }
+	
+.ui.inverted.black.segment {
+    color: #c7c6c6 !important;
+}
+
+.highlight-html {
+    color: #3535fb;
+}
+
+.highlight-attribute-pink {
+    color: pink;
+}
+.highlight-attribute-teal {
+    color: teal;
+}
+.highlight-attribute-green {
+    color: green;
+}
+
+.highlight-attribute-purple {
+    color: purple;
+}
+
+.highlight-attribute-red {
+    color: red;
+}
+
+.highlight-attribute-yellow {
+    color: yellow;
+}
+
+.highlight-attribute-orange {
+    color: orange;
+}
+
+
+
+</style>
+</head>
+<body>
+<div style="background-color: #37f21c54; margin-top: 25px;" class="ui red segment">
+   <h2 align="center" style="font-size: 30px;">Simple HTML / Text compare utility</h2>
+</div>
+   <div class="ui black inverted segment">
+      <div class="ui form">
+         <div class="two fields">
+            <div class="field" >
+				<label style="color:#0f0">Enter text 1 here</label>
+				<textarea id="text1" placeholder="Enter text 1 here">
+
+<div>
+<label for="BukaFile" class="ui small inverted blue button" style="display: inline-flex;"><i class="open folder icon"></i> Buka File Font</label>
+<input id="BukaFile" type="fle" style="display:none;" >
+<button class="ui small inverted violet button" id="extract"><i class="icon upload"></i> Ekstrak font</button>
+<button class="ui small inverted yellow button id="createFont"><i class="icon file outline"></i> Buat font baru</button>
+<button class="ui small inverted red button" id="hapus"><i class="eraser icon"></i> Hapus area teks</button>
+
+<input class="puter" type="number" id="baseValue" value="0" step="1"  style="height: 34px; width:70px; margin-top:5px;"></input>
+<button class="ui small inverted blue button"  oclick="zeroBase()">Rubah Base</button>
+<div class="field" >
+<label><font color="white">Preview Only Active Font : </font> &nbsp; <em class="filename" style="display: none; color: #1b00ff;">Nama Font tidak diketahui</em></label>
+<div class="field" style="background-colo:black;min-height: 11em;">
+<canvas id="fontCanvas" ></canvas>
+<div class="field" > 
+Zoom Scale 
+<input class="puter" typ="number" id="FontZoom" value="4" min="2" step="1" style="height: 34px; width:70px; margin-top:5px;"></input>
+<button class="ui small inverted button blue" id="FontPreview"><i class="recycle icon"></i>Preview</button>
+</div>
+</div>
+</div>
+</div>
+			</textarea>
+				<div class="button-group">
+					<button class="ui compact inverted red button" onclick="clearText(&#39;text1&#39;)" class="clear-button glass-bg">Clear</button>
+					<button class="ui compact inverted blue button" onclick="pasteText(&#39;text1&#39;)" class="paste-button glass-bg">Paste</button>
+				</div>
+			</div>
+            <div class="field" >
+				<label style="color:#0f0">Enter text 2 here</label>
+				<textarea id="text2" placeholder="Enter text 2 here">
+
+<div>
+<label for="BukaFile" class="ui small inverted blue button" style="display: inline-flex;"><i class="open folder icon"></i> Buka File Font</label>
+<input id="BukaFile" type="file" style="display:noe;" >
+<button class="ui small nverted violet button" id="extract"><i class="icon upload"></i> Ekstrak font</button>
+<button class="ui small inverted yellow button" id="createFont"><i class="icon file outline"></i> Buat font baru</button>
+<button class="ui small inverted red button" id="haus"><i class="eraser icon"></i> Hpus area teks</button>
+<br>
+<input class="puter" type="number" id="baseValue" value="0" step="1"  style="height: 34px; width:70px; margin-top:5px;"></input>
+<button class="ui small inverted blue button"  onclik="zeroBase()">Rubah Base</button>
+<div class="field" >
+<label><font color="white">Preview Only ctive Font : </font> &nbsp; <em class="filename" style="display: none; color: #1b00ff;">Nama Font tidak diketahui</em></label>
+<div class="field" style="background-color:black;min-height: 11em;">
+<canvas i="fontCanvas" ></canvas>
+<div class="field" > 
+Zoom Scale 
+<input class=puter" type="number" id="FontZoom" value="4" min="2" step="1" style="height: 34px; width:70px; margin-top:5px;"></input>
+<button class="ui small inverted button blue" id="FonPreview"><i class="recycle icon"></i>Preview</button>
+</div>
+</div>
+</div>
+</div>
+			</textarea>
+				<div class="button-group">
+					<button class="ui compact inverted red button" onclick="clearText(&#39;text2&#39;)" class="clear-button glass-bg">Clear</button>
+					<button class="ui compact inverted blue button" onclick="pasteText(&#39;text2&#39;)" class="paste-button glass-bg">Paste</button>
+				</div>
+			</div>
+		</div>
+		
+         <button class="ui compact inverted violet button" onclick="compareTexts()" class="glass-bg">Compare Texts</button>
+		 <hr>
+		 
+        <div id="hasil" style="display:none">
+				<button id="prevDiffButton" onclick="scrollToPrevDiff()" class="glass-bg" disabled="">Prev Difference</button>
+				<button id="nextDiffButton" onclick="scrollToNextDiff()" class="glass-bg" disabled="">Next Difference</button>
+		
+		 <hr>
+         <div class="two fields" >
+            <div id="output1" class="two fields">
+			</div>
+            <div id="output2" class="two fields">
+			</div>
+		</div>
+		</div>
+		
+	</div>
+</div>
+		
+    
+  <div class="ui container center aligned"> 
+	Created by <a href="https://github.com/OprekersMania" target="_blank">Dony Oprekers</a> - 2025
+	<br>
+	Credit to <a href="https://offlinetext.com/" target="_blank">https://offlinetext.com/</a> for this source
+	</div>
+	<br>
+	<br>
+
+    <script>
+        let currentDiffIndex = -1;
+        let diffLines = [];
+    
+
+        function enableDragAndDrop(textarea) {
+            // Prevent default drag behaviors
+            ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+                textarea.addEventListener(eventName, e => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                });
+            });
+
+            // Highlight textarea on dragover
+            textarea.addEventListener('dragover', () => {
+                textarea.classList.add('dragover');
+            });
+
+            // Remove highlight on dragleave
+            textarea.addEventListener('dragleave', () => {
+                textarea.classList.remove('dragover');
+            });
+
+            // Handle file drop
+            textarea.addEventListener('drop', event => {
+                textarea.classList.remove('dragover');
+                const files = event.dataTransfer.files;
+
+                if (files.length) {
+                    const file = files[0];
+
+                    // Read the file content
+                    const reader = new FileReader();
+                    reader.onload = function (e) {
+                        textarea.value = e.target.result; // Display file content in the textarea
+                    };
+                    reader.readAsText(file); // Read as text
+                }
+            });
+        }
+
+        // Enable drag-and-drop for both textareas
+        enableDragAndDrop(document.getElementById('text1'));
+        enableDragAndDrop(document.getElementById('text2'));
+
+
+
+
+        function clearText(textareaId) {
+            document.getElementById(textareaId).value = '';
+        }
+
+        // Synchronize scrolling
+        function syncScroll(elemen1, elemen2, elemen3, elemen4) {
+            const elemen_1 = document.getElementById(elemen1);
+            const elemen_2 = document.getElementById(elemen2);
+            const elemen_3 = document.getElementById(elemen3);
+            const elemen_4 = document.getElementById(elemen4);
+    
+            let isSyncing = false;
+
+            function syncScrollPosition() {
+                if (isSyncing) return;
+                isSyncing = true;
+
+elemen_4.scrollTop = elemen_3.scrollTop = elemen_2.scrollTop = elemen_1.scrollTop ;
+elemen_4.scrollLeft = elemen_3.scrollLeft = elemen_2.scrollLeft = elemen_1.scrollLeft;
+
+                requestAnimationFrame(() => {
+                    isSyncing = false;
+                });
+            }
+
+            elemen_1.addEventListener('scroll', syncScrollPosition, { passive: true });
+        }
+    
+        // Call syncScroll for both directions
+    
+        function compareTexts() {
+            const text1 = document.getElementById('text1').value;
+            const text2 = document.getElementById('text2').value;
+            
+            // Check if texts are identical
+            if (text1 === text2) {
+                // Clear the output areas
+                document.getElementById('output1').innerHTML = '';
+                document.getElementById('output2').innerHTML = '';
+                // Disable navigation buttons
+                document.getElementById('prevDiffButton').disabled = true;
+                document.getElementById('nextDiffButton').disabled = true;
+                return;
+            }
+            
+            const dmp = new diff_match_patch();
+            const diffs = dmp.diff_main(text1, text2);
+            dmp.diff_cleanupSemantic(diffs);
+            
+            let output1 = '';
+            let output2 = '';
+            let lineNum1 = 1;
+            let lineNum2 = 1;
+            let totalline =0;
+            
+            diffs.forEach((part) => {
+                const [type, value] = part;
+                const lines = value.split('\n');
+                
+                lines.forEach((line, index) => {
+                    const isLastLine = index === lines.length - 1 && !value.endsWith('\n');
+                    
+                    if (type === -1) { // Removed
+                        output1 += createDiffLine(null, line, 'bg-red');
+                        output2 += createDiffLine(null, '', 'bg-gray');
+                        lineNum1++;
+						totalline++;
+                    } else if (type === 1) { // Added
+                        output1 += createDiffLine(null, '', 'bg-gray');
+                        output2 += createDiffLine(null, line, 'bg-green');
+                        lineNum2++;
+						totalline++;
+                    } else { // Unchanged
+                        output1 += createDiffLine(null, line, '');
+                        output2 += createDiffLine(null, line, '');
+                        lineNum1++;
+                        lineNum2++;
+                    }
+                    
+                    if (!isLastLine) {
+                        output1 += '\n';
+                        output2 += '\n';
+						totalline++;
+                    }
+                });
+            });
+			
+	// console.log('totalline = ',totalline)
+	// console.log('line1 = ',lineNum1)
+	// console.log('line2 = ',lineNum2)
+
+
+            let maxLineCount = getMaxLineCount(output1, output2);
+	console.log('maxLineCount = ',maxLineCount)
+			// maxLineCount = Math.ceil(totalline);
+			maxLineCount = Math.ceil(maxLineCount/2);
+            
+		document.getElementById('output1').innerHTML = `
+			<div id="line1" class="field line">
+				${generateLineNumbers(maxLineCount)}
+			</div>
+			<div id="output_1" class="field output">${output1}</div>
+		`;
+		document.getElementById('output2').innerHTML = `
+			<div id="line2" class="field line">
+				${generateLineNumbers(maxLineCount)}
+			</div>
+			<div id="output_2" class="field output">${output2}</div>
+		`;
+
+            setupDifferenceNavigation();
+            if (diffLines.length > 0) {
+                currentDiffIndex = 0;
+                scrollToDiff();
+            }
+			
+		$('#hasil').show()
+        syncScroll('output_1', 'output_2', 'line1', 'line2');
+        syncScroll('output_2', 'output_1', 'line2', 'line1');
+        }
+		
+        function getMaxLineCount(output1, output2) {
+            return Math.max(output1.split('\n').length, output2.split('\n').length);
+        }
+
+		function generateLineNumbers(lineCount) {
+			return Array.from({ length: lineCount }, (_, i) => i + 1).join('\n');
+		}
+
+        function setupDifferenceNavigation() {
+            currentDiffIndex = -1;
+            diffLines = [];
+            const output1Lines = Array.from(document.getElementById('output1').querySelectorAll('.diff-line'));
+            const output2Lines = Array.from(document.getElementById('output2').querySelectorAll('.diff-line'));
+                // For desktop, pair up the differences (keep your existing desktop logic here)
+                const maxLength = Math.max(output1Lines.length, output2Lines.length);
+                    for (let i = 0; i < maxLength; i++) {
+                        if (output1Lines[i] && (output1Lines[i].classList.contains('bg-red') || output1Lines[i].classList.contains('bg-green'))) {
+                            diffLines.push({element: output1Lines[i], output: 1, pairedWith: output2Lines[i]});
+                        }
+                        if (output2Lines[i] && (output2Lines[i].classList.contains('bg-red') || output2Lines[i].classList.contains('bg-green'))) {
+                            if (!output1Lines[i] || (!output1Lines[i].classList.contains('bg-red') && !output1Lines[i].classList.contains('bg-green'))) {
+                                diffLines.push({element: output2Lines[i], output: 2, pairedWith: null});
+                            }
+                        }
+                    }
+
+                const prevButton = document.getElementById('prevDiffButton');
+                const nextButton = document.getElementById('nextDiffButton');
+                prevButton.disabled = nextButton.disabled = diffLines.length === 0;
+            }
+
+    
+        function scrollToPrevDiff() {
+            if (diffLines.length === 0) return;
+    
+            // Remove highlight from current difference
+            if (currentDiffIndex >= 0) {
+                diffLines[currentDiffIndex].element.classList.remove('highlight');
+            }
+    
+            currentDiffIndex--;
+            if (currentDiffIndex < 0) {
+                currentDiffIndex = 0;
+            }
+            setTimeout(scrollToDiff, 0);
+        }
+    
+        function scrollToNextDiff() {
+            if (diffLines.length === 0) return;
+    
+            // Remove highlight from current difference
+            if (currentDiffIndex >= 0) {
+                diffLines[currentDiffIndex].element.classList.remove('highlight');
+            }
+    
+            currentDiffIndex++;
+            if (currentDiffIndex >= diffLines.length) {
+                currentDiffIndex = diffLines.length - 1;
+            }
+            setTimeout(scrollToDiff, 0);
+        }
+    
+        function scrollToDiff() {
+            if (diffLines.length === 0 || currentDiffIndex < 0 || currentDiffIndex >= diffLines.length) return;
+    
+            const currentDiff = diffLines[currentDiffIndex];
+            
+            // Remove highlight from all differences
+            diffLines.forEach(diff => diff.element.classList.remove('highlight'));
+            
+            // Add highlight to current difference
+            currentDiff.element.classList.add('highlight');
+    
+            const output1 = document.getElementById('output1');
+            const output2 = document.getElementById('output2');
+    
+            // Calculate the scroll position
+            const scrollTop = currentDiff.element.offsetTop - 100; // Subtract a fixed amount to show context above
+    
+            // Scroll both output boxes
+            output1.scrollTop = scrollTop;
+            output2.scrollTop = scrollTop;
+    
+            // Use requestAnimationFrame to ensure scrolling has completed before centering
+            requestAnimationFrame(() => {
+                currentDiff.element.scrollIntoView({ behavior: 'auto', block: 'center' });
+                
+                // Adjust scroll position of the other output
+                if (currentDiff.output === 1) {
+                    output2.scrollTop = output1.scrollTop;
+                } else {
+                    output1.scrollTop = output2.scrollTop;
+                }
+            });
+    
+            // Update button states
+            document.getElementById('prevDiffButton').disabled = currentDiffIndex === 0;
+            document.getElementById('nextDiffButton').disabled = currentDiffIndex === diffLines.length - 1;
+        }
+    
+
+function createDiffLine(lineNumber, content, highlightClass) {
+    let diffIcon;
+    switch (highlightClass) {
+        case 'bg-red':
+            diffIcon = '&minus;'; // HTML entity for minus
+            break;
+        case 'bg-green':
+            diffIcon = '&plus;'; // HTML entity for plus
+            break;
+        default:
+            diffIcon = '&nbsp;';
+    }
+
+    // Daftar atribut HTML dan warnanya
+    const attributeColors = {
+        class: 'green',
+        style: 'purple',
+        id: 'red',
+        onclick: 'yellow',
+        value: 'orange',
+        type: 'pink',
+        for: 'teal',
+        color: 'purple',
+    };
+
+    // Daftar tag HTML umum
+    const htmlTags = [
+        '!--...--', '!DOCTYPE', 'a', 'abbr', 'acronym', 'address', 'applet', 'area', 'article', 
+        'aside', 'audio', 'b', 'base', 'basefont', 'bdi', 'bdo', 'big', 'blockquote', 'body', 
+        'br', 'button', 'canvas', 'caption', 'center', 'cite', 'code', 'col', 'colgroup', 'data', 
+        'datalist', 'dd', 'del', 'details', 'dfn', 'dialog', 'dir', 'div', 'dl', 'dt', 'em', 
+        'embed', 'fieldset', 'figcaption', 'figure', 'font', 'footer', 'form', 'frame', 'frameset', 
+        'h1', 'head', 'header', 'hgroup', 'hr', 'html', 'i', 'iframe', 'img', 'input', 'ins', 'kbd', 
+        'label', 'legend', 'li', 'link', 'main', 'map', 'mark', 'menu', 'meta', 'meter', 'nav', 
+        'noframes', 'noscript', 'object', 'ol', 'optgroup', 'option', 'output', 'p', 'param', 
+        'picture', 'pre', 'progress', 'q', 'rp', 'rt', 'ruby', 's', 'samp', 'script', 'search', 
+        'section', 'select', 'small', 'source', 'span', 'strike', 'strong', 'style', 'sub', 
+        'summary', 'sup', 'svg', 'table', 'tbody', 'td', 'template', 'textarea', 'tfoot', 
+        'th', 'thead', 'time', 'title', 'tr', 'track', 'tt', 'u', 'ul', 'var', 'video', 'wbr'
+    ];
+
+    // Escape HTML untuk mencegah eksekusi tag
+    function escapeHtml(str) {
+        if (!str) return '';
+        return str
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#39;');
+    }
+
+// Highlight atribut HTML terlebih dahulu
+function highlightAttributes(str) {
+    for (const [attribute, color] of Object.entries(attributeColors)) {
+        const attributeRegex = new RegExp(`\\b(${attribute}=)`, 'gi');
+        str = str.replace(attributeRegex, (match, attrName) => {
+            return `<span class="highlight-attribute-${color}">${attrName}</span>`;
+        });
+    }
+    return str;
+}
+
+// Highlight nama tag HTML (termasuk tag penutup)
+function highlightHtmlTags(str) {
+    const htmlTagRegex = new RegExp(
+        `(&lt;/?\\s*(${htmlTags.join('|')})(\\s|&gt;))`,
+        'gi'
+    );
+    str = str.replace(htmlTagRegex, (match, fullMatch, tagName) => {
+        return `<span class="highlight-html">${fullMatch}</span>`;
+    });
+    return str;
+}
+	
+// Highlight nama tag HTML (termasuk tag penutup)
+function lastTag(str) {
+    const TagRegex = new RegExp(
+            `(&gt;{1,})`,
+        'gi'
+    );
+    str = str.replace(TagRegex, (match, fullMatch, tagName) => {
+        return `<span class="highlight-html">${match}</span>`;
+    });
+    return str;
+}
+
+    // Proses konten dengan urutan yang benar
+    const escapedContent = escapeHtml(content);
+    const highlightedAttributes = highlightAttributes(escapedContent);
+    const fullyHighlightedContent = highlightHtmlTags(highlightedAttributes);
+    const fullyContent = lastTag(fullyHighlightedContent);
+
+    // Return elemen baris dengan konten yang sudah diproses
+    return `
+        <div class="diff-line ${highlightClass}">
+            <span class="diff-icon">${diffIcon}</span>
+            <span class="line-content">${fullyContent}</span>
+        </div>
+    `.trim();
+}
+
+
+</script>
+
+</body></html>
