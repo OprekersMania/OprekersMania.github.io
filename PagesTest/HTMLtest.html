@@ -23,14 +23,17 @@
             margin: 0;
             padding: 0;
             height: 100vh;
+            width: 100vw;
             overflow: hidden;
             font-family: Arial, sans-serif;
+            user-select: none; /* Mencegah seleksi teks saat dragging */
         }
 
         .left-pane {
             display: flex;
             flex-direction: column;
-            width: 50%;
+            width: 50%; /* Default width */
+            min-width: 150px;
             background-color: #111;
             overflow: hidden;
         }
@@ -39,31 +42,43 @@
             display: flex;
             gap: 10px;
             margin: 10px;
+            flex-shrink: 0;
         }
 
         /* Penyesuaian agar CodeMirror mengisi sisa tinggi left-pane */
         .CodeMirror {
             flex-grow: 1;
-            height: calc(100vh - 60px) !important;
+            height: 100% !important;
             font-size: 14px;
         }
 
         iframe {
-            width: 70%;
+            flex-grow: 1;
+            width: 0; /* Menggunakan flexbox untuk mengatur lebar sisa */
             height: 100%;
             border: none;
             box-sizing: border-box;
+            background-color: #fff;
+        }
+
+        /* Matikan pointer-events pada iframe saat dragging agar tidak patah-patah */
+        .is-resizing iframe {
+            pointer-events: none;
         }
 
         .resizer {
-            width: 15px;
+            width: 8px;
             cursor: col-resize;
-            background-color: blue;
+            background-color: #2b2b2b;
             height: 100%;
+            flex-shrink: 0;
+            transition: background-color 0.2s;
+            position: relative;
+            z-index: 10;
         }
 
-        .resizer:hover {
-            background-color: #aaa;
+        .resizer:hover, body.is-resizing .resizer {
+            background-color: #2185d0; /* Warna biru Semantic UI saat dihover/drag */
         }
     </style>
 </head>
@@ -77,7 +92,6 @@
 		<button class="ui mini green button" id="savefile"><i class="copy icon"></i>Save to file</button>
 		<button class="ui mini blue button" onclick="toggleWhiteSpace()">Toggle WordWrap</button>
       </div>
-        <!-- Element textarea tetap digunakan sebagai basis CodeMirror -->
         <textarea id="editor"></textarea>
     </div>
     <div class="resizer" id="resizer"></div>
@@ -87,7 +101,6 @@
         const preview = document.getElementById('preview');
         const resizer = document.getElementById('resizer');
         const leftPane = document.querySelector('.left-pane');
-        const rightPane = preview;
 
         // Inisialisasi CodeMirror Syntax Highlighting
         const editorInstance = CodeMirror.fromTextArea(document.getElementById('editor'), {
@@ -105,30 +118,43 @@
         // Initialize preview dengan konten awal
         preview.srcdoc = editorInstance.getValue();
 
-        // Handle resizing
+        // High Performance Resizer Logic
         let isResizing = false;
 
-        resizer.addEventListener('mousedown', () => {
+        resizer.addEventListener('mousedown', (e) => {
             isResizing = true;
+            document.body.classList.add('is-resizing');
             document.body.style.cursor = 'col-resize';
+            e.preventDefault();
         });
 
         document.addEventListener('mousemove', (e) => {
             if (!isResizing) return;
 
-            const totalWidth = window.innerWidth;
-            const leftWidth = e.clientX;
-            const rightWidth = totalWidth - leftWidth - resizer.offsetWidth;
+            // Hitung lebar panel kiri berdasarkan posisi kursor relatif terhadap layar
+            const containerWidth = window.innerWidth;
+            let newLeftWidth = e.clientX;
 
-            if (leftWidth > 100 && rightWidth > 100) {
-                leftPane.style.width = `${leftWidth}px`;
-                rightPane.style.width = `${rightWidth}px`;
-            }
+            // Beri batasan minimal dan maksimal pergeseran (misal: minimal 150px dari tepi)
+            const minWidth = 150;
+            const maxWidth = containerWidth - 150;
+
+            if (newLeftWidth < minWidth) newLeftWidth = minWidth;
+            if (newLeftWidth > maxWidth) newLeftWidth = maxWidth;
+
+            leftPane.style.width = `${newLeftWidth}px`;
+            
+            // Refresh tampilan editor CodeMirror agar menyesuaikan ukuran baru
+            editorInstance.refresh();
         });
 
         document.addEventListener('mouseup', () => {
-            isResizing = false;
-            document.body.style.cursor = 'default';
+            if (isResizing) {
+                isResizing = false;
+                document.body.classList.remove('is-resizing');
+                document.body.style.cursor = 'default';
+                editorInstance.refresh();
+            }
         });
 	
 	function toggleWhiteSpace() {
@@ -186,7 +212,6 @@ $(document).ready(function () {
         });
   
 })
-
     </script>
 </body>
 </html>
